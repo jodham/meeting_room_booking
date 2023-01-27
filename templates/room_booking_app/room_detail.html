@@ -1,0 +1,59 @@
+{%extends 'base/base.html'%}
+{%load static%}
+{%block title%}Room detail{%endblock title%}
+{%block content%}
+<div class="container">
+    <div class="py-5 text-center h4 ">{{room.room_name}}</div>
+    <div class="row shadow-lg">
+
+        <div class="col-sm-4">
+            <div class="card my-2">
+                <img src="{%static 'images/boardroom1.jpg'%}" class="card-img-top image-fluid">
+                <div class="card-body">
+                    <div class="card-title">
+                        <span class="h6">Room number: </span>
+                        {{room.room_number}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-8">
+            <div class="py-2 text-center h4">{{room.room_name}} Bookings</div>
+            <hr class="bg-info">
+            {% for book in bookings %}
+            <div class="row">
+                <div class="col-sm-2">
+                    <p>Name</p>
+                    <span>{{book.title}}</span>
+                </div>
+                <div class="col-sm-2">
+                    <p>Name</p>
+                    <span>{{book.booked_by}}</span>
+                </div>
+               <div class="col-sm-2">
+                    <p>Name</p>
+                    <span>{{book.room_id}}</span>
+                </div>
+                <div class="col-sm-2">
+                    <p>Name</p>
+                    <span>{{book.date_booked}}</span>
+                </div>
+               <div class="col-sm-2">
+                    <p>Name</p>
+                    <span>{{book.starting_time}}</span>
+                </div>
+                <div class="col-sm-2">
+                    <p>Name</p>
+                    <span>{{book.ending_time}}</span>
+                </div>
+            </div>
+        {%endfor%}
+        </div>
+
+    </div>
+
+    <a href="{%url 'book_room' room.room_number%}" class="btn btn-primary mt-4 float-right text-center">Book Room</a>
+
+</div>
+{%endblock content%}

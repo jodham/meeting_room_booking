@@ -18,31 +18,31 @@
                 <div class="container-fluid">
                             <form method="post">
                                 {% csrf_token %}
-                                <div class="row shadow-lg">
-                                    <div class="col-6">
-                                        <label for="room_number">Room number</label>
+                                <div class="row content-align-center shadow-lg">
+                                    <div class="col-sm-12">
+                                        <p>Room number</p>
                                         <input type="text" value="{{room.room_number}}" name="room_number" id="room_number">
                                     </div>
-                                     <div class="col-lg-6">
-                                        <label for="bookedby">Booked by</label>
+                                     <div class="col-sm-12">
+                                        <p>Booked by</p>
                                         <input type="text" value="{{request.user}}" name="bookedby" id="bookedby">
                                     </div>
 
 
 
-                                    <div class="col-6">
-                                        <label for="meeting_title">Meeting name</label>
+                                    <div class="col-sm-12">
+                                        <p>Meeting name</p>
                                         <input type="text" value="" required="" name="meeting_title" id="meeting_title">
                                     </div>
-                                     <div class="col-lg-6">
-                                        <label for="starting_time">Starting Time</label>
+                                     <div class="col-sm-12">
+                                        <p>Starting Time</p>
                                         <input type="datetime-local" value="" name="starting_time" id="starting_time">
                                     </div>
 
 
 
-                                    <div class="col-6">
-                                        <label for="ending_time">Ending time</label>
+                                    <div class="col-sm-12">
+                                        <p>Ending time</p>
                                         <input type="datetime-local" value="" name="ending_time" id="ending_time">
                                     </div>
 

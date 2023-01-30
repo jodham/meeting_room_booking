@@ -5,33 +5,33 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav ml-auto">
-      <a class="nav-item nav-link h5 text-white mx-4" href="{%url 'index'%}">Home <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link h5 text-white mx-4" href="{%url 'dashboard'%}">Dashboard</a>
-      <a class="nav-item nav-link h5 text-white mx-4" href="{%url 'bookings'%}">Bookings</a>
+      <a class="nav-item nav-link h5 text-white mx-4" href="#">Home <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link h5 text-white mx-4" href="#">Dashboard</a>
+      <a class="nav-item nav-link h5 text-white mx-4" href="#">Bookings</a>
       <a class="nav-item nav-link h5 text-white mx-4" href="#">Contact</a>
-        {%if myuser.is_authenticated%}
+
       <div class="dropdown show mx-4 my-2">
           <a class="text-light h5 dropdown-toggle" href="#" role="button" id="dropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{user.email}}
+
           </a>
 
           <div class="dropdown-menu" aria-labelledby="dropdownLink">
             <a class="dropdown-item" href="#">Profile</a>
-            <a class="dropdown-item" href="{%url 'signout'%}">Logout</a>
+            <a class="dropdown-item" href="#">Logout</a>
           </div>
       </div>
-        {%else%}
+
     <div class="dropdown show mx-4 my-2">
           <a class="text-light h5 dropdown-toggle" href="#" role="button" id="dropdownnLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Account
           </a>
 
           <div class="dropdown-menu" aria-labelledby="dropdownnLink">
-            <a class="dropdown-item" href="{%url 'signin'%}">Sign in</a>
-            <a class="dropdown-item" href="{%url 'register'%}">Sign up</a>
+            <a class="dropdown-item" href="#">Sign in</a>
+            <a class="dropdown-item" href="#">Sign up</a>
           </div>
       </div>
-        {%endif%}
+
     </div>
   </div>
 </nav>

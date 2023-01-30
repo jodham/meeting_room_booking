@@ -56,12 +56,12 @@
                     <hr class="bg-info">
                     <div class="row mt-3 shadow-sm">
                         <div class="col h5 align-left">Starting Time:</div>
-                        <div class="col">{{object.start_time}}</div>
+                        <div class="col">{{object.starting_time}}</div>
                     </div>
 
                     <div class="row mt-3 pl-0 shadow-sm">
                         <div class="col h5">Ending Time:</div>
-                        <div class="col">{{object.end_time}}</div>
+                        <div class="col">{{object.ending_time}}</div>
                     </div>
 
                     <div class="row mt-3 shadow-sm">
@@ -88,7 +88,7 @@
             <div class="row py-5 ml-4 mr-4 shadow-lg rounded">
                 <div class="col-2"><a href="#" class="btn btn-secondary"> Back</a></div>
                 <div class="col-2"><a href="#" class="btn btn-info">Approve</a></div>
-                {%if request.user.is_admin%}
+                {%if request.myuser.is_admin%}
                 <div class="col-2"><a href="{%url 'booking_update' object.id%}" class="btn btn-primary"> Update</a></div>
                 {%if object.is_active == False%}
                 <div class="col-2"><a href="#" class="btn btn-success ">Cancel</a> </div>

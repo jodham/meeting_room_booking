@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -107,7 +108,10 @@ class Bookings(models.Model):
     def get_absolute_url(self):
         return reverse('bookings_detail', kwargs={'pk': self.pk})
 
-
+    def save(self, *args, **kwargs):
+        if self.starting_time < str(timezone.now()):
+            raise ValidationError("Start time cannot be in the past")
+        super().save(*args, **kwargs)
 class Resource(models.Model):
     rm_id = models.ForeignKey(Room, on_delete=models.CASCADE)
     resource_name = models.CharField(max_length=255)

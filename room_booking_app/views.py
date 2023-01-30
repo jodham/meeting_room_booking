@@ -1,7 +1,9 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 
 from .forms import BookingForm
@@ -44,7 +46,12 @@ class RoomUpdateView(UpdateView):
 class BookingUpdateView(UpdateView):
     model = Bookings
     template_name = 'room_booking_app/book_room_form.html'
-    fields = ['room_id', 'booked_by', 'title', 'starting_date', 'starting_time', 'ending_date', 'ending_time']
+    fields = ['title', 'starting_time', 'ending_time']
+
+
+def clear_session(request):
+    request.session.clear()
+    return redirect('dashboard')
 
 
 # ------------------------------------DetailView Views---------------------------
@@ -66,21 +73,28 @@ def book_room(request, pk):
         starting_time = request.POST.get('starting_time')
         ending_time = request.POST.get('ending_time')
 
-        bookings = Bookings()
-        bookings.room_id = room
-        bookings.booked_by = booked_by
-        bookings.title = title
-        bookings.starting_time = starting_time
-        bookings.ending_time = ending_time
-        bookings.save()
+        if starting_time < str(timezone.now()):
+            messages.error(request, 'Start time must be greater than current time.')
+            # return redirect('room_booking_app:book_room', room)
+        elif ending_time < starting_time:
+            messages.warning(request, 'ending time cannot be less than starting time')
 
-        # subject = 'Room Booking Notification'
-        # message = 'Your room has been booked successfully.'
-        # from_email = 'jodham.wanjala@zetech.ac.ke'
-        # to_list = ['sikutwajotham@gmail.com']
-        # send_mail(subject, message, from_email, to_list, fail_silently=False)
+        else:
+            bookings = Bookings()
+            bookings.room_id = room
+            bookings.booked_by = booked_by
+            bookings.title = title
+            bookings.starting_time = starting_time
+            bookings.ending_time = ending_time
+            bookings.save()
 
-        return redirect('bookings')
+    # subject = 'Room Booking Notification'
+    # message = 'Your room has been booked successfully.'
+    # from_email = 'jodham.wanjala@zetech.ac.ke'
+    # to_list = ['sikutwajotham@gmail.com']
+    # send_mail(subject, message, from_email, to_list, fail_silently=False)
+
+            return redirect('bookings')
 
     templatename = 'room_booking_app/book_room_form.html'
     context = {"room": room, 'pk': pk}

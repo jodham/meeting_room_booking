@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -40,8 +41,8 @@ class MyUser(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
-    # first_name = models.CharField(verbose_name='first name', max_length=50)
-    # last_name = models.CharField(verbose_name='last name', max_length=50)
+    first_name = models.CharField(verbose_name='first name', max_length=50)
+    last_name = models.CharField(verbose_name='last name', max_length=50)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -67,25 +68,49 @@ class MyUser(AbstractBaseUser):
     #     return f"{self.first_name} {self.last_name}"
 
 
+class Campus_branch(models.Model):
+    university_name = models.CharField(default='Zetech University', max_length=50)
+    campus_name = models.CharField(max_length=30)
+
+    def __str__(self):
+        return self.campus_name
+
+
 class Room(models.Model):
     room_number = models.CharField(max_length=10, primary_key=True)
+    campus_name = models.ForeignKey(Campus_branch, default='1', on_delete=models.CASCADE)
     room_name = models.CharField(max_length=150)
     room_location = models.CharField(max_length=150)
     room_capacity = models.IntegerField()
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
-       return self.room_name
+        return self.room_name
+
+    def room_position(self):
+        return f"{self.room_number}, {self.room_location}"
+
+    def get_absolute_url(self):
+        return reverse('room_detail', kwargs={'pk': self.pk})
 
 
 class Bookings(models.Model):
-    title = models.CharField(max_length=100)
-    booked_by = models.ForeignKey(MyUser, on_delete=models.CASCADE)
     room_id = models.ForeignKey(Room, on_delete=models.CASCADE)
+    booked_by = models.ForeignKey(MyUser, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    status = models.CharField(max_length=10, default='pending')
     date_booked = models.DateTimeField(auto_now_add=True)
-    starting_time = models.DateTimeField()
-    ending_time = models.DateTimeField()
+    starting_date = models.DateField()
+    starting_time = models.TimeField()
+    ending_date = models.DateField()
+    ending_time = models.TimeField()
     date_updated = models.DateTimeField(auto_now=True)
-    duration = models.TimeField()
+
+    def start_time(self):
+        return f"{self.starting_date}, {self.starting_time}"
+
+    def end_time(self):
+        return f"{self.ending_date}, {self.ending_time}"
 
 
 class Resource(models.Model):
@@ -110,7 +135,6 @@ class UserActivity(models.Model):
     activity = models.CharField(max_length=100)
     date = models.DateField()
     time = models.TimeField()
-
 
 # class RoomUsage(models.Model):
 #     rm_id = models.ForeignKey(Room, on_delete=models.CASCADE)

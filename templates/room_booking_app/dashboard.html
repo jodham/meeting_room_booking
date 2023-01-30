@@ -4,6 +4,7 @@
 {%block content%}
 <div class="container">
     <div class="py-5 text-center text-info h4">Rooms</div>
+    <a href="{%url 'create_room'%}" class="btn btn-secondary float-right">Add Room</a>
     <div class="row dashboard_list">
         {%for room in rooms%}
         <div class="col-sm-4 mt-3 p-3">

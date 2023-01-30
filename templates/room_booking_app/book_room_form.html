@@ -6,15 +6,50 @@
             <div class="col-lg-8 mt-3 ml-5 shadow-lg content-align-center">
                 <div class="py-5 text-center"><label class="text-info h4">Book Room</label></div>
                 <div class="container-fluid">
-                    <div class="row shadow-lg justify-content-center">
-                        <div class="col-md-6">
                             <form method="post">
                                 {% csrf_token %}
-                                {{form.as_p}}
-                                <input type="submit" value="Register">
+                                <div class="row shadow-lg">
+                                    <div class="col-6">
+                                        <label for="room_number">Room number</label>
+                                        <input type="text" value="{{room.room_number}}" name="room_number" id="room_number">
+                                    </div>
+                                     <div class="col-lg-6">
+                                        <label for="bookedby">Booked by</label>
+                                        <input type="text" value="{{request.user}}" name="bookedby" id="bookedby">
+                                    </div>
+
+
+
+                                    <div class="col-6">
+                                        <label for="meeting_title">Meeting name</label>
+                                        <input type="text" value="" name="meeting_title" id="meeting_title">
+                                    </div>
+                                     <div class="col-lg-6">
+                                        <label for="starting_date">Starting Date</label>
+                                        <input type="date" value="" name="starting_date" id="starting_date">
+                                    </div>
+
+
+
+                                    <div class="col-6">
+                                        <label for="starting_time">Starting time</label>
+                                        <input type="time" value="" name="starting_time" id="starting_time">
+                                    </div>
+                                     <div class="col-lg-6">
+                                        <label for="ending_date">Ending Date</label>
+                                        <input type="date" value="" name="ending_date" id="ending_date">
+                                    </div>
+
+
+                                    <div class="col-6">
+                                        <label for="ending_time">Ending time</label>
+                                        <input type="time" value="" name="ending_time" id="ending_time">
+                                    </div>
+                                </div>
+
+                                <input type="submit" class="mt-4" value="Book">
                             </form>
-                        </div>
-                    </div>
+
                 </div>
 
             </div>

@@ -6,31 +6,31 @@
   <div class="col-lg-8 mt-3 ml-5 shadow-lg">
     <div class="py-5 text-center user-profile-image">
         <img src="" alt="image"> <br>
-        <label class="h2 text-info">{{object.room_name}} </label>
+        <label class="h2 text-info">{{object.title}} </label>
         <div class="container-fluid">
             <div class="row mt-3 p-4" >
                 <div class="col-md-5 shadow-lg">
-                    <label class="text-center text-info h4 mt-2">Room Information</label>
+                    <label class="text-center text-info h4 mt-2">Booking Information</label>
                     <hr class="bg-info">
 
                     <div class="row mt-3 shadow-sm">
-                        <div class="col h5">Room name:</div>
-                        <div class="col text-capitalize">{{object.room_name}}</div>
+                        <div class="col h5">Booked by:</div>
+                        <div class="col text-capitalize">{{object.booked_by}}</div>
                     </div>
 
                     <div class="row mt-3 pl-0 shadow-sm">
-                        <div class="col h5">Room location  :</div>
-                        <div class="col h5 text-capitalize">{{object.campus_name}}</div>
+                        <div class="col h5">Room   :</div>
+                        <div class="col h5 text-capitalize">{{object.room_id}}</div>
                     </div>
 
                     <div class="row mt-3 shadow-sm">
-                        <div class="col h5">Room Floor  :</div>
-                        <div class="col h5 text-capitalize">{{object.room_location}}</div>
+                        <div class="col h5">Title  :</div>
+                        <div class="col h5 text-capitalize">{{object.title}}</div>
                     </div>
 
                     <div class="row mt-3 shadow-sm">
-                        <div class="col h5 pl-0">Room number :</div>
-                        <div class="col h5">{{object.room_number}}</div>
+                        <div class="col h5 pl-0">Status:</div>
+                        <div class="col h5">{{object.status}}</div>
                     </div>
 
                     <div class="row mt-3 shadow-sm">
@@ -42,16 +42,16 @@
                  <div class="vr bg-dark"></div>
 
                 <div class="col-md-6 shadow-lg ml-3">
-                    <label class="text-center text-info h4 mt-2">Resources</label>
+                    <label class="text-center text-info h4 mt-2">Time</label>
                     <hr class="bg-info">
                     <div class="row mt-3 shadow-sm">
-                        <div class="col h5 align-left">Department:</div>
-                        <div class="col">{{object.employee_department_id}}</div>
+                        <div class="col h5 align-left">Starting Time:</div>
+                        <div class="col">{{object.start_time}}</div>
                     </div>
 
                     <div class="row mt-3 pl-0 shadow-sm">
-                        <div class="col h5">Designation:</div>
-                        <div class="col">{{object.employee_designation}}</div>
+                        <div class="col h5">Ending Time:</div>
+                        <div class="col">{{object.end_time}}</div>
                     </div>
 
                     <div class="row mt-3 shadow-sm">
@@ -60,13 +60,13 @@
                     </div>
 
                     <div class="row mt-3 shadow-sm">
-                        <div class="col h5 pl-0">Date Employed:</div>
-                        <div class="col h5">{{object.date_employed}}</div>
+                        <div class="col h5 pl-0">Time Updated:</div>
+                        <div class="col h5">{{object.date_updated}}</div>
                     </div>
 
                     <div class="row mt-3 shadow-sm">
-                        <div class="col h5">Date Registered:</div>
-                        <div class="col h5">{{object.date_created}}</div>
+                        <div class="col h5">Date Booked:</div>
+                        <div class="col h5">{{object.date_booked}}</div>
                     </div>
 
                     <div class="row mt-3 shadow-sm">
@@ -77,14 +77,14 @@
             </div>
             <div class="row py-5 ml-4 mr-4 shadow-lg rounded">
                 <div class="col-2"><a href="#" class="btn btn-secondary"> Back</a></div>
-                <div class="col-2"><a href="{%url 'book_room' object.room_number%}" class="btn btn-info">Book Room</a></div>
+                <div class="col-2"><a href="#" class="btn btn-info">Approve</a></div>
                 {%if request.user.is_admin%}
-                <div class="col-2"><a href="{%url 'room_update' object.room_number%}" class="btn btn-primary"> Update</a></div>
+                <div class="col-2"><a href="#" class="btn btn-primary"> Update</a></div>
                 {%if object.is_active == False%}
-                <div class="col-2"><a href="#" class="btn btn-success ">Activate</a> </div>
+                <div class="col-2"><a href="#" class="btn btn-success ">Cancel</a> </div>
                 <div class="col-2"><label class="text-danger">can't book room, is not in use</label> </div>
                 {%else%}
-                <div class="col-2"><a href="#" class="btn btn-warning"> Deactivate</a></div>
+                <div class="col-2"><a href="#" class="btn btn-warning">Cancel</a></div>
                 {%endif%}
                 {%endif%}
 

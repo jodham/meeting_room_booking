@@ -100,17 +100,12 @@ class Bookings(models.Model):
     title = models.CharField(max_length=100)
     status = models.CharField(max_length=10, default='pending')
     date_booked = models.DateTimeField(auto_now_add=True)
-    starting_date = models.DateField()
-    starting_time = models.TimeField()
-    ending_date = models.DateField()
-    ending_time = models.TimeField()
+    starting_time = models.DateTimeField(default=timezone.now)
+    ending_time = models.DateTimeField(default=timezone.now)
     date_updated = models.DateTimeField(auto_now=True)
 
-    def start_time(self):
-        return f"{self.starting_date}, {self.starting_time}"
-
-    def end_time(self):
-        return f"{self.ending_date}, {self.ending_time}"
+    def get_absolute_url(self):
+        return reverse('bookings_detail', kwargs={'pk': self.pk})
 
 
 class Resource(models.Model):

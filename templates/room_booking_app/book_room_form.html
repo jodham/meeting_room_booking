@@ -5,6 +5,16 @@
         <div class="row">
             <div class="col-lg-8 mt-3 ml-5 shadow-lg content-align-center">
                 <div class="py-5 text-center"><label class="text-info h4">Book Room</label></div>
+
+                {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+
+
                 <div class="container-fluid">
                             <form method="post">
                                 {% csrf_token %}
@@ -22,29 +32,20 @@
 
                                     <div class="col-6">
                                         <label for="meeting_title">Meeting name</label>
-                                        <input type="text" value="" name="meeting_title" id="meeting_title">
+                                        <input type="text" value="" required="" name="meeting_title" id="meeting_title">
                                     </div>
                                      <div class="col-lg-6">
-                                        <label for="starting_date">Starting Date</label>
-                                        <input type="date" value="" name="starting_date" id="starting_date">
+                                        <label for="starting_time">Starting Time</label>
+                                        <input type="datetime-local" value="" name="starting_time" id="starting_time">
                                     </div>
 
-
-
-                                    <div class="col-6">
-                                        <label for="starting_time">Starting time</label>
-                                        <input type="time" value="" name="starting_time" id="starting_time">
-                                    </div>
-                                     <div class="col-lg-6">
-                                        <label for="ending_date">Ending Date</label>
-                                        <input type="date" value="" name="ending_date" id="ending_date">
-                                    </div>
 
 
                                     <div class="col-6">
                                         <label for="ending_time">Ending time</label>
-                                        <input type="time" value="" name="ending_time" id="ending_time">
+                                        <input type="datetime-local" value="" name="ending_time" id="ending_time">
                                     </div>
+
                                 </div>
 
                                 <input type="submit" class="mt-4" value="Book">

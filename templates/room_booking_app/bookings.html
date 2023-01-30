@@ -46,8 +46,8 @@
                   <td>{{book.room_id.room_position}}</td>
                   <td>{{book.title}}</td>
                   <td>{{book.booked_by}}</td>
-                  <td>{{book.starting_time}}</td>
-                  <td>{{book.ending_time}}</td>
+                  <td>{{book.start_time}}</td>
+                  <td>{{book.end_time}}</td>
                   <td><a href="{%url 'book_detail' book.pk%}">View</a></td>
               </tr>
               {%endfor%}

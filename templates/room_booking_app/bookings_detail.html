@@ -7,6 +7,16 @@
     <div class="py-5 text-center user-profile-image">
         <img src="" alt="image"> <br>
         <label class="h2 text-info">{{object.title}} </label>
+
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+
         <div class="container-fluid">
             <div class="row mt-3 p-4" >
                 <div class="col-md-5 shadow-lg">
@@ -79,7 +89,7 @@
                 <div class="col-2"><a href="#" class="btn btn-secondary"> Back</a></div>
                 <div class="col-2"><a href="#" class="btn btn-info">Approve</a></div>
                 {%if request.user.is_admin%}
-                <div class="col-2"><a href="#" class="btn btn-primary"> Update</a></div>
+                <div class="col-2"><a href="{%url 'booking_update' object.id%}" class="btn btn-primary"> Update</a></div>
                 {%if object.is_active == False%}
                 <div class="col-2"><a href="#" class="btn btn-success ">Cancel</a> </div>
                 <div class="col-2"><label class="text-danger">can't book room, is not in use</label> </div>

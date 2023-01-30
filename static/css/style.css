@@ -1,6 +1,29 @@
-.navbar, .dashboard-btn, .mycard{
-    background-color: #021545;
+.navbar{
+    background-color: #041E42;
 }
 .dashboard_list{
     background-color: #FFFDD0;
+}
+.navbar img{
+    width: 170px;
+   }
+
+.navbar-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+.rounded-pill {
+  border-radius: 50rem;
+}
+.my-container{
+    background-color: #CB6015;
+    border-radius: 10px;
+}
+.my-btn{
+    border-radius: 10px;
+}
+.my-text{
+    color: #041E42;
 }

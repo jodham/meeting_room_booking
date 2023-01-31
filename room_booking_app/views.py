@@ -7,7 +7,7 @@ from django.utils import timezone
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 
 from .forms import BookingForm
-from .models import Room, Bookings, MyUser
+from .models import Room, Bookings, MyUser, Resource
 
 
 # Create your views here.
@@ -63,6 +63,16 @@ class BookDetailView(DetailView):
     model = Bookings
 
 
+def room_detail_view(request, pk):
+    room = Room.objects.get(pk=pk)
+    print(room)
+    resources = Resource.objects.filter(Q(rm_id=room))
+    templatename = 'room_booking_app/room_detail.html'
+    context = {"room": room, 'resources': resources}
+    return render(request, templatename, context)
+
+
+# --------------------------------------Book room ---------------------------------
 @login_required(login_url='signin')
 def book_room(request, pk):
     room = Room.objects.get(room_number=pk)
@@ -88,11 +98,11 @@ def book_room(request, pk):
             bookings.ending_time = ending_time
             bookings.save()
 
-    # subject = 'Room Booking Notification'
-    # message = 'Your room has been booked successfully.'
-    # from_email = 'jodham.wanjala@zetech.ac.ke'
-    # to_list = ['sikutwajotham@gmail.com']
-    # send_mail(subject, message, from_email, to_list, fail_silently=False)
+            # subject = 'Room Booking Notification'
+            # message = 'Your room has been booked successfully.'
+            # from_email = 'jodham.wanjala@zetech.ac.ke'
+            # to_list = ['sikutwajotham@gmail.com']
+            # send_mail(subject, message, from_email, to_list, fail_silently=False)
 
             return redirect('bookings')
 

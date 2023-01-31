@@ -112,6 +112,8 @@ class Bookings(models.Model):
         if self.starting_time < str(timezone.now()):
             raise ValidationError("Start time cannot be in the past")
         super().save(*args, **kwargs)
+
+
 class Resource(models.Model):
     rm_id = models.ForeignKey(Room, on_delete=models.CASCADE)
     resource_name = models.CharField(max_length=255)

@@ -2,12 +2,12 @@ from .views import *
 from django.urls import path
 
 urlpatterns = [
-    path('', index, name='index'),
+    path('index/', index, name='index'),
     path('dashboard/', dashboard, name='dashboard'),
 
     path('book/room/<int:pk>', book_room, name='book_room'),
     path('bookings/', Bookings_View, name='bookings'),
-    path('book/detail/<int:pk>', BookDetailView.as_view(), name='book_detail'),
+    path('book/detail/<int:pk>', room_detail_view, name='book_detail'),
     path('book/update/<int:pk>', BookingUpdateView.as_view(), name='booking_update'),
 
     path('room/detail/<int:pk>/', RoomDetailView.as_view(), name='room_detail'),

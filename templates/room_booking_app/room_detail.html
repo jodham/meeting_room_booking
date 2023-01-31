@@ -8,8 +8,8 @@
         <img src="" alt="image"> <br>
         <label class="h2 text-info">{{object.room_name}} </label>
         <div class="container-fluid">
-            <div class="row mt-3 p-4" >
-                <div class="col-md-5 shadow-lg">
+            <div class="row p-4" >
+                <div class="col-md-4 mt-4 shadow-lg">
                     <label class="text-center text-info h4 mt-2">Room Information</label>
                     <hr class="bg-info">
 
@@ -39,40 +39,16 @@
                     </div>
                 </div>
 
-                 <div class="vr bg-dark"></div>
-
-                <div class="col-md-6 shadow-lg ml-3">
+                <div class="col-md-4 mt-4 shadow-lg ml-3">
                     <label class="text-center text-info h4 mt-2">Resources</label>
                     <hr class="bg-info">
+                    {%for resource in resources%}
                     <div class="row mt-3 shadow-sm">
-                        <div class="col h5 align-left">Department:</div>
-                        <div class="col">{{object.employee_department_id}}</div>
+                        <div class="col h5 align-left">{{resource.resource_name}}</div>
+                        <div class="col">{{resource.quantity}}</div>
                     </div>
+                    {%endfor%}
 
-                    <div class="row mt-3 pl-0 shadow-sm">
-                        <div class="col h5">Designation:</div>
-                        <div class="col">{{object.employee_designation}}</div>
-                    </div>
-
-                    <div class="row mt-3 shadow-sm">
-                        <div class="col h5">Category:</div>
-                        <div class="col h5">{{object.employee_category}}</div>
-                    </div>
-
-                    <div class="row mt-3 shadow-sm">
-                        <div class="col h5 pl-0">Date Employed:</div>
-                        <div class="col h5">{{object.date_employed}}</div>
-                    </div>
-
-                    <div class="row mt-3 shadow-sm">
-                        <div class="col h5">Date Registered:</div>
-                        <div class="col h5">{{object.date_created}}</div>
-                    </div>
-
-                    <div class="row mt-3 shadow-sm">
-                        <div class="col h5">Active:</div>
-                        <div class="col h5">{{object.is_active}}</div>
-                    </div>
                 </div>
             </div>
             <div class="row py-5 ml-4 mr-4 shadow-lg rounded">

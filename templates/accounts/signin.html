@@ -1,30 +1,37 @@
 {%extends 'base/base.html'%}
-{%block title%}Sign in{%endblock title%}
+{%load static%}
+{%block title%}index{%endblock title%}
 {%block content%}
-<div class="container">
-    <div class="row py-5">
-        <div class="col-lg-8 ml-5 shadow-lg content-align-center">
-            <div class="py-5 text-center"><label class="text-info h4">Sign in</label></div>
-            <div class="container-fluid">
-                <div class="row shadow-lg justify-content-center">
-                    <div class="col-md-6">
+<div class="container align-items-center">
+    <div class="row py-5 mx-auto">
+        <div class="col-lg-12 py-5 ml-5 content-align-center">
+            <div class="py-5 text-center"><label class="text-info h3"></label></div>
+            <div class="container-fluid shadow-lg ">
+                <div class="row shadow-lg my-container justify-content-center">
+
                         <form method="post">
-                            {% csrf_token %}
-                            <div class="row">
-                                <label for="username">Username</label>
-                                <input type="text" name="username" id="username" class="form-control">
+                            {%csrf_token%}
+                            <label class="h4">Username</label>
+                            <div class="form-group">
+                              <input type="email" name="username" placeholder="mail@zetech.ac.ke" class="form-control rounded-pill">
                             </div>
-                            <div class="row">
-                                <label for="password">Password</label>
-                                <input type="password" id="password" name="password" class="form-control">
+
+                            <label class="h4">Password</label>
+                            <div class="form-group">
+                              <input type="password" name="password" placeholder="........." class="form-control rounded-pill">
                             </div>
-                            <input class="mx-4 my-4" type="submit" value="Sign in">
+
+                            <input type="submit" value="Login">
+                             <label class="small-text ml-4 my-text">forgot password</label>
                         </form>
-                    </div>
+
+
                 </div>
             </div>
 
         </div>
     </div>
 </div>
+
+
 {%endblock content%}

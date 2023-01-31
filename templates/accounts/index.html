@@ -1,0 +1,30 @@
+{%extends 'base/base.html'%}
+{%block title%}Sign in{%endblock title%}
+{%block content%}
+<div class="container">
+    <div class="row py-5">
+        <div class="col-lg-8 ml-5 shadow-lg content-align-center">
+            <div class="py-5 text-center"><label class="text-info h4">Sign in</label></div>
+            <div class="container-fluid">
+                <div class="row shadow-lg justify-content-center">
+                    <div class="col-md-6">
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="row">
+                                <label for="username">Username</label>
+                                <input type="text" name="username" id="username" class="form-control">
+                            </div>
+                            <div class="row">
+                                <label for="password">Password</label>
+                                <input type="password" id="password" name="password" class="form-control">
+                            </div>
+                            <input class="mx-4 my-4" type="submit" value="Sign in">
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{%endblock content%}

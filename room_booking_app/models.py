@@ -120,6 +120,7 @@ class Resource(models.Model):
     quantity = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    published = models.BooleanField(default=True)
 
 
 class ResourceUtilization(models.Model):

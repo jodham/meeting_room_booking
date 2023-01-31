@@ -3,68 +3,76 @@
 {%block title%}Room Detail{%endblock title%}
 {%block content%}
 <div class="row p-4" style="height: 95vh; width: 100%; background-color: white; background-attachment: fixed;">
-  <div class="col-lg-8 mt-3 ml-5 shadow-lg">
-    <div class="py-5 text-center user-profile-image">
-        <img src="" alt="image"> <br>
-        <label class="h2 text-info">{{object.room_name}} </label>
-        <div class="container-fluid">
-            <div class="row p-4" >
-                <div class="col-md-4 mt-4 shadow-lg">
-                    <label class="text-center text-info h4 mt-2">Room Information</label>
-                    <hr class="bg-info">
+  <div class="col-lg-12 mt-3 shadow-lg">
+      <div class="py-5 text-center h3 my-text">{{object.room_name}}</div>
+        <div class="container-fluid shadow-lg">
 
-                    <div class="row mt-3 shadow-sm">
-                        <div class="col h5">Room name:</div>
-                        <div class="col text-capitalize">{{object.room_name}}</div>
-                    </div>
+          <div class="row py-2 room_detail">
+            <div class="col-md-3 mb-3">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5 class="card-title text-center h5">Room Details</h5>
+                      <div class="row mt-3 shadow-sm">
+                          <div class="col h5">Room Name:</div>
+                          <div class="col">{{room.room_name}}</div>
+                      </div>
 
-                    <div class="row mt-3 pl-0 shadow-sm">
-                        <div class="col h5">Room location  :</div>
-                        <div class="col h5 text-capitalize">{{object.campus_name}}</div>
-                    </div>
+                      <div class="row mt-3 shadow-sm">
+                          <div class="col h5">Room Location:</div>
+                          <div class="col">{{room.campus_name}}</div>
+                      </div>
 
-                    <div class="row mt-3 shadow-sm">
-                        <div class="col h5">Room Floor  :</div>
-                        <div class="col h5 text-capitalize">{{object.room_location}}</div>
-                    </div>
+                      <div class="row mt-3 shadow-sm">
+                          <div class="col h5">Room number:</div>
+                          <div class="col">{{room.room_number}}</div>
+                      </div>
 
-                    <div class="row mt-3 shadow-sm">
-                        <div class="col h5 pl-0">Room number :</div>
-                        <div class="col h5">{{object.room_number}}</div>
-                    </div>
+                     <div class="row mt-3 shadow-sm">
+                          <div class="col h5">Room capacity:</div>
+                          <div class="col">{{room.room_capacity}}</div>
+                      </div>
 
-                    <div class="row mt-3 shadow-sm">
-                        <div class="col h5">Capacity:</div>
-                        <div class="col h5">{{object.room_capacity}}</div>
-                    </div>
+
                 </div>
-
-                <div class="col-md-4 mt-4 shadow-lg ml-3">
-                    <label class="text-center text-info h4 mt-2">Resources</label>
-                    <hr class="bg-info">
-                    {%for resource in resources%}
-                    <div class="row mt-3 shadow-sm">
-                        <div class="col h5 align-left">{{resource.resource_name}}</div>
-                        <div class="col">{{resource.quantity}}</div>
-                    </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5 class="card-title text-center h5">Resources</h5>
+                    {% for resource in resources %}
+                      <div class="row mt-3 shadow-sm">
+                          <div class="col h5">{{resource.resource_name}}:</div>
+                          <div class="col">Available</div>
+                      </div>
                     {%endfor%}
-
                 </div>
+              </div>
             </div>
-            <div class="row py-5 ml-4 mr-4 shadow-lg rounded">
-                <div class="col-2"><a href="#" class="btn btn-secondary"> Back</a></div>
-                <div class="col-2"><a href="{%url 'book_room' object.room_number%}" class="btn btn-info">Book Room</a></div>
-                {%if request.user.is_admin%}
-                <div class="col-2"><a href="{%url 'room_update' object.room_number%}" class="btn btn-primary"> Update</a></div>
-                {%if object.is_active == False%}
-                <div class="col-2"><a href="#" class="btn btn-success ">Activate</a> </div>
-                <div class="col-2"><label class="text-danger">can't book room, is not in use</label> </div>
-                {%else%}
-                <div class="col-2"><a href="#" class="btn btn-warning"> Deactivate</a></div>
-                {%endif%}
-                {%endif%}
+            <div class="col-md-3 mb-3">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5 class="card-title">Bookings</h5>
+                  {%for book in bookings%}
+                    <div class="row mt-3 shadow-sm">
+                      <div class="col h5">{{resource.resource_name}}:</div>
+                      <div class="col">Available</div>
+                    </div>
+                  {%endfor%}
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <div class="card h-100">
+                <div class="card-body">
+                  <h5 class="card-title">Resources</h5>
+                  <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                </div>
+              </div>
+            </div>
+          </div>
 
-            </div>
+
          </div>
     </div>
   </div>

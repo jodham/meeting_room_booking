@@ -65,10 +65,10 @@ class BookDetailView(DetailView):
 
 def room_detail_view(request, pk):
     room = Room.objects.get(pk=pk)
-    print(room)
-    resources = Resource.objects.filter(Q(rm_id=room))
+    resources = Resource.objects.filter(rm_id_id=pk)
+    booking = Bookings.objects.filter(room_id_id=pk)
     templatename = 'room_booking_app/room_detail.html'
-    context = {"room": room, 'resources': resources}
+    context = {"room": room, 'resources': resources, 'booking': booking}
     return render(request, templatename, context)
 
 

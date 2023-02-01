@@ -108,10 +108,10 @@ class Bookings(models.Model):
     def get_absolute_url(self):
         return reverse('bookings_detail', kwargs={'pk': self.pk})
 
-    def save(self, *args, **kwargs):
-        if self.starting_time < str(timezone.now()):
-            raise ValidationError("Start time cannot be in the past")
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.starting_time < str(timezone.now()):
+    #         raise ValidationError("Start time cannot be in the past")
+    #     super().save(*args, **kwargs)
 
 
 class Resource(models.Model):

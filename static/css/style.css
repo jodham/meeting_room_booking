@@ -1,3 +1,22 @@
+header {
+  height: 100px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  background-color: #ffffff;
+}
+main {
+  height: auto;
+  margin-top: 7.0rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  width: 100%;
+  overflow: auto;
+  max-width: 800px;
+}
+
 
 .navbar{
     background-color: #041E42;
@@ -21,9 +40,7 @@
   justify-content: space-between;
 }
 
-.rounded-pill {
-  border-radius: 50rem;
-}
+
 .my-container{
     background-color: #CB6015;
     border-radius: 10px;
@@ -36,4 +53,30 @@
 }
 .footer{
     background-color: #041E42;
+}
+.room-detail-container{
+    padding-top: 9.0rem;
+    height: auto;
+    margin-left: 1rem;
+    margin-right: 1.0rem;
+}
+.loginbtn{
+    background-color: #CB6015;
+    margin-top: 2.0rem;
+}
+
+.frmlogin{
+    margin-top: 7.0rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.imglogo{
+    color:#fff;
+}
+/*        table-container*/
+.table-container{
+    padding-top: 7.0rem;
 }

@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
@@ -66,9 +67,12 @@ class BookDetailView(DetailView):
 def room_detail_view(request, pk):
     room = Room.objects.get(pk=pk)
     resources = Resource.objects.filter(rm_id_id=pk)
-    booking = Bookings.objects.filter(room_id_id=pk)
+    bookings = Bookings.objects.filter(room_id_id=pk)
+    paginator = Paginator(bookings, 2)
+    page = request.GET.get('page')
+    bookings = paginator.get_page(page)
     templatename = 'room_booking_app/room_detail.html'
-    context = {"room": room, 'resources': resources, 'booking': booking}
+    context = {"room": room, 'resources': resources, 'bookings': bookings}
     return render(request, templatename, context)
 
 

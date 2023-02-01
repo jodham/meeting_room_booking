@@ -2,14 +2,14 @@
 {%load static%}
 {%block title%}Room Detail{%endblock title%}
 {%block content%}
-<div class="row p-4" style="height: 95vh; width: 100%; background-color: white; background-attachment: fixed;">
-  <div class="col-lg-12 mt-3 shadow-lg">
-      <div class="py-5 text-center h3 my-text">{{object.room_name}}</div>
-        <div class="container-fluid shadow-lg">
 
-          <div class="row py-2 room_detail">
-            <div class="col-md-3 mb-3">
-              <div class="card h-100">
+
+<div class="container">
+    <div class="room-detail-container">
+
+        <div class="row shadow-lg py-2">
+            <div class="col-md-6 mb-3">
+              <div class="card">
                 <div class="card-body">
                   <h5 class="card-title text-center h5">Room Details</h5>
                       <div class="row mt-3 shadow-sm">
@@ -36,8 +36,9 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-3 mb-3">
-              <div class="card h-100">
+
+            <div class="col-md-6 mb-3">
+              <div class="card">
                 <div class="card-body">
                   <h5 class="card-title text-center h5">Resources</h5>
                     {% for resource in resources %}
@@ -49,32 +50,34 @@
                 </div>
               </div>
             </div>
-            <div class="col-md-3 mb-3">
-              <div class="card h-100">
-                <div class="card-body">
-                  <h5 class="card-title">Bookings</h5>
+        </div>
+
+         <main class="shadow-lg">
+             <table class="table data-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Booked by</th>
+                      <th scope="col">Meeting</th>
+                      <th scope="col">Starting time</th>
+                      <th scope="col">Ending time</th>
+                      <th scope="col">View</th>
+                    </tr>
+                  </thead>
+                  <tbody>
                   {%for book in bookings%}
-                    <div class="row mt-3 shadow-sm">
-                      <div class="col h5">{{resource.resource_name}}:</div>
-                      <div class="col">Available</div>
-                    </div>
+                  <tr>
+                      <td class="text-capitalize">{{book.booked_by}}</td>
+                      <td class="text-capitalize">{{book.title}}</td>
+                      <td>{{book.starting_time}}</td>
+                      <td>{{room.ending_time}}</td>
+                      <td><a href="{%url 'room_detail' room.pk%}">View</a></td>
+                  </tr>
                   {%endfor%}
-                </div>
-              </div>
-            </div>
-            <div class="col-md-3 mb-3">
-              <div class="card h-100">
-                <div class="card-body">
-                  <h5 class="card-title">Resources</h5>
-                  <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-         </div>
-    </div>
-  </div>
+                  </tbody>
+            </table>
+        </main>
 </div>
+</div>
+
+
 {%endblock content%}

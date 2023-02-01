@@ -2,36 +2,25 @@
 {%load static%}
 {%block title%}index{%endblock title%}
 {%block content%}
-<div class="container align-items-center">
-    <div class="row py-5 mx-auto">
-        <div class="col-lg-12 py-5 ml-5 content-align-center">
-            <div class="py-5 text-center"><label class="text-info h3"></label></div>
-            <div class="container-fluid shadow-lg ">
-                <div class="row shadow-lg my-container justify-content-center">
-                    <div class="col-sm-6 mt-4">
-                        <form method="post">
-                            {%csrf_token%}
-                            <label class="h4">Username</label>
-                            <div class="form-group">
-                              <input type="email" name="username" placeholder="mail@zetech.ac.ke" class="form-control rounded-pill">
-                            </div>
 
-                            <label class="h4">Password</label>
-                            <div class="form-group">
-                              <input type="password" name="password" placeholder="........." class="form-control rounded-pill">
-                            </div>
-
-                            <input type="submit" value="Login">
-                             <label class="small-text ml-4 my-text">forgot password</label>
-                        </form>
-                    </div>
-
-                </div>
+    <div class="row justify-content-center">
+        <form method="post" class="form-container frmlogin">
+            {%csrf_token%}
+            <label class="h4">Username</label>
+            <div class="form-group">
+              <input type="email" required autofocus name="username" placeholder='email@zetech.ac.ke' class="form-control form-control-lg">
             </div>
 
-        </div>
+            <label class="h4">Password</label>
+            <div class="form-group">
+              <input type="password" name="password" placeholder="password" class="form-control form-control-lg">
+            </div>
+
+            <button class="btn btn-block loginbtn h5" type="submit">Login</button>
+
+        </form>
     </div>
-</div>
+
 
 
 {%endblock content%}

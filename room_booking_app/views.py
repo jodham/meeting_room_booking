@@ -20,7 +20,7 @@ def index(request):
 
 @login_required(login_url='signin')
 def dashboard(request):
-    templatename = 'room_booking_app/dashboard.html'
+    templatename = 'room_booking_app/rooms.html'
     rooms = Room.objects.all()
     context = {'rooms': rooms}
     return render(request, templatename, context)

@@ -34,6 +34,22 @@ main {
   align-items: center;
   height: 100%;
 }
+.navbar-text{
+    margin-left: 2.5rem;
+    font-weight: 700;
+    font-size: 25px;
+}
+
+.nav-item {
+  margin: 0 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.nav-link {
+  font-size: 1.2rem;
+}
+
 .navbar-container {
   display: flex;
   align-items: center;
@@ -45,8 +61,7 @@ main {
     background-color: #CB6015;
     border-radius: 10px;
 }
-.my-btn{
-    border-radius: 10px;
+
 }
 .my-text{
     color: #041E42;
@@ -66,7 +81,7 @@ main {
 }
 
 .frmlogin{
-    margin-top: 7.0rem;
+    margin-top: 8.5rem;
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     padding: 1.5rem;

@@ -2,8 +2,8 @@
 {%load static%}
 {%block title%}Room Detail{%endblock title%}
 {%block content%}
-<div class="row p-4" style="height: 95vh; width: 100%; background-color: white; background-attachment: fixed;">
-  <div class="col-lg-8 mt-3 ml-5 shadow-lg">
+<div class="row justify-content-center" style="height: 95vh; width: 100%; background-color: white; background-attachment: fixed;">
+<!--  <div class="col-lg-8 ml-5 shadow-lg">-->
     <div class="py-5 text-center user-profile-image">
         <img src="" alt="image"> <br>
         <label class="h2 text-info">{{object.title}} </label>
@@ -16,10 +16,9 @@
         </ul>
         {% endif %}
 
-
         <div class="container-fluid">
             <div class="row mt-3 p-4" >
-                <div class="col-md-5 shadow-lg">
+                <div class="col-md-5">
                     <label class="text-center text-info h4 mt-2">Booking Information</label>
                     <hr class="bg-info">
 
@@ -49,9 +48,7 @@
                     </div>
                 </div>
 
-                 <div class="vr bg-dark"></div>
-
-                <div class="col-md-6 shadow-lg ml-3">
+                <div class="col-md-5 shadow-lg mt-4">
                     <label class="text-center text-info h4 mt-2">Time</label>
                     <hr class="bg-info">
                     <div class="row mt-3 shadow-sm">
@@ -86,7 +83,7 @@
                 </div>
             </div>
             <div class="row py-5 ml-4 mr-4 shadow-lg rounded">
-                <div class="col-2"><a href="#" class="btn btn-secondary"> Back</a></div>
+
                 <div class="col-2"><a href="#" class="btn btn-info">Approve</a></div>
                 {%if request.myuser.is_admin%}
                 <div class="col-2"><a href="{%url 'booking_update' object.id%}" class="btn btn-primary"> Update</a></div>
@@ -102,5 +99,5 @@
          </div>
     </div>
   </div>
-</div>
+<!--</div>-->
 {%endblock content%}

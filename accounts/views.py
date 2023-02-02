@@ -42,6 +42,8 @@ def signin(request):
         templatename = 'accounts/signin.html'
         return render(request, templatename)
 
+
 def signout(request):
     logout(request)
-    return redirect('index')
+    return redirect('signin')
+

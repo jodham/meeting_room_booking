@@ -6,16 +6,35 @@
             {%csrf_token%}
             <label class="h4">Room Title</label>
             <div class="form-group">
-              <input type="text" required autofocus name="title" placeholder='room title' class="form-control form-control-lg">
+              <input type="text" required autofocus name="title" placeholder='i.e iZET Hub' class="form-control form-control-lg">
             </div>
 
             <label class="h4">Location</label>
             <div class="form-group">
-              <input type="text" name="location" value="{%for x in location%} x.id" placeholder="location" class="form-control form-control-lg">
+              <p><select name="leave_id" id="location">
+                {%for x in location%}
+                <option class="form-control form-control-lg my-2" value="{{x.id}}">{{x.title}}</option>
+                {%endfor%}
+            </select>
+              </p>
             </div>
 
-            <button class="btn btn-block loginbtn h5" type="submit">Login</button>
-            <a href="#" class="small-text">forgot password</a>
+             <label class="h4">Room</label>
+            <div class="form-group">
+              <input type="text" required autofocus name="title" placeholder='room title' class="form-control form-control-lg">
+            </div>
+
+            <label class="h4">Facilities</label>
+            <div class="form-group">
+               <select multiple name="facilities_ids" id="facilities_ids">
+               {%for x in facilities%}
+                <option value="x.id">x.title</option>
+               {%endfor%}
+              </select>
+            </div>
+
+            <button class="btn btn-block create-room-submit-btn h5" type="submit">Login</button>
+
         </form>
 
     </div>

@@ -109,5 +109,10 @@ main {
 .room-fields{
     font-weight: bold;
 }
+.create-room-submit-btn{
+    background-color: #CB6015;
+    margin-top: 2.0rem;
+    font-weight: bold;
+}
 
 /*----------x-------room-booking-page-styling-----x-----*/

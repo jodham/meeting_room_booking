@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 
 from .forms import BookingForm
-from .models import Rooms, Booking, User, Campus
+from .models import Rooms, Booking, User, Campus, Facility
 
 
 # Create your views here.
@@ -29,6 +29,7 @@ def dashboard(request):
 # ------------------------------room create view------>
 def create_room_form(request):
     location = Campus.objects.all()
+    facilities = Facility.objects.all()
     if request.method == "POST":
         title = request.POST.get('title')
         location = request.POST.get('location')
@@ -41,7 +42,7 @@ def create_room_form(request):
         room.facilities_ids = facilities
         room.save()
     templatename = 'room_booking_app/create_room_form.html'
-    context = {'location': location}
+    context = {'location': location, 'facilities': facilities}
     return render(request, templatename, context)
 
 # ------------------------------------Update Views---------------------------->

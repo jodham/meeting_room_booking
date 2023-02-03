@@ -1,5 +1,5 @@
 from django import forms
-from .models import Bookings
+from .models import Booking
 
 
 class BookingForm(forms.ModelForm):
@@ -9,7 +9,7 @@ class BookingForm(forms.ModelForm):
     booked_by = forms.CharField(widget=forms.HiddenInput())
 
     class Meta:
-        model = Bookings
+        model = Booking
         fields = ('title', 'starting_time', 'ending_time')
 
     def __init__(self, *args, **kwargs):

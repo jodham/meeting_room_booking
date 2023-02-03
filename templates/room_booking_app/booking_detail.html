@@ -1,0 +1,35 @@
+{%extends 'base/base.html'%}
+{%load static%}
+{%block title%}dashboard{%endblock title%}
+{%block content%}
+
+<div class="container">
+
+        <main class="shadow-lg">
+              <div class="py-4 text-center h3">Available Rooms</div>
+             <table class="table data-table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Name</th>
+                      <th scope="col">Location</th>
+                      <th scope="col">Capacity</th>
+                      <th scope="col">Number</th>
+                      <th scope="col">View</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  {%for book in bookings%}
+                  <tr>
+                      <td class="text-capitalize">{{book.room_name}}</td>
+                      <td class="text-capitalize">{{room.campus_name}}</td>
+                      <td>{{room.room_capacity}}</td>
+                      <td>{{room.room_number}}</td>
+                      <td><a href="{%url 'room_detail' room.pk%}">View</a></td>
+                  </tr>
+                  {%endfor%}
+                  </tbody>
+            </table>
+        </main>
+</div>
+
+{%endblock content%}

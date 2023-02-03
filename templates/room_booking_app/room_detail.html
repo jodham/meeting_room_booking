@@ -22,11 +22,6 @@
                           <div class="col">{{room.campus_name}}</div>
                       </div>
 
-                      <div class="row mt-3 shadow-sm">
-                          <div class="col h5">Room number:</div>
-                          <div class="col">{{room.room_number}}</div>
-                      </div>
-
                      <div class="row mt-3 shadow-sm">
                           <div class="col h5">Room capacity:</div>
                           <div class="col">{{room.room_capacity}}</div>
@@ -83,7 +78,7 @@
 
             <div class="col-2"><a href="" class="btn btn-primary">Unpublish room</a></div>
 
-            <div class="col-2"><a href="#" class="btn btn-warning">Book Room</a></div>
+            <div class="col-2"><a href="{%url 'book_room' room.id%}" class="btn btn-warning">Book Room</a></div>
 
         </div>
 

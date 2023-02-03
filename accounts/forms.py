@@ -1,11 +1,11 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from room_booking_app.models import MyUser
+from room_booking_app.models import User
 
 
 class CreateUserAccount(UserCreationForm):
     email = forms.EmailField()
 
     class Meta:
-        model = MyUser
+        model = User
         fields = ['email', 'first_name', 'last_name', 'password1', 'password2']

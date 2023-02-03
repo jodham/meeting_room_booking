@@ -8,7 +8,7 @@ from django.utils import timezone
 from django.views.generic import ListView, CreateView, DetailView, UpdateView
 
 from .forms import BookingForm
-from .models import Room, Bookings, MyUser, Resource
+from .models import Rooms, Booking, User, Campus
 
 
 # Create your views here.
@@ -21,32 +21,41 @@ def index(request):
 @login_required(login_url='signin')
 def dashboard(request):
     templatename = 'room_booking_app/rooms.html'
-    rooms = Room.objects.all()
+    rooms = Rooms.objects.all()
     context = {'rooms': rooms}
     return render(request, templatename, context)
 
 
 # ------------------------------room create view------>
-class CreateRoomView(CreateView):
-    model = Room
-    fields = ['room_number', 'campus_name', 'room_name', 'room_location', 'room_capacity']
+def create_room_form(request):
+    location = Campus.objects.all()
+    if request.method == "POST":
+        title = request.POST.get('title')
+        location = request.POST.get('location')
+        capacity = request.POST.get('capacity')
+        facilities = request.POST.get('facilities')
 
-    def form_valid(self, form):
-        return super().form_valid(form)
-
+        room = Rooms()
+        room.title = title
+        room.capacity = capacity
+        room.facilities_ids = facilities
+        room.save()
+    templatename = 'room_booking_app/create_room_form.html'
+    context = {'location': location}
+    return render(request, templatename, context)
 
 # ------------------------------------Update Views---------------------------->
 class RoomUpdateView(UpdateView):
-    model = Room
-    fields = ['room_number', 'campus_name', 'room_name', 'room_location', 'room_capacity']
+    model = Rooms
+    fields = ['campus_name', 'room_name', 'room_capacity']
 
     def form_valid(self, form):
         return super().form_valid(form)
 
 
 class BookingUpdateView(UpdateView):
-    model = Bookings
-    template_name = 'room_booking_app/book_room_form.html'
+    model = Booking
+    template_name = 'room_booking_app/rooms_form.html'
     fields = ['title', 'starting_time', 'ending_time']
 
 
@@ -57,30 +66,26 @@ def clear_session(request):
 
 # ------------------------------------DetailView Views---------------------------
 class RoomDetailView(DetailView):
-    model = Room
+    model = Rooms
 
 
 class BookDetailView(DetailView):
-    model = Bookings
+    model = Booking
 
 
 def room_detail_view(request, pk):
-    room = Room.objects.get(pk=pk)
-    resources = Resource.objects.filter(rm_id_id=pk)
-    bookings = Bookings.objects.filter(room_id_id=pk)
-    paginator = Paginator(bookings, 2)
-    page = request.GET.get('page')
-    bookings = paginator.get_page(page)
+    room = Rooms.objects.get(pk=pk)
+    bookings = Booking.objects.filter(room_id_id=pk)
     templatename = 'room_booking_app/room_detail.html'
-    context = {"room": room, 'resources': resources, 'bookings': bookings}
+    context = {"room": room, 'bookings': bookings}
     return render(request, templatename, context)
 
 
 # --------------------------------------Book room ---------------------------------
 @login_required(login_url='signin')
 def book_room(request, pk):
-    room = Room.objects.get(room_number=pk)
-    booked_by = MyUser.objects.get(email=request.user)
+    room = Rooms.objects.get(id=pk)
+    booked_by = User.objects.get(email=request.user)
 
     if request.method == "POST":
         title = request.POST.get('meeting_title')
@@ -94,7 +99,7 @@ def book_room(request, pk):
             messages.warning(request, 'ending time cannot be less than starting time')
 
         else:
-            bookings = Bookings()
+            bookings = Booking()
             bookings.room_id = room
             bookings.booked_by = booked_by
             bookings.title = title
@@ -110,13 +115,20 @@ def book_room(request, pk):
 
             return redirect('bookings')
 
-    templatename = 'room_booking_app/book_room_form.html'
+    templatename = 'room_booking_app/rooms_form.html'
     context = {"room": room, 'pk': pk}
     return render(request, templatename, context)
 
 
 def Bookings_View(request):
-    room_booking = Bookings.objects.all()
+    room_booking = Booking.objects.all()
     templatename = "room_booking_app/bookings.html"
     context = {'room_booking': room_booking}
+    return render(request, templatename, context)
+
+
+def booking_detail_view(request, id):
+    booking = Booking.objects.get(id=id)
+    templatename = 'room_booking_app/booking_detail.html'
+    context = {'booking': booking}
     return render(request, templatename, context)

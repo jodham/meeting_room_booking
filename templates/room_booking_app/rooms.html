@@ -3,33 +3,34 @@
 {%block title%}dashboard{%endblock title%}
 {%block content%}
 
-<div class="container">
+<div class="container-fluid">
 
-        <main class="shadow-lg">
-              <div class="py-4 text-center h3">Available Rooms</div>
+        <div class="room-bookings-card justify-content-center">
+            <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
+              <div class="py-2 text-center h3">Available Rooms</div>
+              <a class="btn float-right add-room-button" href="{%url 'create_room'%}">Add Room</a>
+            </div>
              <table class="table data-table">
                   <thead>
                     <tr>
                       <th scope="col">Name</th>
                       <th scope="col">Location</th>
                       <th scope="col">Capacity</th>
-                      <th scope="col">Number</th>
                       <th scope="col">View</th>
                     </tr>
                   </thead>
                   <tbody>
                   {%for room in rooms%}
                   <tr>
-                      <td class="text-capitalize">{{room.room_name}}</td>
-                      <td class="text-capitalize">{{room.campus_name}}</td>
-                      <td>{{room.room_capacity}}</td>
-                      <td>{{room.room_number}}</td>
-                      <td><a href="{%url 'room_detail' room.pk%}">View</a></td>
+                      <td class="text-capitalize room-fields">{{room.room_name}}</td>
+                      <td class="text-capitalize room-fields">{{room.campus_name}}</td>
+                      <td class="room-fields">{{room.room_capacity}}</td>
+                      <td class="room-fields"><a href="{%url 'room_detail' room.pk%}">View</a></td>
                   </tr>
                   {%endfor%}
                   </tbody>
             </table>
-        </main>
+        </div>
 </div>
 
 {%endblock content%}

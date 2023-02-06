@@ -84,6 +84,9 @@ class Facility(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.title
+
 
 class Rooms(models.Model):
     location = models.ForeignKey(Campus, on_delete=models.CASCADE)
@@ -91,14 +94,17 @@ class Rooms(models.Model):
     capacity = models.IntegerField()
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    facilities_ids = models.ManyToManyField(Facility, related_name='rooms')
+    facilities_ids = models.CharField(max_length=255, default='', blank=True)
     is_active = models.BooleanField(default=1)
 
     def __str__(self):
         return self.title
 
-    # def room_position(self):
-    #     return f"{self.room_number}"
+    def set_facilities_ids(self, facilities_ids):
+        self.facilities_ids = ','.join(map(str, facilities_ids))
+
+    def get_facilities_ids(self):
+        return list(map(int, self.facilities_ids.strip("[]").split(',')))
 
     def get_absolute_url(self):
         return reverse('room_detail', kwargs={'pk': self.pk})
@@ -120,8 +126,8 @@ class Booking(models.Model):
     title = models.CharField(max_length=100)
     is_approved = models.BooleanField(default=False)
     status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=STATUS_PENDING)
-    actioned_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='bookings_actioned')
-    date_actioned = models.DateTimeField()
+    actioned_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='bookings_actioned')
+    date_actioned = models.DateTimeField(null=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_start = models.DateTimeField(default=timezone.now)
     date_end = models.DateTimeField(default=timezone.now)

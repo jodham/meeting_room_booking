@@ -1,0 +1,47 @@
+{%extends 'base/base.html'%}
+{%block title%}Create Room{%endblock title%}
+{%block content%}
+    <div class="row justify-content-center">
+        <form method="post" class="room-create-form">
+              {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {%csrf_token%}
+
+            <label class="h6">Location</label>
+            <div class="form-group">
+              <select class="form-control form-control-lg" required name="location_id">
+                  {%for x in campus%}
+                  <option  value="{{x.id}}">{{x.title}}</option>
+                  {%endfor%}
+              </select>
+            </div>
+
+            <label class="h6">Room Name</label>
+            <div class="form-group">
+                <input type="text" required name="title" class="form-control form-control-lg">
+            </div>
+
+            <label class="h6">Capacity</label>
+            <div class="form-group">
+                <input type="number" name="capacity" required class="form-control form-control-lg">
+            </div>
+
+            <label class="h6">Facilities</label>
+            <div class="form-group">
+                {%for facility in facility%}
+                <label>{{facility.title}}</label>
+                <input type="checkbox" name="facilities" value="{{facility.id}}">
+                {%endfor%}
+            </div>
+
+            <button class="btn btn-block create-room-submit-btn h5" type="submit">Create Room</button>
+
+        </form>
+
+    </div>
+{%endblock content%}

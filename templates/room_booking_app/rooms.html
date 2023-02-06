@@ -4,7 +4,6 @@
 {%block content%}
 
 <div class="row justify-content-center">
-
         <div class="room-bookings-card">
             <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
               <div class="py-2 text-center h3">Available Rooms</div>
@@ -22,9 +21,9 @@
                   <tbody>
                   {%for room in rooms%}
                   <tr>
-                      <td class="text-capitalize room-fields">{{room.room_name}}</td>
-                      <td class="text-capitalize room-fields">{{room.campus_name}}</td>
-                      <td class="room-fields">{{room.room_capacity}}</td>
+                      <td class="text-capitalize room-fields">{{room.title}}</td>
+                      <td class="text-capitalize room-fields">{{room.location}}</td>
+                      <td class="room-fields">{{room.capacity}}</td>
                       <td class="room-fields"><a href="{%url 'room_detail' room.pk%}">View</a></td>
                   </tr>
                   {%endfor%}

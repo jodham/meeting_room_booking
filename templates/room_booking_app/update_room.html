@@ -1,0 +1,22 @@
+{%extends 'base/base.html'%}
+{%block title%}Update Room{%endblock title%}
+{%block content%}
+    <div class="row justify-content-center">
+        <form method="post" class="room-create-form">
+              {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            {%csrf_token%}
+
+            {{form.as_p}}
+
+            <button class="btn btn-block create-room-submit-btn h5" type="submit">Update Room</button>
+
+        </form>
+
+    </div>
+{%endblock content%}

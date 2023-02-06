@@ -23,12 +23,16 @@ class BookingForm(forms.ModelForm):
 
 
 class RoomForm(forms.ModelForm):
+    facilities_ids = forms.ModelMultipleChoiceField(
+        queryset=Facility.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
+
     class Meta:
         model = Rooms
         fields = ['location', 'title', 'capacity', 'facilities_ids']
 
-    facilities_ids = forms.ModelMultipleChoiceField(
-        queryset=Facility.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=False
-    )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance:
+            self.fields['facilities_ids'].initial = self.instance.facility_set.all()

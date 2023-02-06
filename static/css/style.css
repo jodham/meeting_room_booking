@@ -70,19 +70,14 @@ main {
 .footer{
     background-color: #041E42;
 }
-.room-detail-container{
-    padding-top: 9.0rem;
-    height: auto;
-    margin-left: 1rem;
-    margin-right: 1.0rem;
-}
 .loginbtn{
     background-color: #CB6015;
     margin-top: 2.0rem;
+    color: bold;
 }
 
 .frmlogin{
-    margin-top: 8.5rem;
+    margin-top: 9.5rem;
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     padding: 1.5rem;
@@ -98,7 +93,6 @@ main {
     margin-top: 9.5rem;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
     width: 80%;
-    margin-left: 2.0rem;
     padding: 0.5rem;
     border-radius: 3px;
 }
@@ -106,6 +100,16 @@ main {
     background-color: #CB6015;
     font-weight: bolder;
 }
+.room-create-form{
+    width: 300px;
+    margin-top: 8.5rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    max-width: 300px;
+    padding: 1.5rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+    }
 .room-fields{
     font-weight: bold;
 }
@@ -116,3 +120,27 @@ main {
 }
 
 /*----------x-------room-booking-page-styling-----x-----*/
+
+/*-------------------room-detail-page-styling----------*/
+.room-detail-container{
+    padding-top: 0.5rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    margin-top: 9.5rem;
+    border-radius: 2px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.book-room-form{
+    margin-top: 3.0rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.book-room-btn{
+    background-color: #CB6015;
+    margin-top: 2.0rem;
+    color: bold;
+}
+/*-------------------room-detail-page-styling----------*/

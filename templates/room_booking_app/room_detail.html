@@ -2,88 +2,87 @@
 {%load static%}
 {%block title%}Room Detail{%endblock title%}
 {%block content%}
-
-
-<div class="container">
-    <div class="room-detail-container">
-
-        <div class="row shadow-lg py-2">
-            <div class="col-md-6 mb-3">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title text-center h5">Room Details</h5>
-                      <div class="row mt-3 shadow-sm">
-                          <div class="col h5">Room Name:</div>
-                          <div class="col">{{room.room_name}}</div>
-                      </div>
-
-                      <div class="row mt-3 shadow-sm">
-                          <div class="col h5">Room Location:</div>
-                          <div class="col">{{room.campus_name}}</div>
-                      </div>
-
-                     <div class="row mt-3 shadow-sm">
-                          <div class="col h5">Room capacity:</div>
-                          <div class="col">{{room.room_capacity}}</div>
-                      </div>
-
-
-                </div>
+<div class="row room-detail-container justify-content-center">
+    <div class="col-md-6 mb-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title text-center h5">Room Details</h5>
+              <div class="row mt-3 shadow-sm">
+                  <div class="col h6">Room Name:</div>
+                  <div class="col">{{room.title}}</div>
               </div>
-            </div>
 
-            <div class="col-md-6 mb-3">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title text-center h5">Resources</h5>
-                    {% for resource in resources %}
-                      <div class="row mt-3 shadow-sm">
-                          <div class="col h5">{{resource.resource_name}}:</div>
-                          <div class="col">Available</div>
-                      </div>
-                    {%endfor%}
-                </div>
+              <div class="row mt-3 shadow-sm">
+                  <div class="col h6">Room Location:</div>
+                  <div class="col">{{room.location}}</div>
               </div>
-            </div>
-        </div>
 
-         <main class="shadow-lg">
-             <table class="table data-table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Booked by</th>
-                      <th scope="col">Meeting</th>
-                      <th scope="col">Starting time</th>
-                      <th scope="col">Ending time</th>
-                      <th scope="col">View</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {%for book in bookings%}
-                  <tr>
-                      <td class="text-capitalize">{{book.booked_by}}</td>
-                      <td class="text-capitalize">{{book.title}}</td>
-                      <td>{{book.starting_time}}</td>
-                      <td>{{room.ending_time}}</td>
-                      <td><a href="{%url 'room_detail' room.pk%}">View</a></td>
-                  </tr>
-                  {%endfor%}
-                  </tbody>
-            </table>
-        </main>
+             <div class="row mt-3 shadow-sm">
+                  <div class="col h6">Room capacity:</div>
+                  <div class="col">{{room.capacity}}</div>
+              </div>
 
-         <div class="row py-5 my-4 shadow-lg rounded">
-            <div class="col-2"><a href="#" class="btn btn-secondary">Update Room</a></div>
-            <div class="col-2"><a href="#" class="btn btn-info">Add Resource</a></div>
-
-            <div class="col-2"><a href="" class="btn btn-primary">Unpublish room</a></div>
-
-            <div class="col-2"><a href="{%url 'book_room' room.id%}" class="btn btn-warning">Book Room</a></div>
 
         </div>
+      </div>
+    </div>
 
-</div>
-</div>
+    <div class="col-md-6 mb-3">
+      <div class="card">
+          <table class="table data-table">
+              <thead>
+                <tr>
+                  <th scope="col">Booked by</th>
+                  <th scope="col">Meeting</th>
+                  <th scope="col">Starting time</th>
+                  <th scope="col">Ending time</th>
+                  <th scope="col">View</th>
+                </tr>
+              </thead>
+              <tbody>
+              {%for book in bookings%}
+              <tr>
+                  <td class="text-capitalize">{{book.user_id}}</td>
+                  <td class="text-capitalize">{{book.title}}</td>
+                  <td>{{book.date_start}}</td>
+                  <td>{{book.date_end}}</td>
+                  <td><a href="{%url 'room_detail' room.pk%}">View</a></td>
+              </tr>
+              {%endfor%}
+              </tbody>
+        </table>
+      </div>
+    </div>
 
+
+    <div class="col-md-6">
+        <form method="post" class="book-room-form">
+            {%csrf_token%}
+            <label class="h6">Meeting title</label>
+            <div class="form-group">
+              <input type="text" required autofocus name="title" placeholder='meeting title' class="form-control">
+            </div>
+
+            <label class="h6">Starting date:</label>
+            <div class="form-group">
+              <input type="datetime-local" required name="starting-date" class="form-control">
+            </div>
+
+             <label class="h6">Ending date:</label>
+            <div class="form-group">
+              <input type="datetime-local" required name="ending-date" class="form-control">
+            </div>
+
+            <button class="btn btn-block book-room-btn h5" id="book-room-button"  type="submit">Book Room</button>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <div class="py-3 text-center">
+            <div class="card">
+                <a href="{%url 'room_update' room.id%}" class="btn btn-secondary">Update Room</a>
+            </div>
+        </div>
+    </div>
+</div>
 
 {%endblock content%}

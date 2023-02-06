@@ -12,7 +12,7 @@ urlpatterns = [
 
     path('room/detail/<int:pk>/', room_detail_view, name='room_detail'),
     path('room/create/', create_room_form, name='create_room'),
-    path('room/update/<int:pk>', RoomUpdateView.as_view(), name='room_update'),
+    path('room/update/<int:pk>', RoomUpdateView, name='room_update'),
 
     path('session/', clear_session, name='clear_session')
     # path('book/create_book/', BookCreateView.as_view(), name='book_create')

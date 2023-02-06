@@ -1,5 +1,5 @@
 from django import forms
-from .models import Booking
+from .models import Booking, Campus
 from django import forms
 from .models import Rooms, Facility
 
@@ -22,17 +22,15 @@ class BookingForm(forms.ModelForm):
         self.fields['room_id'].initial = room_id
 
 
-class RoomForm(forms.ModelForm):
-    facilities_ids = forms.ModelMultipleChoiceField(
-        queryset=Facility.objects.all(),
-        widget=forms.CheckboxSelectMultiple
+class RoomForm(forms.Form):
+    location = forms.ModelChoiceField(
+        queryset=Campus.objects.all(),
+        widget=forms.Select,
+        to_field_name='id'
     )
-
-    class Meta:
-        model = Rooms
-        fields = ['location', 'title', 'capacity', 'facilities_ids']
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.instance:
-            self.fields['facilities_ids'].initial = self.instance.facility_set.all()
+    title = forms.CharField(max_length=100)
+    capacity = forms.IntegerField()
+    facilities = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        choices=[(facility.id, facility.title) for facility in Facility.objects.all()]
+    )

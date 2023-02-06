@@ -1,3 +1,5 @@
+from array import array
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -47,34 +49,32 @@ def create_room_form(request):
 
 
 # ------------------------------------Update Views---------------------------->
-class RoomUpdateView(UpdateView):
-    model = Rooms
-    form_class = RoomForm
-    template_name = 'room_booking_app/update_room.html'
-    success_url = 'dashboard'
 
-    def get_object(self, queryset=None):
-        room = Rooms.objects.get(id=self.kwargs['pk'])
-        return room
+def RoomUpdateView(request, pk):
+    room = Rooms.objects.get(id=pk)
+    facilities_ids = room.facilities_ids.split(',')
+    facilities = Facility.objects.all()
+    form = RoomForm(request.POST or None)
 
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.form_class(instance=self.object)
-        form.fields['facilities_ids'].initial = ",".join(str(x) for x in self.object.get_facilities_ids())
-        return self.render_to_response(self.get_context_data(form=form))
+    if form.is_valid():
+        location = form.cleaned_data.get('location')
+        title = form.cleaned_data.get('title')
+        capacity = form.cleaned_data.get('capacity')
+        selected_facilities = form.cleaned_data.get('facilities')
 
-    def post(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        form = self.form_class(request.POST, instance=self.object)
-        if form.is_valid():
-            form.save()
-            self.object.facilities_ids = ",".join(str(x) for x in form.cleaned_data['facilities_ids'])
-            self.object.save()
-            return redirect(self.success_url)
-        return render(request, self.template_name, {'form': form})
+        room.location = location
+        room.title = title
+        room.capacity = capacity
+        room.facilities_ids = ','.join(selected_facilities)
+        room.save()
+        return redirect('dashboard')
 
+    form.fields['location'].initial = room.location
+    form.fields['title'].initial = room.title
+    form.fields['capacity'].initial = room.capacity
+    form.fields['facilities'].initial = facilities_ids
 
-
+    return render(request, 'room_booking_app/update_room.html', {'form': form, 'facilities': facilities})
 
 
 class BookingUpdateView(UpdateView):

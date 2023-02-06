@@ -108,6 +108,7 @@ main {
     max-width: 300px;
     padding: 1.5rem;
     border-radius: 5px;
+    border: 2px solid #0000;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
     }
 .room-fields{
@@ -130,17 +131,25 @@ main {
     border-radius: 2px;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }
+.horizontal-line{
+    background-color: #041e42;
+    font-weight: bolder;
+}
+.room-detail-titles{
+    color: #cb6015;
+}
 .book-room-form{
-    margin-top: 3.0rem;
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
-    padding: 1.5rem;
+    margin-top: 2.0rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    padding: 0.5rem;
+    max-width: 300px;
     border-radius: 5px;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }
 .book-room-btn{
     background-color: #CB6015;
     margin-top: 2.0rem;
-    color: bold;
+    font-weight: bold;
 }
 /*-------------------room-detail-page-styling----------*/

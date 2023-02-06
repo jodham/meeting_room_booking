@@ -89,10 +89,6 @@ def clear_session(request):
 
 
 # ------------------------------------DetailView Views---------------------------
-class RoomDetailView(DetailView):
-    model = Rooms
-
-
 class BookDetailView(DetailView):
     model = Booking
 
@@ -100,29 +96,45 @@ class BookDetailView(DetailView):
 def room_detail_view(request, pk):
     room = Rooms.objects.get(pk=pk)
     bookings = Booking.objects.filter(room_id_id=pk)
-    user = request.user
-    print(room)
+    booked_by = User.objects.get(email=request.user)
+    facility = room.facilities_ids.split(',')
+    facilities = Facility.objects.filter(id__in=facility)
+    # ---------------------boook-room----form---------------->
     if request.method == "POST":
-        room_id = room
-        booked_by = user
-        title = request.POST.get('title')
-        starting_date = request.POST.get('starting-date')
-        ending_date = request.POST.get('ending-date')
+        title = request.POST.get('meeting_title')
+        starting_time = request.POST.get('starting_time')
+        ending_time = request.POST.get('ending_time')
 
-        if starting_date < str(timezone.now()):
-            messages.error(request, 'choose starting time greater than now')
-        elif ending_date <= starting_date:
-            messages.error(request, 'choosing ending time beyond starting time')
-        else:
-            booking = Booking()
-            booking.room_id = room_id
-            booking.user_id = booked_by
-            booking.title = title
-            booking.date_start = starting_date
-            booking.date_end = ending_date
-            booking.save()
-    templatename = 'room_booking_app/room_detail.html'
-    context = {"room": room, 'bookings': bookings}
+        # Check if starting_time is greater than current time
+        if starting_time < str(timezone.now()):
+            messages.error(request, 'Start time must be greater than current time.')
+            return redirect('room_booking_app:book_room', room)
+
+        # Check if ending_time is greater than starting_time
+        elif ending_time < starting_time:
+            messages.warning(request, 'ending time cannot be less than starting time')
+            return redirect('room_booking_app:book_room', room)
+
+        # Check if the time frame for the booking is not within another approved booking
+        overlapping_bookings = Booking.objects.filter(room_id=room, is_approved=True,
+                                                      date_start__lte=ending_time,
+                                                      date_end__gte=starting_time)
+        if overlapping_bookings.exists():
+            messages.warning(request, 'This room is already booked for this time frame.')
+            return redirect('room_booking_app/book_room', room)
+
+        bookings = Booking()
+        bookings.room_id = room
+        bookings.booked_by = booked_by
+        bookings.title = title
+        bookings.date_start = starting_time
+        bookings.date_end = ending_time
+        bookings.save()
+
+        return redirect('bookings')
+
+    templatename = 'room_booking_app/rooms_form.html'
+    context = {"room": room, 'pk': pk, 'bookings': bookings, 'facilities': facilities}
     return render(request, templatename, context)
 
 
@@ -137,22 +149,33 @@ def book_room(request, pk):
         starting_time = request.POST.get('starting_time')
         ending_time = request.POST.get('ending_time')
 
+        # Check if starting_time is greater than current time
         if starting_time < str(timezone.now()):
             messages.error(request, 'Start time must be greater than current time.')
-            # return redirect('room_booking_app:book_room', room)
+            return redirect('room_booking_app:book_room', room)
+
+        # Check if ending_time is greater than starting_time
         elif ending_time < starting_time:
             messages.warning(request, 'ending time cannot be less than starting time')
+            return redirect('room_booking_app:book_room', room)
 
-        else:
-            bookings = Booking()
-            bookings.room_id = room
-            bookings.booked_by = booked_by
-            bookings.title = title
-            bookings.starting_time = starting_time
-            bookings.ending_time = ending_time
-            bookings.save()
+        # Check if the time frame for the booking is not within another approved booking
+        overlapping_bookings = Booking.objects.filter(room_id=room, is_approved=True,
+                                                      date_start__lte=ending_time,
+                                                      date_end__gte=starting_time)
+        if overlapping_bookings.exists():
+            messages.warning(request, 'This room is already booked for this time frame.')
+            return redirect('room_booking_app/book_room', room)
 
-            return redirect('bookings')
+        bookings = Booking()
+        bookings.room_id = room
+        bookings.booked_by = booked_by
+        bookings.title = title
+        bookings.date_start = starting_time
+        bookings.date_end = ending_time
+        bookings.save()
+
+        return redirect('bookings')
 
     templatename = 'room_booking_app/rooms_form.html'
     context = {"room": room, 'pk': pk}

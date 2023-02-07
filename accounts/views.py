@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 
-from accounts.forms import CreateUserAccount
+from accounts.forms import CreateUserAccount, create_user
 from room_booking_app.models import User
 
 
@@ -71,3 +71,16 @@ def user_detail(request, pk):
     templatename = 'adminstrator/user-detail.html'
     context = {'user_id': user_id}
     return render(request, templatename, context)
+
+
+def add_user(request):
+    if request.method == 'POST':
+        form = create_user(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('system_users')
+    else:
+        form = create_user()
+        messages.error(request, "wrong user details")
+    templatename = 'accounts/register.html'
+    return render(request, templatename, {'form': form})

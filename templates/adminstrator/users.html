@@ -3,6 +3,10 @@
 {%block content%}
 <div class="py-4 text-center h4 users-page-title">Users</div>
 <div class="row adminstrator-users-panel justify-content-center">
+    <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
+      <div class="py-2 text-center h3"></div>
+      <a class="btn float-right add-room-button" href="{%url 'create_user'%}">Add User</a>
+    </div>
     <div class="card users-table-container">
          <table class="table data-table">
               <thead>

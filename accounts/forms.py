@@ -9,3 +9,11 @@ class CreateUserAccount(UserCreationForm):
     class Meta:
         model = User
         fields = ['email', 'first_name', 'last_name', 'password1', 'password2']
+
+
+class create_user(UserCreationForm):
+    email = forms.EmailField()
+
+    class Meta:
+        model = User
+        fields = ['email', 'first_name', 'last_name', 'password1', 'password2']

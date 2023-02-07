@@ -1,23 +1,17 @@
 {%extends 'base/base.html'%}
-{%block title%}Create account{%endblock title%}
+{%load static%}
+{%block title%}index{%endblock title%}
 {%block content%}
-<div class="container">
-    <div class="row">
-        <div class="col-lg-8 mt-3 ml-5 shadow-lg content-align-center">
-            <div class="py-5 text-center"><label class="text-info h4">Register</label></div>
-            <div class="container-fluid">
-                <div class="row shadow-lg justify-content-center">
-                    <div class="col-md-6">
-                        <form method="post">
-                            {% csrf_token %}
-                            {{form.as_p}}
-                            <input type="submit" value="Register">
-                        </form>
-                    </div>
-                </div>
-            </div>
-
+<div class="row justify-content-center">
+    <form method="post" class="form-container frmlogin">
+        {%csrf_token%}
+        {%for field in form%}
+        {{field.label_tag}}
+        <div class="form-control form-control-lg">
+            {{field}}
         </div>
-    </div>
+        {%endfor%}
+        <button class="btn btn-block loginbtn h5" type="submit">Create User</button>
+    </form>
 </div>
 {%endblock content%}

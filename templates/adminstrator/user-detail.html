@@ -42,6 +42,45 @@
 
    </div>
 
+   <div class="col-md-4">
+      <div class="row shadow-sm  mx-2 mt-2">
+           <div class="col">
+               Status
+           </div>
+           <div class="col">
+               {%if user_id.active == 1%}
+               Active
+               {%else%}
+               Not Active
+               {%endif%}
+           </div>
+       </div>
+        <div class="row shadow-sm  mx-2 mt-2">
+           <div class="col">
+               Last Login
+           </div>
+           <div class="col">
+               {{user_id.last_login}}
+           </div>
+       </div>
+        <div class="row shadow-sm  mx-2 mt-2">
+           <div class="col">
+               Date Created
+           </div>
+           <div class="col">
+               {{user_id.created_at}}
+           </div>
+       </div>
+        <div class="row shadow-sm  mx-2 mt-2">
+           <div class="col">
+               Date Updated
+           </div>
+           <div class="col">
+               {{user_id.updated_at}}
+           </div>
+       </div>
+  </div>
+
     <div class="col-md-4">
       <div class="row shadow-sm  mx-2 mt-2">
            <div class="col btn">

@@ -58,8 +58,16 @@ def adminstrator(request):
     return render(request, templatename, context)
 
 
+# ------------------------ListView-------------------------
 class UsersListView(ListView):
     model = User
     context_object_name = 'users'
     ordering = 'updated_at'
     template_name = 'adminstrator/users.html'
+
+
+def user_detail(request, pk):
+    user_id = User.objects.get(id=pk)
+    templatename = 'adminstrator/user-detail.html'
+    context = {'user_id': user_id}
+    return render(request, templatename, context)

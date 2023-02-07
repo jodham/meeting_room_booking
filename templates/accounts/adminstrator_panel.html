@@ -1,0 +1,29 @@
+{%extends 'base/base.html'%}
+{%block title%}Admin Panel{%endblock title%}
+{%block content%}
+<div class="text-center admin-title">Adminstration Page</div>
+
+<div class="row adminstrator-panel">
+  <a href="{%url 'system_users'%}" class="card col-2">
+    <div class="card-body">
+      <div class="card-title h5">
+        Users
+      </div>
+    </div>
+  </a>
+
+   <a href="#" class="card admin-card  col-2">
+    <div class="card-body">
+      body
+    </div>
+  </a>
+
+   <a href="#" class="card admin-card col-2">
+    <div class="card-body">
+      body
+    </div>
+  </a>
+
+</div>
+
+{%endblock content%}

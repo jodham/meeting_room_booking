@@ -1,0 +1,33 @@
+{%extends 'base/base.html'%}
+{%block title%}System Users{%endblock title%}
+{%block content%}
+<div class="py-4 text-center h4 users-page-title">Users</div>
+<div class="row adminstrator-users-panel justify-content-center">
+    <div class="card users-table-container">
+         <table class="table data-table">
+              <thead>
+                <tr>
+
+                  <th scope="col">Email</th>
+                  <th scope="col">First Name</th>
+                  <th scope="col">Last Name</th>
+                  <th scope="col">level</th>
+                  <th scope="col">Manage</th>
+                </tr>
+              </thead>
+              <tbody>
+              {%for user in users%}
+              <tr>
+                  <td>{{user.email}}</td>
+                  <td>{{user.first_name}}</td>
+                  <td>{{user.last_name}}</td>
+                  <td>{{user.is_admin}}</td>
+                  <td><a href="{%url 'user_detail' user.pk%}">manage</a> </td>
+              </tr>
+              {%endfor%}
+              </tbody>
+        </table>
+    </div>
+    </div>
+
+{%endblock content%}

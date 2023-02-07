@@ -185,3 +185,17 @@ main {
     width: 95%;
     margin-left: 1.5rem;
 }
+.user-detail-title{
+    margin-top: 5.0rem;
+    color: #CB6015;
+    font-weight: bold;
+}
+.user-details-wrapper{
+    padding: 1.5rem;
+    margin: 1.5rem;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.user-details-container{
+    margin-left: 1.5rem;
+    padding: 0;
+}

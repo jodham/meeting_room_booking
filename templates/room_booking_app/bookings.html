@@ -8,7 +8,6 @@
          <table class="table data-table">
               <thead>
                 <tr>
-
                   <th scope="col">Location</th>
                   <th scope="col">Room</th>
                   <th scope="col">Meeting</th>
@@ -23,7 +22,7 @@
                   <td>{{book.room_id}}</td>
                   <td>{{book.title}}</td>
                   <td>{{book.user_id}}</td>
-                  <td><a href="{%url 'booking_detail' book.pk%}">View</a></td>
+                  <td><a href="{%url 'booking_detail' room.id%}">View</a></td>
               </tr>
               {%endfor%}
               </tbody>

@@ -153,3 +153,35 @@ main {
     font-weight: bold;
 }
 /*-------------------room-detail-page-styling----------*/
+
+
+/*-------------------------adminstrator page--styling*/
+.admin-title{
+    margin-top: 7.0rem;
+    color: #CB6015;
+    font-weight: bold;
+}
+.adminstrator-panel{
+    padding: 1.5rem;
+    margin: 1.5rem;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.admin-card{
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+}
+/*--------------------users-page-styling----------------*/
+.users-page-title{
+    margin-top: 5.0rem;
+    color: #CB6015;
+    font-weight: bold;
+}
+.adminstrator-users-panel{
+    padding: 1.5rem;
+    margin: 1.5rem;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.users-table-container{
+    width: 95%;
+    margin-left: 1.5rem;
+}

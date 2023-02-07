@@ -1,8 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect
+from django.views.generic import ListView
 
 from accounts.forms import CreateUserAccount
+from room_booking_app.models import User
 
 
 # Create your views here.
@@ -47,3 +49,17 @@ def signout(request):
     logout(request)
     return redirect('signin')
 
+
+# -------------------Admin--page---------------------
+
+def adminstrator(request):
+    templatename = 'accounts/adminstrator_panel.html'
+    context = {}
+    return render(request, templatename, context)
+
+
+class UsersListView(ListView):
+    model = User
+    context_object_name = 'users'
+    ordering = 'updated_at'
+    template_name = 'adminstrator/users.html'

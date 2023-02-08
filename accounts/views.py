@@ -1,10 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
-from django.views.generic import ListView
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.views.generic import ListView, CreateView, UpdateView
+from django.contrib.admin.models import LogEntry
 
 from accounts.forms import CreateUserAccount, create_user
-from room_booking_app.models import User
+from room_booking_app.models import User, Facility
 
 
 # Create your views here.
@@ -84,3 +86,67 @@ def add_user(request):
         messages.error(request, "wrong user details")
     templatename = 'accounts/register.html'
     return render(request, templatename, {'form': form})
+
+
+def activate_deactivate_user(request, id):
+    if not (request.user.is_authenticated and request.user.is_admin):
+        return redirect('signin')
+    user = get_object_or_404(User, id=id)
+    if user.active:
+        user.active = False
+        user.save()
+        messages.success(request, 'user has been deactivated', extra_tags="alert alert warning dismissable show")
+        return redirect('system_users')
+    else:
+        user.active = True
+        user.save()
+        messages.success(request, 'user has been activated', extra_tags="alert alert warning dismissable show")
+        return redirect('system_users')
+
+
+def system_logs(request):
+    logs = LogEntry.objects.all()
+    templatename = 'adminstrator/system-logs.html'
+    context = {'logs': logs}
+    return render(request, templatename, context)
+
+
+# -----------------------peripherals---------------------
+def peripherals(request):
+    peripheral = Facility.objects.all()
+    context = {'peripheral': peripheral}
+    return render(request, 'adminstrator/peripherals.html', context)
+
+
+def create_peripheral(request):
+    if request.method == "POST":
+        title = request.POST.get('title')
+        facility = Facility()
+        facility.title = title
+        facility.save()
+        return reverse('peripherals')
+    templatename = 'adminstrator/create_peripheral.html'
+    return render(request, templatename)
+
+
+class PeripheralUpdateView(UpdateView):
+    model = Facility
+    fields = ['title']
+    success_url = 'peripherals'
+    template_name = 'adminstrator/create_peripheral.html'
+
+
+def activate_deactivate_peripheral(request, pk):
+    if not request.user.is_admin:
+        return redirect(signin)
+    peripheral = get_object_or_404(Facility, id=pk)
+    if peripheral.active:
+        peripheral.active = False
+        messages.success(request, 'peripheral is deactivated')
+        peripheral.save()
+        return redirect('peripherals')
+    else:
+        peripheral.active = True
+        messages.success(request, 'peripheral is activated')
+        peripheral.save()
+        return redirect('peripherals')

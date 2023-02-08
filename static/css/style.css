@@ -170,6 +170,9 @@ main {
     margin-left: 0.5rem;
     margin-right: 0.5rem;
 }
+.adminstrator-page-card-titles{
+    color: #041e42;
+}
 /*--------------------users-page-styling----------------*/
 .users-page-title{
     margin-top: 5.0rem;
@@ -180,6 +183,10 @@ main {
     padding: 1.5rem;
     margin: 1.5rem;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.add-user-button{
+    background-color: #CB6015;
+    font-weight: bolder;
 }
 .users-table-container{
     width: 95%;

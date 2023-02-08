@@ -6,7 +6,7 @@
 <div class="row adminstrator-panel">
   <a href="{%url 'system_users'%}" class="card col-2">
     <div class="card-body">
-      <div class="card-title h5">
+      <div class="card-title h5 adminstrator-page-card-titles">
         Users
       </div>
     </div>
@@ -14,16 +14,26 @@
 
    <a href="#" class="card admin-card  col-2">
     <div class="card-body">
-      body
+        <div class="card-title h5 adminstrator-page-card-titles">
+            Facilities
+        </div>
     </div>
   </a>
 
-   <a href="#" class="card admin-card col-2">
+   <a href="{%url 'peripherals'%}" class="card admin-card col-2">
     <div class="card-body">
-      body
+        <div class="card-title h5 adminstrator-page-card-titles" >
+            Peripherals
+        </div>
     </div>
   </a>
-
+  <a href="{%url 'system_logs'%}" class="card admin-card col-2">
+    <div class="card-body">
+        <div class="card-title h5 adminstrator-page-card-titles">
+            System Logs
+        </div>
+    </div>
+  </a>
 </div>
 
 {%endblock content%}

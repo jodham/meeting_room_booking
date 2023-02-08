@@ -5,42 +5,41 @@
 <div class="row adminstrator-users-panel justify-content-center">
     <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
       <div class="py-2 text-center h3"></div>
-      <a class="btn float-right add-user-button" href="{%url 'create_user'%}">Add User</a>
+      <a class="btn float-right add-user-button" href="{%url 'create_peripheral'%}">Add Peripheral</a>
     </div>
     <div class="card users-table-container">
          <table class="table data-table">
               <thead>
                 <tr>
 
-                  <th scope="col">Email</th>
-                  <th scope="col">First Name</th>
-                  <th scope="col">Last Name</th>
-                  <th scope="col">level</th>
+                  <th scope="col">id</th>
+                  <th scope="col">name</th>
+                  <th scope="col">Date Added</th>
+                  <th scope="col">Date Modified</th>
                   <th scope="col">Status</th>
                   <th scope="col">Manage</th>
                 </tr>
               </thead>
               <tbody>
-              {%for user in users%}
+              {%for item in peripheral%}
               <tr>
-                  <td>{{user.email}}</td>
-                  <td>{{user.first_name}}</td>
-                  <td>{{user.last_name}}</td>
-                  <td>{{user.is_admin}}</td>
+                  <td>{{item.id}}</td>
+                  <td>{{item.title}}</td>
+                  <td>{{item.date_created}}</td>
+                  <td>{{item.date_modified}}</td>
                   <td>
-                      {%if user.active == 1%}
-                      Active
-                      {%else%}
-                      Not Active
-                      {%endif%}
+                    {%if item.active == 1%}
+                    Active
+                    {%else%}
+                    Not Active
+                    {%endif%}
                   </td>
                   <td>
-                      <a href="{%url 'user_detail' user.pk%}">view</a>
-                      <a href="#">update</a>
+                      <a href="{%url 'update_peripheral' item.pk%}">update</a>
                       {%if user.active == 1%}
-                      <a href="{%url 'activate_deactivate_user' user.id%}">disable</a>
+                      <a href="{%url 'activate_deactivate_peripheral' item.pk%}">disable</a>
                       {%else%}
-                      <a href="{%url 'activate_deactivate_user' user.id%}">activate</a>
+                      <a href="{%url 'activate_deactivate_peripheral' item.pk%}">activate</a>
                       {%endif%}
                   </td>
               </tr>

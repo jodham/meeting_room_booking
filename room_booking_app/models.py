@@ -67,6 +67,15 @@ class User(AbstractBaseUser):
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
 
+    @property
+    def activate_disable_user(pk):
+        user = User.objects.get(id=pk)
+        if user.active:
+            user.active = False
+        else:
+            user.active = True
+        return user
+
 
 class Campus(models.Model):
     title = models.CharField(max_length=30)

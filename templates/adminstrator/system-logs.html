@@ -1,0 +1,33 @@
+{%extends 'base/base.html'%}
+{%block title%}System Logs{%endblock title%}
+{%block content%}
+<div class="py-4 text-center h4 users-page-title">System Logs</div>
+<div class="row adminstrator-users-panel justify-content-center">
+    <div class="card users-table-container">
+         <table class="table data-table">
+              <thead>
+                <tr>
+
+                  <th scope="col">id</th>
+                  <th scope="col">Action time</th>
+                  <th scope="col">Message</th>
+                  <th scope="col">Object</th>
+                  <th scope="col">Actioned by</th>
+                </tr>
+              </thead>
+              <tbody>
+              {%for x in logs%}
+              <tr>
+                  <td>{{x.id}}</td>
+                  <td>{{x.action_time}}</td>
+                  <td>{{x.change_message}}</td>
+                  <td>{{x.object_repr}}</td>
+                  <td>{{x.user}}</td>
+              </tr>
+              {%endfor%}
+              </tbody>
+        </table>
+    </div>
+    </div>
+
+{%endblock content%}

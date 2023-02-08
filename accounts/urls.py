@@ -18,5 +18,7 @@ urlpatterns = [
     path('adminstrator/peripherals', peripherals, name='peripherals'),
     path('adminstrator/peripheral/create', create_peripheral, name='create_peripheral'),
     path('adminstrator/peripheral/update/<int:pk>', PeripheralUpdateView.as_view(), name='update_peripheral'),
-    path('adminstrator/peripheral/activate_deactivate/<int:pk>', activate_deactivate_peripheral, name='activate_deactivate_peripheral')
+    path('adminstrator/peripheral/activate_deactivate/<int:pk>', activate_deactivate_peripheral,
+         name='activate_deactivate_peripheral'),
+    path('adminstrator/rooms/activate_deactivate_room/<int:pk>', activate_deactivate_room, name='activate_deactivate_room')
 ]

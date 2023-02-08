@@ -6,7 +6,7 @@ from django.views.generic import ListView, CreateView, UpdateView
 from django.contrib.admin.models import LogEntry
 
 from accounts.forms import CreateUserAccount, create_user
-from room_booking_app.models import User, Facility
+from room_booking_app.models import User, Facility, Rooms
 
 
 # Create your views here.
@@ -150,3 +150,20 @@ def activate_deactivate_peripheral(request, pk):
         messages.success(request, 'peripheral is activated')
         peripheral.save()
         return redirect('peripherals')
+
+
+# --------------------------rooms/facilities---------------
+def activate_deactivate_room(request, pk):
+    if not request.user.is_admin:
+        return redirect(signin)
+    room = get_object_or_404(Rooms, id=pk)
+    if room.is_active:
+        room.is_active = False
+        messages.success(request, 'room has been deactivated', fail_silently=True)
+        room.save()
+        return redirect('dashboard')
+    else:
+        room.is_active = True
+        messages.success(request, 'room has been activated', fail_silently=True)
+        room.save()
+        return redirect('dashboard')

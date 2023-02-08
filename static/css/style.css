@@ -206,3 +206,11 @@ main {
     margin-left: 1.5rem;
     padding: 0;
 }
+.activate_item_link{
+    color: #CB6015;
+    font-weight: bold;
+}
+.update_disable_item_link{
+    color: #041e42;
+    font-weight: bold;
+}

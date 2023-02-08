@@ -3,6 +3,7 @@
 {%block content%}
 
 <div class="row justify-content-center">
+
     <div class="room-bookings-card">
         <div class="py-4 text-center h4">Bookings</div>
          <table class="table data-table">
@@ -22,7 +23,7 @@
                   <td>{{book.room_id}}</td>
                   <td>{{book.title}}</td>
                   <td>{{book.user_id}}</td>
-                  <td><a href="{%url 'booking_detail' room.id%}">View</a></td>
+                  <td><a href="#">View</a></td>
               </tr>
               {%endfor%}
               </tbody>

@@ -36,11 +36,11 @@
                   </td>
                   <td>
                       <a href="{%url 'user_detail' user.pk%}">view</a>
-                      <a href="#">update</a>
+                      <a class="update_disable_item_link" href="#">update</a>
                       {%if user.active == 1%}
-                      <a href="{%url 'activate_deactivate_user' user.id%}">disable</a>
+                      <a class="update_disable_item_link" href="{%url 'activate_deactivate_user' user.id%}">disable</a>
                       {%else%}
-                      <a href="{%url 'activate_deactivate_user' user.id%}">activate</a>
+                      <a class="activate_item_link" href="{%url 'activate_deactivate_user' user.id%}">activate</a>
                       {%endif%}
                   </td>
               </tr>

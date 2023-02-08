@@ -7,7 +7,16 @@
         <div class="room-bookings-card">
             <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
               <div class="py-2 text-center h3">Available Rooms</div>
+                 {% if messages %}
+                <ul class="messages">
+                    {% for message in messages %}
+                     {{ message.tags }} {{message}}
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                {%if request.user.is_admin%}
               <a class="btn float-right add-room-button" href="{%url 'create_room'%}">Add Room</a>
+                {%endif%}
             </div>
              <table class="table data-table">
                   <thead>
@@ -15,6 +24,7 @@
                       <th scope="col">Name</th>
                       <th scope="col">Location</th>
                       <th scope="col">Capacity</th>
+                        <th scope="col">Status</th>
                       <th scope="col">View</th>
                     </tr>
                   </thead>
@@ -24,7 +34,20 @@
                       <td class="text-capitalize room-fields">{{room.title}}</td>
                       <td class="text-capitalize room-fields">{{room.location}}</td>
                       <td class="room-fields">{{room.capacity}}</td>
-                      <td class="room-fields"><a href="{%url 'room_detail' room.pk%}">View</a></td>
+                      {%if room.is_active == 1%}
+                      <td class="room-fields">Active</td>
+                      {%else%}
+                      <td class="room-fields">Not Active</td>
+                      {%endif%}
+                      <td class="room-fields">
+                          <a href="{%url 'room_detail' room.pk%}">View</a>
+                          <a href="{%url 'room_update' room.id%}" class="update_disable_item_link">Update</a>
+                          {%if room.is_active == 1%}
+                          <a href="{%url 'activate_deactivate_room' room.pk%}" class="update_disable_item_link">Disable</a>
+                          {%else%}
+                          <a href="{%url 'activate_deactivate_room' room.pk%}" class="activate_item_link">activate</a>
+                          {%endif%}
+                      </td>
                   </tr>
                   {%endfor%}
                   </tbody>

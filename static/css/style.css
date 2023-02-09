@@ -185,11 +185,13 @@ main {
 }
 .add-user-button{
     background-color: #CB6015;
-    font-weight: bolder;
+    font-weight: bold;
+    border-radius: 2px;
+    color: white;
+    margin: 0.5rem;
 }
 .users-table-container{
     width: 95%;
-    margin-left: 1.5rem;
 }
 .user-detail-title{
     margin-top: 5.0rem;

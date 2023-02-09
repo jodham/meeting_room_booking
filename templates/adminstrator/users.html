@@ -3,11 +3,11 @@
 {%block content%}
 <div class="py-3 text-center h4 users-page-title">Users</div>
 <div class="row adminstrator-users-panel justify-content-center">
-    <div class="d-flex align-items-center">
-      <div class="py-2 text-left h3">Available Rooms</div>
-      <a class="btn float-right add-user-button" href="{%url 'create_user'%}">Add User</a>
-    </div>
     <div class="card users-table-container">
+     <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
+      <div class="py-2 float-left h6"></div>
+        <div class="float-right"><a class="add-user-button" href="{%url 'create_user'%}">Add User</a></div>
+    </div>
          <table class="table data-table">
               <thead>
                 <tr>

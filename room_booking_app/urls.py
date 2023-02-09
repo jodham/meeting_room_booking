@@ -7,7 +7,7 @@ urlpatterns = [
 
     # path('book/room/<int:pk>', book_room, name='book_room'),
     path('bookings/', Bookings_View, name='bookings'),
-    path('book/detail/<int:id>', booking_detail_view, name='booking_detail'),
+    path('book/detail/<int:pk>', booking_detail_view, name='booking_detail'),
     path('book/update/<int:pk>', BookingUpdateView.as_view(), name='booking_update'),
 
     path('room/detail/<int:pk>/', room_detail_view, name='room_detail'),

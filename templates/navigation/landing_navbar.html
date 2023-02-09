@@ -15,10 +15,10 @@
       <li class="nav-item">
         <a class="nav-link text-white" href="{%url 'bookings'%}">Bookings</a>
       </li>
-    {%if request.user.is_admin%}
+    {%if role == 'administrator'%}
      <li class="nav-item">
         <a class="nav-link text-white" href="{%url 'adminstrator_page'%}">Admin</a>
-      </li>
+     </li>
     {%endif%}
       <li class="nav-item">
         <a class="nav-link text-white" href="{%url 'signout'%}">Logout</a>

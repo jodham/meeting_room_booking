@@ -1,35 +1,99 @@
 {%extends 'base/base.html'%}
-{%load static%}
-{%block title%}dashboard{%endblock title%}
+{%block title%}Booking details{%endblock title%}
 {%block content%}
+<div class="py-4 h4 text-center user-detail-title">book details</div>
+<div class="row user-details-wrapper">
+   <div class="col-md-4 user-details-container">
 
-<div class="container">
+       <div class="row shadow-sm mx-2 mt-2">
+           <div class="col book-detail-title-text">
+               Campus Name
+           </div>
+           <div class="col">
+               {{booking.room_id.location}}
+           </div>
+       </div>
 
-        <main class="shadow-lg">
-              <div class="py-4 text-center h3">Available Rooms</div>
-             <table class="table data-table">
-                  <thead>
-                    <tr>
-                      <th scope="col">Name</th>
-                      <th scope="col">Location</th>
-                      <th scope="col">Capacity</th>
-                      <th scope="col">Number</th>
-                      <th scope="col">View</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {%for book in bookings%}
-                  <tr>
-                      <td class="text-capitalize">{{book.room_name}}</td>
-                      <td class="text-capitalize">{{room.campus_name}}</td>
-                      <td>{{room.room_capacity}}</td>
-                      <td>{{room.room_number}}</td>
-                      <td><a href="{%url 'room_detail' room.pk%}">View</a></td>
-                  </tr>
-                  {%endfor%}
-                  </tbody>
-            </table>
-        </main>
+       <div class="row shadow-sm mx-2 mt-2">
+           <div class="col book-detail-title-text">
+               Room Name
+           </div>
+           <div class="col">
+               {{booking.room_id}}
+           </div>
+       </div>
+
+       <div class="row shadow-sm mx-2 mt-2">
+           <div class="col book-detail-title-text">
+               Meeting Name
+           </div>
+           <div class="col">
+               {{booking.title}}
+           </div>
+       </div>
+       <div class="row shadow-sm  mx-2 mt-2">
+           <div class="col book-detail-title-text">
+               Booked by
+           </div>
+           <div class="col">
+               {{booking.user_id}}
+           </div>
+       </div>
+
+   </div>
+
+   <div class="col-md-4">
+      <div class="row shadow-sm  mx-2 mt-2">
+           <div class="col book-detail-title-text">
+               Date Booked
+           </div>
+           <div class="col">
+              {{booking.date_created}}
+           </div>
+       </div>
+        <div class="row shadow-sm  mx-2 mt-2">
+           <div class="col book-detail-title-text">
+               Starting Date
+           </div>
+           <div class="col">
+               {{booking.date_start}}
+           </div>
+       </div>
+        <div class="row shadow-sm  mx-2 mt-2">
+           <div class="col book-detail-title-text">
+               Ending time
+           </div>
+           <div class="col">
+               {{booking.date_end}}
+           </div>
+       </div>
+        <div class="row shadow-sm  mx-2 mt-2">
+           <div class="col book-detail-title-text">
+               Status
+           </div>
+           <div class="col">
+               {%if booking.status == 0%}
+               Pending
+               {%elif booking.status == 1%}
+               Approved
+               {%else%}
+               Rejected
+               {%endif%}
+           </div>
+       </div>
+  </div>
+    {%if role == 'approver' or role == 'administrator'%}
+<div class="col-md-3">
+     <div class="row shadow-sm  mx-2 mt-2">
+       <div class="col book-detail-title-text">
+           <a href="{%url 'approve_booking' booking.pk%}" class="btn approve-booking-btn">Approve</a>
+       </div>
+       <div class="col">
+          <a href="{%url 'reject_booking' booking.pk%}" class="btn reject-booking-btn">Reject</a>
+       </div>
+   </div>
 </div>
+{%endif%}
+    </div>
 
 {%endblock content%}

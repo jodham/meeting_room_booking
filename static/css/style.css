@@ -180,8 +180,7 @@ main {
     font-weight: bold;
 }
 .adminstrator-users-panel{
-    padding: 1.5rem;
-    margin: 1.5rem;
+    margin: 0.5rem;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }
 .add-user-button{
@@ -212,5 +211,22 @@ main {
 }
 .update_disable_item_link{
     color: #041e42;
+    font-weight: bold;
+}
+/* -------------------booking detail styling-----------------*/
+.book-detail-title-text{
+    font-weight: bold;
+}
+.approve-booking-btn{
+    background-color: #041e42;
+    color: white;
+    font-weight: bold;
+}
+.approve-booking-btn:hover{
+    color: #CB6015;
+}
+.reject-booking-btn{
+    background-color: #CB6015;
+    color: white;
     font-weight: bold;
 }

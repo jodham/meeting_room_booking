@@ -1,7 +1,7 @@
 from django import forms
+
 from .models import Booking, Campus
-from django import forms
-from .models import Rooms, Facility
+from .models import Facility
 
 
 class BookingForm(forms.ModelForm):

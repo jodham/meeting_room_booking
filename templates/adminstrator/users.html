@@ -3,15 +3,15 @@
 {%block content%}
 <div class="py-3 text-center h4 users-page-title">Users</div>
 <div class="row adminstrator-users-panel justify-content-center">
-    <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
-      <div class="py-2 text-center h3"></div>
+    <div class="d-flex align-items-center">
+      <div class="py-2 text-left h3">Available Rooms</div>
       <a class="btn float-right add-user-button" href="{%url 'create_user'%}">Add User</a>
     </div>
     <div class="card users-table-container">
          <table class="table data-table">
               <thead>
                 <tr>
-
+                  <th scope="col">No.</th>
                   <th scope="col">Email</th>
                   <th scope="col">First Name</th>
                   <th scope="col">Last Name</th>
@@ -21,22 +21,23 @@
                 </tr>
               </thead>
               <tbody>
-              {%for user in users%}
+              {%for user, role in user_roles%}
               <tr>
+                  <td>{{forloop.counter}}</td>
                   <td>{{user.email}}</td>
                   <td>{{user.first_name}}</td>
                   <td>{{user.last_name}}</td>
-                  <td>{{user.is_admin}}</td>
+                  <td>{{role}}</td>
                   <td>
-                      {%if user.active == 1%}
+                    {%if user.active%}
                       Active
-                      {%else%}
+                    {%else%}
                       Not Active
-                      {%endif%}
+                    {%endif%}
                   </td>
                   <td>
                       <a href="{%url 'user_detail' user.pk%}">view</a>
-                      <a class="update_disable_item_link" href="#">update</a>
+                      <a class="update_disable_item_link" href="{%url 'update_user' user.pk%}">update</a>
                       {%if user.active == 1%}
                       <a class="update_disable_item_link" href="{%url 'activate_deactivate_user' user.id%}">disable</a>
                       {%else%}
@@ -48,6 +49,5 @@
               </tbody>
         </table>
     </div>
-    </div>
-
+</div>
 {%endblock content%}

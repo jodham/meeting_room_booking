@@ -35,6 +35,15 @@ class UserManager(BaseUserManager):
         return user
 
 
+class Roles(models.Model):
+    role_name = models.CharField(max_length=30)
+    data_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.role_name
+
+
 class User(AbstractBaseUser):
     email = models.EmailField(
         verbose_name='email address',
@@ -45,6 +54,7 @@ class User(AbstractBaseUser):
     last_name = models.CharField(verbose_name='last name', max_length=50)
     active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
+    role = models.CharField(max_length=255, default=3)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = UserManager()
@@ -67,14 +77,23 @@ class User(AbstractBaseUser):
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
 
-    @property
-    def activate_disable_user(pk):
-        user = User.objects.get(id=pk)
-        if user.active:
-            user.active = False
-        else:
-            user.active = True
-        return user
+
+"""
+    # def get_role_name(self):
+    #     role_ids = [int(rid) for rid in self.role.split(',')]
+    #     roles = Roles.objects.filter(id__in=role_ids)
+    #     role_names = [role.role_name for role in roles]
+    # 
+    #     if role_names == ['default']:
+    #         return 'default'
+    #     elif role_names == ['default', 'approver']:
+    #         return 'approver'
+    #     elif role_names == ['default', 'approver', 'admin']:
+    #         return 'admin'
+    #     else:
+    #         return 'default'
+
+"""
 
 
 class Campus(models.Model):
@@ -144,25 +163,3 @@ class Booking(models.Model):
 
     def get_absolute_url(self):
         return reverse('bookings_detail', kwargs={'pk': self.pk})
-
-    def approve_booking(booking_id, actioned_by_id):
-        booking = Booking.objects.get(id=booking_id)
-        if booking.status == Booking.STATUS_PENDING:
-            booking.status = Booking.STATUS_APPROVED
-            booking.is_approved = True
-            booking.actioned_by_id = actioned_by_id
-            booking.date_actioned = timezone.now()
-            booking.save()
-        else:
-            raise Exception("Booking is not in pending status")
-
-    def reject_booking(booking_id, actioned_by_id):
-        booking = Booking.objects.get(id=booking_id)
-        if booking.status == Booking.STATUS_PENDING:
-            booking.status = Booking.STATUS_REJECTED
-            booking.is_approved = False
-            booking.actioned_by_id = actioned_by_id
-            booking.date_actioned = timezone.now()
-            booking.save()
-        else:
-            raise Exception("Booking is not in pending status")

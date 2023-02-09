@@ -4,9 +4,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.views.generic import ListView, CreateView, UpdateView
 from django.contrib.admin.models import LogEntry
-
-from accounts.forms import CreateUserAccount, create_user
-from room_booking_app.models import User, Facility, Rooms
+from room_booking_app.controllers import *
+from accounts.forms import CreateUserAccount, create_user, UserUpdateForm
+from room_booking_app.models import User, Facility, Rooms, Roles, Booking
 
 
 # Create your views here.
@@ -36,7 +36,11 @@ def signin(request):
         user = authenticate(username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('dashboard')
+            role = check_user_role(request.user)
+            if role == 'administrator':
+                return redirect('adminstrator_page')
+            else:
+                return redirect('dashboard')
         else:
             error = messages.error(request, 'Invalid details try again!!')
             templatename = 'accounts/signin.html'
@@ -47,6 +51,7 @@ def signin(request):
         return render(request, templatename)
 
 
+
 def signout(request):
     logout(request)
     return redirect('signin')
@@ -55,17 +60,30 @@ def signout(request):
 # -------------------Admin--page---------------------
 
 def adminstrator(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     templatename = 'accounts/adminstrator_panel.html'
-    context = {}
+    context = {'role': role}
     return render(request, templatename, context)
 
 
 # ------------------------ListView-------------------------
-class UsersListView(ListView):
-    model = User
-    context_object_name = 'users'
-    ordering = 'updated_at'
+def UsersListView(request):
+    users = User.objects.all()
+    user_roles = [(user, check_user_role(user)) for user in users]
     template_name = 'adminstrator/users.html'
+    context = {'user_roles': user_roles}
+    return render(request, template_name, context)
+
+
+"""
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['roles'] = [get_role_name(user.role) for user in self.object_list]
+        return context
+"""
 
 
 def user_detail(request, pk):
@@ -86,6 +104,29 @@ def add_user(request):
         messages.error(request, "wrong user details")
     templatename = 'accounts/register.html'
     return render(request, templatename, {'form': form})
+
+
+def update_user(request, pk):
+    user = get_object_or_404(User, id=pk)
+    role_ids = user.role.split(',')
+    roles = Roles.objects.all()
+    form = UserUpdateForm(request.POST or None)
+    if form.is_valid():
+        user.email = form.cleaned_data.get('email')
+        user.first_name = form.cleaned_data.get('first_name')
+        user.last_name = form.cleaned_data.get('last_name')
+        selected_roles = form.cleaned_data.get('role')
+
+        user.role = ','.join(selected_roles)
+        user.save()
+        return redirect('system_users')
+
+    form.fields['email'].initial = user.email
+    form.fields['first_name'].initial = user.first_name
+    form.fields['last_name'].initial = user.last_name
+    form.fields['role'].initial = role_ids
+
+    return render(request, 'adminstrator/update_user.html', {'form': form, 'roles': roles})
 
 
 def activate_deactivate_user(request, id):
@@ -167,3 +208,23 @@ def activate_deactivate_room(request, pk):
         messages.success(request, 'room has been activated', fail_silently=True)
         room.save()
         return redirect('dashboard')
+
+
+# approve booking --------------------------
+
+def approve_booking(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('signin')
+    booking = get_object_or_404(Booking, id=pk)
+    if booking.status == 0 or booking.status == 2:
+        booking.status = 1
+        booking.save()
+
+
+def reject_booking(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('sign')
+    booking = get_object_or_404(Booking, id=pk)
+    if booking.status == 0 or booking.status == 1:
+        booking.status = 2
+        booking.save()

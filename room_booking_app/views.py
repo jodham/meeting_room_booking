@@ -1,12 +1,10 @@
-from django.contrib import messages
+# from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 # from django.shortcuts import render, redirect
-from django.shortcuts import render, redirect
-from django.utils import timezone
 from django.views.generic import DetailView, UpdateView
-
+from .controllers import *
 from .forms import RoomForm
-from .models import Rooms, Booking, User, Campus, Facility
+from .models import Booking, User
 
 
 # Create your views here.
@@ -18,9 +16,13 @@ def index(request):
 
 @login_required(login_url='signin')
 def dashboard(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     templatename = 'room_booking_app/rooms.html'
     rooms = Rooms.objects.all()
-    context = {'rooms': rooms}
+    context = {'rooms': rooms, 'role': role}
     return render(request, templatename, context)
 
 
@@ -141,16 +143,24 @@ def room_detail_view(request, pk):
 
 
 def Bookings_View(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     room_booking = Booking.objects.all()
     templatename = "room_booking_app/bookings.html"
-    context = {'room_booking': room_booking}
+    context = {'room_booking': room_booking, 'role': role}
     return render(request, templatename, context)
 
 
 def booking_detail_view(request, pk):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     booking = Booking.objects.get(id=pk)
     templatename = 'room_booking_app/booking_detail.html'
-    context = {'booking': booking}
+    context = {'booking': booking, "role": role}
     return render(request, templatename, context)
 
 

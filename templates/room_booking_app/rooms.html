@@ -7,7 +7,9 @@
         <div class="room-bookings-card">
             <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
               <div class="py-2 float-left text-center h6">Available Rooms</div>
+                {%if role == 'administrator'%}
                 <div class="btn float-right"><a href="{%url 'create_room'%}"> Add Room</a></div>
+                {%endif%}
             </div>
              <table class="table data-table">
                   <thead>

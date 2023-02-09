@@ -94,6 +94,10 @@ def user_detail(request, pk):
 
 
 def add_user(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     if request.method == 'POST':
         form = create_user(request.POST)
         if form.is_valid():
@@ -103,7 +107,7 @@ def add_user(request):
         form = create_user()
         messages.error(request, "wrong user details")
     templatename = 'accounts/register.html'
-    return render(request, templatename, {'form': form})
+    return render(request, templatename, {'form': form,'role': role})
 
 
 def update_user(request, pk):
@@ -210,7 +214,7 @@ def activate_deactivate_room(request, pk):
         return redirect('dashboard')
 
 
-# approve booking --------------------------
+# -----------------approve booking --------------------------
 
 def approve_booking(request, pk):
     if not request.user.is_authenticated:
@@ -219,6 +223,7 @@ def approve_booking(request, pk):
     if booking.status == 0 or booking.status == 2:
         booking.status = 1
         booking.save()
+        return redirect('booking_detail', pk=pk)
 
 
 def reject_booking(request, pk):
@@ -228,3 +233,4 @@ def reject_booking(request, pk):
     if booking.status == 0 or booking.status == 1:
         booking.status = 2
         booking.save()
+        return redirect('booking_detail', pk=pk)

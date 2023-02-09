@@ -5,8 +5,8 @@
 <div class="row adminstrator-users-panel justify-content-center">
     <div class="card users-table-container">
      <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
-      <div class="py-2 float-left h6"></div>
-        <div class="float-right"><a class="add-user-button" href="{%url 'create_user'%}">Add User</a></div>
+      <div class="py-2 float-left ml-3 h6"><a href="{%url 'adminstrator_page'%}"> back </a> </div>
+        <div class="float-right"> <a class="add-user-button" href="{%url 'create_user'%}">Add User</a> </div>
     </div>
          <table class="table data-table">
               <thead>
@@ -36,13 +36,20 @@
                     {%endif%}
                   </td>
                   <td>
-                      <a href="{%url 'user_detail' user.pk%}">view</a>
-                      <a class="update_disable_item_link" href="{%url 'update_user' user.pk%}">update</a>
-                      {%if user.active == 1%}
-                      <a class="update_disable_item_link" href="{%url 'activate_deactivate_user' user.id%}">disable</a>
-                      {%else%}
-                      <a class="activate_item_link" href="{%url 'activate_deactivate_user' user.id%}">activate</a>
-                      {%endif%}
+                      <div class="btn-group dropup">
+                          <button class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Action
+                          </button>
+                          <div class="dropdown-menu">
+                              <a class="dropdown-item" href="{%url 'user_detail' user.pk%}">view</a>
+                              <a class="dropdown-item update_disable_item_link" href="{%url 'update_user' user.pk%}">update</a>
+                              {%if user.active == 1%}
+                              <a class="dropdown-item update_disable_item_link" href="{%url 'activate_deactivate_user' user.id%}">disable</a>
+                              {%else%}
+                              <a class="dropdown-item activate_item_link" href="{%url 'activate_deactivate_user' user.id%}">activate</a>
+                              {%endif%}
+                          </div>
+                      </div>
                   </td>
               </tr>
               {%endfor%}

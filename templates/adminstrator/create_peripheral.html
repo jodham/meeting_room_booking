@@ -2,6 +2,7 @@
 {%load static%}
 {%block title%}create peripheral{%endblock title%}
 {%block content%}
+<div class="create-peripheral-title text-center">Create Peripheral</div>
 <div class="row justify-content-center">
     <form method="post" class="form-container frmlogin">
         {%csrf_token%}
@@ -10,7 +11,7 @@
          <input type="text" value="" class="form-control form-control-lg" name="title" id="title">
        </div>
         <button class="btn btn-block loginbtn h5" type="submit">Create Peripheral</button>
-        <a href="{%url 'peripherals'%}" class="">Cancel</a>
+        <a href="{%url 'peripherals'%}" class="text-dark"><i class="bi bi-arrow-left-circle"></i>Peripherals</a>
     </form>
 </div>
 {%endblock content%}

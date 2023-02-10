@@ -12,9 +12,11 @@
      <li class="nav-item">
         <a class="nav-link text-white" href="{%url 'dashboard'%}">Rooms</a>
       </li>
+         {%if role == 'administrator' or role == 'approver'%}
       <li class="nav-item">
         <a class="nav-link text-white" href="{%url 'bookings'%}">Bookings</a>
       </li>
+        {%endif%}
     {%if role == 'administrator'%}
      <li class="nav-item">
         <a class="nav-link text-white" href="{%url 'adminstrator_page'%}">Admin</a>

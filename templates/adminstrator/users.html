@@ -5,7 +5,12 @@
 <div class="row adminstrator-users-panel justify-content-center">
     <div class="card users-table-container">
      <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
-      <div class="py-2 float-left ml-3 h6"><a href="{%url 'adminstrator_page'%}"> back </a> </div>
+     <div class="py-2 float-left text-center h6">
+         <a href="{%url 'adminstrator_page'%}" class="btn btn-lg">
+             <i class="bi bi-arrow-left-circle"></i>
+             Dashboard
+         </a>
+     </div>
         <div class="float-right"> <a class="add-user-button" href="{%url 'create_user'%}">Add User</a> </div>
     </div>
          <table class="table data-table">

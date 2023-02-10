@@ -150,20 +150,32 @@ def activate_deactivate_user(request, id):
 
 
 def system_logs(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     logs = LogEntry.objects.all()
     templatename = 'adminstrator/system-logs.html'
-    context = {'logs': logs}
+    context = {'logs': logs, 'role': role}
     return render(request, templatename, context)
 
 
 # -----------------------peripherals---------------------
 def peripherals(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     peripheral = Facility.objects.all()
-    context = {'peripheral': peripheral}
+    context = {'peripheral': peripheral, 'role': role}
     return render(request, 'adminstrator/peripherals.html', context)
 
 
 def create_peripheral(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     if request.method == "POST":
         title = request.POST.get('title')
         facility = Facility()
@@ -171,7 +183,7 @@ def create_peripheral(request):
         facility.save()
         return reverse('peripherals')
     templatename = 'adminstrator/create_peripheral.html'
-    return render(request, templatename)
+    return render(request, templatename, {'role': role})
 
 
 class PeripheralUpdateView(UpdateView):

@@ -159,8 +159,7 @@ def booking_detail_view(request, pk):
     else:
         role = None
     booking = Booking.objects.get(id=pk)
+    # booking = book.filter(Q(date_end > ))
     templatename = 'room_booking_app/booking_detail.html'
     context = {'booking': booking, "role": role}
     return render(request, templatename, context)
-
-

@@ -25,10 +25,9 @@
                       <th scope="col">Name</th>
                       <th scope="col">Location</th>
                       <th scope="col">Capacity</th>
-                        <th scope="col">Status</th>
-                        {%if request.user.is_admin%}
+                      <th scope="col">Status</th>
                       <th scope="col">View</th>
-                        {%endif%}
+
                     </tr>
                   </thead>
                   <tbody>
@@ -43,17 +42,18 @@
                       {%else%}
                       <td class="room-fields">Not Active</td>
                       {%endif%}
-                      {%if role == "administrator"%}
+
                       <td class="room-fields">
                           <a href="{%url 'room_detail' room.pk%}">View</a>
+                          {%if role == "administrator"%}
                           <a href="{%url 'room_update' room.id%}" class="update_disable_item_link">Update</a>
                           {%if room.is_active == 1%}
                           <a href="{%url 'activate_deactivate_room' room.pk%}" class="update_disable_item_link">Disable</a>
                           {%else%}
                           <a href="{%url 'activate_deactivate_room' room.pk%}" class="activate_item_link">activate</a>
                           {%endif%}
+                           {%endif%}
                       </td>
-                      {%endif%}
                   </tr>
                   {%endfor%}
                   </tbody>

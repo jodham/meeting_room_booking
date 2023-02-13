@@ -1,0 +1,26 @@
+{%extends 'base/base.html'%}
+{%load static%}
+{%block title%}Login{%endblock title%}
+{%block content%}
+<div class="row justify-content-center">
+    <form method="post" class="book-room-form">
+        {%csrf_token%}
+        <label class="h6">Meeting title</label>
+        <div class="form-group">
+          <input type="text" required autofocus name="title" placeholder='meeting title' class="form-control">
+        </div>
+
+        <label class="h6">Starting date:</label>
+        <div class="form-group">
+          <input type="datetime-local" required name="starting-date" class="form-control">
+        </div>
+
+         <label class="h6">Ending date:</label>
+        <div class="form-group">
+          <input type="datetime-local" required name="ending-date" class="form-control">
+        </div>
+
+        <button class="btn btn-block book-room-btn h5" id="book-room-button"  type="submit">Book Room</button>
+    </form>
+</div>
+{%endblock content%}

@@ -127,6 +127,18 @@ section{
     background-color: #CB6015;
     color: white;
 }
+.book-room-button{
+    background-color: #041e42;
+    list-style: none;
+    color: white;
+    font-weight: bold;
+}
+.book-room-button:hover{
+    background-color: #CB6015;
+    list-style: none;
+    color: white;
+    font-weight: bold;
+}
 /*----------x-------room-booking-page-styling-----x-----*/
 
 

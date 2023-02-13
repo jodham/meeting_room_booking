@@ -2,10 +2,22 @@
 {%load static%}
 {%block title%}Room Detail{%endblock title%}
 {%block content%}
+ <div class="col-md-12 room-details-title text-center py-3 h5 text-capitalize">{{room.title}}  Details</div>
   <div class="row room-detail-container">
-    <div class="col-md-12 room-details-title text-center py-3 h5 text-capitalize">{{room.title}}  Details</div>
+      <div class="col-md-12">
+          <div class="py-2 float-left text-center h6">
+            <a href="{%url 'dashboard'%}" class="btn back-to-dashboard-button">
+                <i class="bi bi-arrow-left-circle"></i>
+                Dashboard
+            </a>
+        </div>
+       <div class="py-2 float-right">
+           <a href="{%url 'book_room' room.pk%}" class="btn book-room-button">
+               Book Room
+           </a>
+       </div>
+      </div>
     <div class="col-md-6">
-
        <div class="row shadow-sm mx-2 mt-2">
            <div class="col book-detail-title-text">
                Location
@@ -78,33 +90,6 @@
     </table>
   </div>
 </div>
-<!--
-    <div class="col-md-7">
-        <div class="py-3 text-center room-detail-titles h5">Book Room</div>
-        <form method="post" class="book-room-form">
-            {%csrf_token%}
-            <label class="h6">Meeting title</label>
-            <div class="form-group">
-              <input type="text" required autofocus name="title" placeholder='meeting title' class="form-control">
-            </div>
-
-            <label class="h6">Starting date:</label>
-            <div class="form-group">
-              <input type="datetime-local" required name="starting-date" class="form-control">
-            </div>
-
-             <label class="h6">Ending date:</label>
-            <div class="form-group">
-              <input type="datetime-local" required name="ending-date" class="form-control">
-            </div>
-
-            <button class="btn btn-block book-room-btn h5" id="book-room-button"  type="submit">Book Room</button>
-        </form>
-    </div>
-
-</div>
-
--->
 </div>
 
 {%endblock content%}

@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.views.generic import ListView, CreateView, UpdateView
 from django.contrib.admin.models import LogEntry
 from room_booking_app.controllers import *
-from accounts.forms import CreateUserAccount, create_user, UserUpdateForm
+from accounts.forms import CreateUserAccount, create_user, UserUpdateForm, peripheralUpdate
 from room_booking_app.models import User, Facility, Rooms, Roles, Booking
 
 
@@ -51,7 +51,6 @@ def signin(request):
         return render(request, templatename)
 
 
-
 def signout(request):
     logout(request)
     return redirect('signin')
@@ -71,10 +70,14 @@ def adminstrator(request):
 
 # ------------------------ListView-------------------------
 def UsersListView(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     users = User.objects.all()
     user_roles = [(user, check_user_role(user)) for user in users]
     template_name = 'adminstrator/users.html'
-    context = {'user_roles': user_roles}
+    context = {'user_roles': user_roles, 'role': role}
     return render(request, template_name, context)
 
 
@@ -87,9 +90,13 @@ def UsersListView(request):
 
 
 def user_detail(request, pk):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     user_id = User.objects.get(id=pk)
     templatename = 'adminstrator/user-detail.html'
-    context = {'user_id': user_id}
+    context = {'user_id': user_id, 'role': role}
     return render(request, templatename, context)
 
 
@@ -107,7 +114,7 @@ def add_user(request):
         form = create_user()
         messages.error(request, "wrong user details")
     templatename = 'accounts/register.html'
-    return render(request, templatename, {'form': form,'role': role})
+    return render(request, templatename, {'form': form, 'role': role})
 
 
 def update_user(request, pk):
@@ -186,11 +193,19 @@ def create_peripheral(request):
     return render(request, templatename, {'role': role})
 
 
-class PeripheralUpdateView(UpdateView):
-    model = Facility
-    fields = ['title']
-    success_url = 'peripherals'
-    template_name = 'adminstrator/create_peripheral.html'
+def PeripheralUpdateView(request, pk):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    peripheral = get_object_or_404(Facility, id=pk)
+    form = peripheralUpdate(request.POST or None)
+    if form.is_valid():
+        peripheral.title = form.cleaned_data.get('title')
+        peripheral.save()
+        return redirect('peripherals')
+    form.fields['title'].initial = peripheral.title
+    return render(request, 'adminstrator/peripheral_update.html', {'role': role, 'form': form})
 
 
 def activate_deactivate_peripheral(request, pk):

@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from room_booking_app.models import User, Roles
+from room_booking_app.models import User, Roles, Facility
 
 
 class CreateUserAccount(UserCreationForm):
@@ -27,3 +27,11 @@ class UserUpdateForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
         choices=[(role.id, role.role_name) for role in Roles.objects.all()]
     )
+
+
+class peripheralUpdate(forms.Form):
+    title = forms.CharField(max_length=30)
+
+    class Meta:
+        model = Facility
+        fields = ['title']

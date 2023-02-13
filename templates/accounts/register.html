@@ -3,11 +3,11 @@
 {%block title%}Login{%endblock title%}
 {%block content%}
 <div class="row justify-content-center">
-    <form method="post" class="form-container frmlogin">
+    <form method="post" class="form-container text-center frmlogin">
         {%csrf_token%}
         {%for field in form%}
         {{field.label_tag}}
-        <div class="form-control form-control-lg">
+        <div class="form-group">
             {{field}}
         </div>
         {%endfor%}

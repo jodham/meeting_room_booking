@@ -1,37 +1,33 @@
-<nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-  <a class="navbar-brand h2 text-white" href="#">Room Booking</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+{%load static%}
+ <nav class="navbar navbar-expand-lg navbar-dark">
+  <img src="{%static 'images/logo1.png'%}" class="navbar-brand ml-4">
+     <span class="navbar-site-name text-white">Room Booking</span>
+     {%if request.user.is_authenticated%}
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav ml-auto">
-      <a class="nav-item nav-link h5 text-white mx-4" href="{%url 'index'%}">Home <span class="sr-only">(current)</span></a>
-      <a class="nav-item nav-link h5 text-white mx-4" href="{%url 'dashboard'%}">Dashboard</a>
-      <a class="nav-item nav-link h5 text-white mx-4" href="{%url 'bookings'%}">Bookings</a>
-      <a class="nav-item nav-link h5 text-white mx-4" href="#">Contact</a>
-        {%if myuser.is_authenticated%}
-      <div class="dropdown show mx-4 my-2">
-          <a class="text-light h5 dropdown-toggle" href="#" role="button" id="dropdownLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            {{user.email}}
-          </a>
 
-          <div class="dropdown-menu" aria-labelledby="dropdownLink">
-            <a class="dropdown-item" href="#">Profile</a>
-            <a class="dropdown-item" href="{%url 'signout'%}">Logout</a>
-          </div>
-      </div>
-        {%else%}
-    <div class="dropdown show mx-4 my-2">
-          <a class="text-light h5 dropdown-toggle" href="#" role="button" id="dropdownnLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Account
-          </a>
-
-          <div class="dropdown-menu" aria-labelledby="dropdownnLink">
-            <a class="dropdown-item" href="{%url 'signin'%}">Sign in</a>
-            <a class="dropdown-item" href="{%url 'register'%}">Sign up</a>
-          </div>
-      </div>
+  <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+    <ul class="navbar-nav">
+     <li class="nav-item">
+        <a class="nav-link text-white" href="{%url 'dashboard'%}">Rooms</a>
+      </li>
+         {%if role == 'administrator' or role == 'approver'%}
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{%url 'bookings'%}">Bookings</a>
+      </li>
         {%endif%}
-    </div>
+    {%if role == 'administrator'%}
+     <li class="nav-item">
+        <a class="nav-link text-white" href="{%url 'adminstrator_page'%}">Admin</a>
+     </li>
+    {%endif%}
+      <li class="nav-item">
+        <a class="nav-link text-white" href="{%url 'signout'%}">Logout</a>
+      </li>
+    </ul>
   </div>
+     {%endif%}
 </nav>
+
+

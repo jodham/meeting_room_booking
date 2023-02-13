@@ -1,35 +1,37 @@
 {%extends 'base/base.html'%}
 {%block title%}Room-Bookings{%endblock title%}
 {%block content%}
-
-<div class="row justify-content-center">
-
-    <div class="room-bookings-card">
-        <div class="py-4 text-center h4">Bookings</div>
-         <table class="table data-table">
-              <thead>
-                <tr>
-                    <th scope="col">No.</th>
-                  <th scope="col">Location</th>
-                  <th scope="col">Room</th>
-                  <th scope="col">Meeting</th>
-                  <th scope="col">Booked by</th>
-                  <th scope="col">View</th>
-                </tr>
-              </thead>
-              <tbody>
-              {%for book in room_booking%}
-              <tr>
-                  <td>{{forloop.counter}}</td>
-                  <td>{{book.room_id.location}}</td>
-                  <td>{{book.room_id}}</td>
-                  <td>{{book.title}}</td>
-                  <td>{{book.user_id}}</td>
-                  <td><a href="{%url 'booking_detail' book.pk%}">View</a></td>
-              </tr>
-              {%endfor%}
-              </tbody>
-        </table>
-    </div>
+<div class="col-md-12 text-center bookings-title">Bookings</div>
+<div class="col-md-12 room-bookings-card">
+          <div class="py-2 float-left h6">
+                <a href="{%url 'adminstrator_page'%}" class="btn btn-lg">
+                    <i class="bi bi-arrow-left-circle"></i>
+                    Dashboard
+                </a>
+            </div>
+     <table class="table data-table">
+          <thead>
+            <tr>
+                <th scope="col">No.</th>
+              <th scope="col">Location</th>
+              <th scope="col">Room</th>
+              <th scope="col">Meeting</th>
+              <th scope="col">Booked by</th>
+              <th scope="col">View</th>
+            </tr>
+          </thead>
+          <tbody>
+          {%for book in room_booking%}
+          <tr>
+              <td>{{forloop.counter}}</td>
+              <td>{{book.room_id.location}}</td>
+              <td>{{book.room_id}}</td>
+              <td>{{book.title}}</td>
+              <td>{{book.user_id}}</td>
+              <td><a href="{%url 'booking_detail' book.pk%}">View</a></td>
+          </tr>
+          {%endfor%}
+          </tbody>
+    </table>
 </div>
 {%endblock content%}

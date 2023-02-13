@@ -32,6 +32,10 @@ from .models import Rooms, Campus, Facility
 
 
 def create_room_form(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     campus = Campus.objects.all()
     facility = Facility.objects.all()
     facilities = []
@@ -45,13 +49,17 @@ def create_room_form(request):
         room.save()
         return redirect('dashboard')
     templatename = 'room_booking_app/room_form.html'
-    context = {'campus': campus, 'facility': facility, 'facilities': facilities}
+    context = {'campus': campus, 'facility': facility, 'facilities': facilities, 'role': role}
     return render(request, templatename, context)
 
 
 # ------------------------------------Update Views---------------------------->
 
 def RoomUpdateView(request, pk):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     room = Rooms.objects.get(id=pk)
     facilities_ids = room.facilities_ids.split(',')
     facilities = Facility.objects.all()
@@ -75,7 +83,7 @@ def RoomUpdateView(request, pk):
     form.fields['capacity'].initial = room.capacity
     form.fields['facilities'].initial = facilities_ids
 
-    return render(request, 'room_booking_app/update_room.html', {'form': form, 'facilities': facilities})
+    return render(request, 'room_booking_app/update_room.html', {'form': form, 'facilities': facilities, 'role': role})
 
 
 class BookingUpdateView(UpdateView):
@@ -95,6 +103,10 @@ class BookDetailView(DetailView):
 
 
 def room_detail_view(request, pk):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     room = Rooms.objects.get(pk=pk)
     bookings = Booking.objects.filter(room_id_id=pk)
     booked_by = User.objects.get(email=request.user)
@@ -135,7 +147,7 @@ def room_detail_view(request, pk):
             return redirect('bookings')
         """
     templatename = 'room_booking_app/room_detail.html'
-    context = {"room": room, 'pk': pk, 'bookings': bookings, 'facilities': facilities}
+    context = {"room": room, 'pk': pk, 'bookings': bookings, 'facilities': facilities, 'role': role}
     return render(request, templatename, context)
 
 

@@ -148,7 +148,6 @@ class Booking(models.Model):
         (STATUS_APPROVED, 'approved'),
         (STATUS_REJECTED, 'rejected'),
     ]
-
     room_id = models.ForeignKey(Rooms, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bookings_created")
     title = models.CharField(max_length=100)

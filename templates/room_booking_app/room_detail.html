@@ -2,8 +2,9 @@
 {%load static%}
 {%block title%}Room Detail{%endblock title%}
 {%block content%}
-<div class="row room-detail-container">
-    <div class="col-md-4 user-details-container">
+  <div class="row room-detail-container">
+    <div class="col-md-12 room-details-title text-center py-3 h5 text-capitalize">{{room.title}}  Details</div>
+    <div class="col-md-6">
 
        <div class="row shadow-sm mx-2 mt-2">
            <div class="col book-detail-title-text">
@@ -34,50 +35,49 @@
 
    </div>
 
-<div class="col-md-4 user-details-container">
-
-       <div class="row shadow-sm mx-2 mt-2">
-           <div class="col text-center book-detail-title-text">
-               Facilities
-           </div>
+<div class="col-md-6">
+   <div class="row shadow-sm mx-2 mt-2">
+       <div class="col text-center facilities-title-text">
+           Facilities
        </div>
-        <div class="row shadow-sm mx-2 mt-2">
-        {%for item in facilities%}
-
-       <div class="col-sm-6 mt-2 shadow-sm">{{forloop.counter}}. {{item.title}}</div>
-        {%endfor%}
-        </div>
-
    </div>
+    <div class="row shadow-sm mx-2 mt-2">
+    {%for item in facilities%}
 
-
-    <div class="col-md-6 mt-4 mb-3">
-        <div class="py-3 text-center room-detail-titles h5">Room Bookings</div>
-      <div class="card">
-          <table class="table data-table">
-              <thead>
-                <tr>
-                  <th scope="col">Booked by</th>
-                  <th scope="col">Meeting</th>
-                  <th scope="col">Starting time</th>
-                  <th scope="col">Ending time</th>
-                  <th scope="col">View</th>
-                </tr>
-              </thead>
-              <tbody>
-              {%for book in bookings%}
-              <tr>
-                  <td>{{book.user_id}}</td>
-                  <td class="text-capitalize">{{book.title}}</td>
-                  <td>{{book.date_start}}</td>
-                  <td>{{book.date_end}}</td>
-                  <td><a href="{%url 'room_detail' room.pk%}">View</a></td>
-              </tr>
-              {%endfor%}
-              </tbody>
-        </table>
-      </div>
+   <div class="col-sm-6 mt-2 shadow-sm">{{forloop.counter}}. {{item.title}}</div>
+    {%endfor%}
     </div>
+
+</div>
+
+
+<div class="col-md-12 mt-4 mb-3">
+    <div class="py-3 text-center room-detail-titles h5">Room Bookings</div>
+  <div class="card">
+      <table class="table data-table">
+          <thead>
+            <tr>
+              <th scope="col">Booked by</th>
+              <th scope="col">Meeting</th>
+              <th scope="col">Starting time</th>
+              <th scope="col">Ending time</th>
+              <th scope="col">View</th>
+            </tr>
+          </thead>
+          <tbody>
+          {%for book in bookings%}
+          <tr>
+              <td>{{book.user_id}}</td>
+              <td class="text-capitalize">{{book.title}}</td>
+              <td>{{book.date_start}}</td>
+              <td>{{book.date_end}}</td>
+              <td><a href="{%url 'room_detail' room.pk%}">View</a></td>
+          </tr>
+          {%endfor%}
+          </tbody>
+    </table>
+  </div>
+</div>
 <!--
     <div class="col-md-7">
         <div class="py-3 text-center room-detail-titles h5">Book Room</div>

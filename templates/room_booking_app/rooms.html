@@ -2,63 +2,62 @@
 {%load static%}
 {%block title%}dashboard{%endblock title%}
 {%block content%}
-
-<div class="row justify-content-center">
-        <div class="room-bookings-card">
-            <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
-                {%if role == 'administrator'%}
-                <div class="py-2 float-left text-center h6">
-                    <a href="{%url 'adminstrator_page'%}" class="btn btn-lg">
-                        <i class="bi bi-arrow-left-circle"></i>
-                        Dashboard
-                    </a>
-                </div>
-                <div class="btn float-right"><a href="{%url 'create_room'%}"> Add Room</a></div>
-                {%else%}
-                <div class="py-2 float-left text-center h6">Available Rooms</div>
-                {%endif%}
-            </div>
-             <table class="table data-table">
-                  <thead>
-                    <tr>
-                        <th scope="col">No.</th>
-                      <th scope="col">Name</th>
-                      <th scope="col">Location</th>
-                      <th scope="col">Capacity</th>
-                      <th scope="col">Status</th>
-                      <th scope="col">View</th>
-
-                    </tr>
-                  </thead>
-                  <tbody>
-                  {%for room in rooms%}
-                  <tr>
-                      <td>{{forloop.counter}}</td>
-                      <td class="text-capitalize room-fields">{{room.title}}</td>
-                      <td class="text-capitalize room-fields">{{room.location}}</td>
-                      <td class="room-fields">{{room.capacity}}</td>
-                      {%if room.is_active == 1%}
-                      <td class="room-fields">Active</td>
-                      {%else%}
-                      <td class="room-fields">Not Active</td>
-                      {%endif%}
-
-                      <td class="room-fields">
-                          <a href="{%url 'room_detail' room.pk%}">View</a>
-                          {%if role == "administrator"%}
-                          <a href="{%url 'room_update' room.id%}" class="update_disable_item_link">Update</a>
-                          {%if room.is_active == 1%}
-                          <a href="{%url 'activate_deactivate_room' room.pk%}" class="update_disable_item_link">Disable</a>
-                          {%else%}
-                          <a href="{%url 'activate_deactivate_room' room.pk%}" class="activate_item_link">activate</a>
-                          {%endif%}
-                           {%endif%}
-                      </td>
-                  </tr>
-                  {%endfor%}
-                  </tbody>
-            </table>
+<div class="col-md-12 text-center room-title">Available rooms</div>
+<div class="room-bookings-card">
+    <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
+        {%if role == 'administrator'%}
+        <div class="py-2 float-left text-center h6">
+            <a href="{%url 'adminstrator_page'%}" class="btn btn-lg back-to-dashboard-button">
+                <i class="bi bi-arrow-left-circle"></i>
+                Dashboard
+            </a>
         </div>
+        <div class="float-right"><a class="btn add-room-button" href="{%url 'create_room'%}"> Add Room</a></div>
+        {%else%}
+        <div class="py-2 float-left text-center h4">Available Rooms</div>
+        {%endif%}
+    </div>
+     <table class="table data-table">
+          <thead>
+            <tr>
+                <th scope="col">No.</th>
+              <th scope="col">Name</th>
+              <th scope="col">Location</th>
+              <th scope="col">Capacity</th>
+              <th scope="col">Status</th>
+              <th scope="col">View</th>
+
+            </tr>
+          </thead>
+          <tbody>
+          {%for room in rooms%}
+          <tr>
+              <td>{{forloop.counter}}</td>
+              <td class="text-capitalize room-fields">{{room.title}}</td>
+              <td class="text-capitalize room-fields">{{room.location}}</td>
+              <td class="room-fields">{{room.capacity}}</td>
+              {%if room.is_active == 1%}
+              <td class="room-fields">Active</td>
+              {%else%}
+              <td class="room-fields">Not Active</td>
+              {%endif%}
+
+              <td class="room-fields">
+                  <a href="{%url 'room_detail' room.pk%}">View</a>
+                  {%if role == "administrator"%}
+                  <a href="{%url 'room_update' room.id%}" class="update_disable_item_link">Update</a>
+                  {%if room.is_active == 1%}
+                  <a href="{%url 'activate_deactivate_room' room.pk%}" class="update_disable_item_link">Disable</a>
+                  {%else%}
+                  <a href="{%url 'activate_deactivate_room' room.pk%}" class="activate_item_link">activate</a>
+                  {%endif%}
+                   {%endif%}
+              </td>
+          </tr>
+          {%endfor%}
+          </tbody>
+    </table>
 </div>
+
 
 {%endblock content%}

@@ -1,0 +1,21 @@
+{%extends 'base/base.html'%}
+{%load static%}
+{%block title%}update peripheral{%endblock title%}
+{%block content%}
+<div class="create-peripheral-title text-center">update Peripheral</div>
+<div class="row justify-content-center">
+    <form method="post" class="form-container frmlogin">
+        {%csrf_token%}
+        {%for field in form%}
+       <div class="form-group">
+        {{field.label_tag}}
+        <div class="form-group">
+            {{field}}
+        </div>
+       </div>
+        {%endfor%}
+        <button class="btn btn-block loginbtn h5" type="submit">Update Peripheral</button>
+        <a href="{%url 'peripherals'%}" class="text-dark"><i class="bi bi-arrow-left-circle"></i>Peripherals</a>
+    </form>
+</div>
+{%endblock content%}

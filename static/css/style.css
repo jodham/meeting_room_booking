@@ -1,26 +1,17 @@
-header {
-  height: 100px;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1;
-  background-color: #ffffff;
+/*-----------------header--section--------------------*/
+section{
+    float: left;
+    width: 100%;
 }
-main {
-  height: auto;
-  margin-top: 7.0rem;
-  padding-left: 1.5rem;
-  padding-right: 1.5rem;
-  width: 100%;
-  overflow: auto;
-  max-width: 800px;
+.container{
+    padding: 0 !important;
+}
+.header-navigation{
+    
 }
 .navbar{
     background-color: #041E42;
-}
-.dashboard_list{
-    background-color: #FFFDD0;
+    width: 100%;
 }
 .navbar-toggler{
     background-color: #CB6015;
@@ -35,9 +26,9 @@ main {
   align-items: center;
   height: 100%;
 }
-.navbar-text{
-    margin-left: 2.5rem;
-    font-weight: 700;
+.navbar-site-name{
+    margin-left: 1.5rem;
+    font-weight: bolder;
     font-size: 25px;
 }
 
@@ -50,35 +41,21 @@ main {
 .nav-link {
   font-size: 1.2rem;
 }
+/*----------x---------header---section-------x----------*/
 
-.navbar-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+/*-------------------block-body--section--------------------*/
 
-
-.my-container{
-    background-color: #CB6015;
-    border-radius: 10px;
-}
-
-}
-.my-text{
-    color: #041E42;
-}
-.footer{
-    background-color: #041E42;
-}
+/*---------------------login-section-------------------------*/
 .loginbtn{
     background-color: #CB6015;
     margin-top: 2.0rem;
     font-weight: bolder;
 }
 .login-text-title{
-    margin-top: 8.5rem;
-    font-weight: bold;
+    font-weight: bolder;
     color: #CB6015;
+    font-size: 25px;
+    padding: 1.5rem;
 }
 .frmlogin{
     margin-top: 1.0rem;
@@ -89,17 +66,34 @@ main {
     border-radius: 5px;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }
-.imglogo{
-    color:#fff;
-}
+/*-----------x--------login---section---------x--------------*/
 
 /*-----------------room-booking-page-styling------------*/
+.bookings-title{
+    color: #cb6015;
+    font-weight: bolder;
+    font-size: 25px;
+    padding: 20px 0;
+}
+
 .room-bookings-card{
-    margin-top: 9.5rem;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
-    width: 80%;
-    padding: 0.5rem;
+    width: 100%;
+    padding: 1.25rem;
     border-radius: 3px;
+    margin-top: 1.5px;
+}
+.room-title{
+    color: #CB6015;
+    font-weight: bolder;
+    font-size: 25px;
+    padding: 20px 0;
+}
+.create-room-title{
+     color: #cb6015;
+     font-weight: bolder;
+     font-size: 25px;
+     padding: 1.5rem;
 }
 .add-room-button{
     background-color: #CB6015;
@@ -107,7 +101,6 @@ main {
 }
 .room-create-form{
     width: 300px;
-    margin-top: 8.5rem;
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     max-width: 300px;
@@ -124,21 +117,36 @@ main {
     margin-top: 2.0rem;
     font-weight: bold;
 }
-
+.update-room-title{
+    padding: 1.5rem;
+    color: #CB6015;
+    font-weight: bolder;
+    font-size: 25px;
+}
+.back-to-dashboard-button{
+    background-color: #CB6015;
+    color: white;
+}
 /*----------x-------room-booking-page-styling-----x-----*/
+
 
 /*-------------------room-detail-page-styling----------*/
 .room-detail-container{
     padding-top: 0.5rem;
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
-    margin-top: 9.5rem;
     border-radius: 2px;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }
-.horizontal-line{
-    background-color: #041e42;
+.booking-details-buttons{
+    margin-top: 1.5rem;
+}
+.room-details-title{
     font-weight: bolder;
+    color: #CB6015;
+}
+.facilities-title-text{
+    color: #cb6015;
 }
 .room-detail-titles{
     color: #cb6015;
@@ -159,15 +167,61 @@ main {
 }
 /*-------------------room-detail-page-styling----------*/
 
+/*-----------x--------block-body--section--------x-----------*/
+/*-------------------footer---section--------------------*/
+.footer{
+    background-color: #041E42;
+    padding: 30px 0;
+    margin-top: 3.0rem;
+}
+.copyright-section{
+    background-color: #111;
+    color: white;
+    padding: 20px 0;
+
+}
+/*-----------x------footer---section---------x-----------*/
+main {
+  height: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  width: 100%;
+  overflow: auto;
+  max-width: 800px;
+}
+
+.dashboard_list{
+    background-color: #FFFDD0;
+}
+.navbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+
+.my-container{
+    background-color: #CB6015;
+    border-radius: 10px;
+}
+
+}
+.my-text{
+    color: #041E42;
+}
+.imglogo{
+    color:#fff;
+}
 
 /*-------------------------adminstrator page--styling*/
 .admin-title{
-    margin-top: 7.0rem;
     color: #CB6015;
-    font-weight: bold;
+    font-weight: bolder;
+    padding: 20px 0;
+    font-size: 25px;
 }
 .adminstrator-panel{
-    padding: 1.5rem;
+    padding: 3.0rem;
     margin: 1.5rem;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }
@@ -182,7 +236,7 @@ main {
 }
 /*--------------------users-page-styling----------------*/
 .users-page-title{
-    margin-top: 5.0rem;
+
     color: #CB6015;
     font-weight: bold;
 }
@@ -196,27 +250,28 @@ main {
     color: white;
     margin: 0.5rem;
 }
+
 .add-user-button:hover{
     background-color: #041e42;
     border-radius: 2px;
     list-style: none;
+    color: white;
 }
 .users-table-container{
     width: 95%;
     margin-top: 0.5rem;
 }
 .user-detail-title{
-    margin-top: 5.0rem;
+
     color: #CB6015;
     font-weight: bold;
 }
 .user-details-wrapper{
-    padding: 1.5rem;
-    margin: 1.5rem;
+    padding: 0.5rem;
+    margin: 0.5rem;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }
 .user-details-container{
-    margin-left: 0.5rem;
     padding: 0;
 }
 .activate_item_link{
@@ -229,9 +284,11 @@ main {
 }
 /*-----------------pripheral-section------------------*/
 .create-peripheral-title{
-    font-weight: bold;
+    font-weight: bolder;
     color: #CB6015;
-    margin-top: 9.5rem;
+    margin: 1.5rem;
+    font-size: 25px;
+  
 }
 .add-peripheral-btn{
     background-color: #041e42;

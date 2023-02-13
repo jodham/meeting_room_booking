@@ -23,12 +23,24 @@
 </head>
 
 <body>
-
-{%include 'navigation/landing_navbar.html'%}
+<section class="header-navigation">
+{%include 'navigation/navigation_bar.html'%}
+</section>
+<section class="body-content">
+    <div class="container">
 {%block content%}
 
 {%endblock content%}
+    </div>
+</section>
+<section class="footer text-center">
 {%include 'footer/footer.html'%}
+</section>
+<section class="copyright-section text-center">
+    <div class="container">
+        Zetech University  Copyright &copy; 2023
+    </div>
+</section>
 <! ---------------------------------------scripts---------------------------------------->
 
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"

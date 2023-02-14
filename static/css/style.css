@@ -289,6 +289,13 @@ main {
     color: #CB6015;
     font-weight: bold;
 }
+.booking-details-wrapper{
+    padding: 0.5rem;
+    margin: 0.5rem;
+    min-width: 250px;
+    width: 40rem;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
 .user-details-wrapper{
     padding: 0.5rem;
     margin: 0.5rem;

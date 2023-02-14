@@ -1,38 +1,39 @@
 {%extends 'base/base.html'%}
 {%block title%}Booking details{%endblock title%}
 {%block content%}
-<div class="py-4 h4 text-center user-detail-title">book details</div>
+<div class="py-4 h4 text-center user-detail-title">Booking Details</div>
 
-<div class="row user-details-wrapper">
-       <div class="col-md-6 user-details-container">
-
-           <div class="row shadow-sm mx-2 mt-2">
-               <div class="col book-detail-title-text">
-                   Campus Name
-               </div>
-               <div class="col">
-                   {{booking.room_id.location}}
-               </div>
-           </div>
+<div class="row booking-details-wrapper justify-content-center">
+       <div class="col-md-12 user-details-container">
 
            <div class="row shadow-sm mx-2 mt-2">
                <div class="col book-detail-title-text">
-                   Room Name
+                   Meeting Room   :
                </div>
                <div class="col">
                    {{booking.room_id}}
+                  ( {{booking.room_id.location}} )
                </div>
            </div>
 
            <div class="row shadow-sm mx-2 mt-2">
                <div class="col book-detail-title-text">
-                   Meeting Name
+                   Meeting Purpose
                </div>
                <div class="col">
                    {{booking.title}}
                </div>
            </div>
-           <div class="row shadow-sm  mx-2 mt-2">
+
+           <div class="row shadow-sm mx-2 mt-2">
+               <div class="col book-detail-title-text">
+                   Meeting Time
+               </div>
+               <div class="col">
+                   {{booking.date_start}}  <label class="h6">To</label> {{booking.date_end}}
+               </div>
+           </div>
+             <div class="row shadow-sm  mx-2 mt-2">
                <div class="col book-detail-title-text">
                    Booked by
                </div>
@@ -40,54 +41,36 @@
                    {{booking.user_id}}
                </div>
            </div>
+           <div class="row shadow-sm  mx-2 mt-2">
+               <div class="col book-detail-title-text">
+                   Date Booked
+               </div>
+               <div class="col">
+                   {{booking.date_created}}
+               </div>
+           </div>
 
-       </div>
 
-   <div class="col-md-6">
-      <div class="row shadow-sm  mx-2 mt-2">
-           <div class="col book-detail-title-text">
-               Date Booked
-           </div>
-           <div class="col">
-              {{booking.date_created}}
-           </div>
-       </div>
-        <div class="row shadow-sm  mx-2 mt-2">
-           <div class="col book-detail-title-text">
-               Starting Date
-           </div>
-           <div class="col">
-               {{booking.date_start}}
-           </div>
-       </div>
-        <div class="row shadow-sm  mx-2 mt-2">
-           <div class="col book-detail-title-text">
-               Ending time
-           </div>
-           <div class="col">
-               {{booking.date_end}}
-           </div>
-       </div>
-        <div class="row shadow-sm  mx-2 mt-2">
-           <div class="col book-detail-title-text">
-               Status
-           </div>
-           <div class="col">
-               {%if booking.status == 0%}
-               Pending
-               {%elif booking.status == 1%}
-               Approved
-               {%else%}
-               Rejected
-               {%endif%}
-           </div>
-       </div>
-  </div>
+          <div class="row shadow-sm  mx-2 mt-2">
+               <div class="col book-detail-title-text">
+                   Status
+               </div>
 
+               <div class="col">
+                   {%if booking.status == 0%}
+                   Pending
+                   {%elif booking.status == 1%}
+                   Approved
+                   {%else%}
+                   Rejected
+                   {%endif%}
+               </div>
+           </div>
+         </div>
 <div class="col-md-12 booking-details-buttons">
      <div class="row shadow-sm  mx-2 mt-2">
          <div class="col book-detail-title-text">
-           <a href="{%url 'bookings'%}" class="btn approve-booking-btn mt-2">
+           <a href="{%url 'dashboard'%}" class="btn approve-booking-btn mt-2">
                <i class="bi bi-arrow-left-circle"></i>
                Bookings
            </a>

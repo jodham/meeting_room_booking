@@ -83,7 +83,7 @@
               <td class="text-capitalize">{{book.title}}</td>
               <td>{{book.date_start}}</td>
               <td>{{book.date_end}}</td>
-              <td><a href="{%url 'room_detail' room.pk%}">View</a></td>
+              <td><a href="{%url 'booking_detail' book.pk%}">View</a></td>
           </tr>
           {%endfor%}
           </tbody>

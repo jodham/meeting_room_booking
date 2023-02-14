@@ -3,6 +3,7 @@ import datetime
 from time import strftime, strptime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 # from django.shortcuts import render, redirect
 from django.views.generic import DetailView, UpdateView
 from django.shortcuts import render, redirect
@@ -30,8 +31,19 @@ def dashboard(request):
     context = {'rooms': rooms, 'role': role}
     return render(request, templatename, context)
 
-def rooms(request):
-    pass
+
+def activeRooms(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    available_rooms = Rooms.objects.all()
+    active_rooms = available_rooms.filter(is_active=True)
+    templatename = 'room_booking_app/active_rooms.html'
+    context = {'role': role, 'active_rooms': active_rooms}
+    return render(request, templatename, context)
+
+
 # ------------------------------room create view------>
 
 def create_room_form(request):

@@ -17,7 +17,7 @@
         <div class="py-2 float-left text-center h4">Available Rooms</div>
         {%endif%}
     </div>
-
+    <div class="table-responsive">
      <table class="table data-table">
           <thead>
             <tr>
@@ -31,7 +31,7 @@
             </tr>
           </thead>
           <tbody>
-          {%for room in rooms%}
+          {%for room in active_rooms%}
           <tr>
               <td>{{forloop.counter}}</td>
               <td class="text-capitalize room-fields">{{room.title}}</td>
@@ -55,11 +55,10 @@
                    {%endif%}
               </td>
           </tr>
-
           {%endfor%}
           </tbody>
     </table>
-
+    </div>
 </div>
 
 

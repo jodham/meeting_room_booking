@@ -42,7 +42,7 @@ def signin(request):
             if role == 'administrator':
                 return redirect('adminstrator_page')
             else:
-                return redirect('dashboard')
+                return redirect('rooms')
         else:
             error = messages.error(request, 'Invalid details try again!!')
             templatename = 'accounts/signin.html'

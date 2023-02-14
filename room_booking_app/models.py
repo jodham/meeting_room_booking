@@ -123,7 +123,7 @@ class Rooms(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     facilities_ids = models.CharField(max_length=255, default='', blank=True)
-    is_active = models.BooleanField(default=1)
+    is_active = models.BooleanField(default=True)
 
     def __str__(self):
         return self.title

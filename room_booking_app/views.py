@@ -5,7 +5,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 # from django.shortcuts import render, redirect
 from django.views.generic import DetailView, UpdateView
-
+from django.shortcuts import render, redirect
+from .models import Rooms, Campus, Facility
 from .controllers import *
 from .forms import RoomForm
 from .models import Booking, User
@@ -29,11 +30,9 @@ def dashboard(request):
     context = {'rooms': rooms, 'role': role}
     return render(request, templatename, context)
 
-
+def rooms(request):
+    pass
 # ------------------------------room create view------>
-from django.shortcuts import render, redirect
-from .models import Rooms, Campus, Facility
-
 
 def create_room_form(request):
     if request.user.is_authenticated:

@@ -1,9 +1,10 @@
 {%extends 'base/base.html'%}
 {%load static%}
-{%block title%}Login{%endblock title%}
+{%block title%}book room{%endblock title%}
 {%block content%}
+<div class="col-md-12 text-center bookings-title">Book Room</div>
 <div class="row justify-content-center">
-    <form method="post" class="book-room-form">
+    <form method="post" class="frmlogin">
         {%csrf_token%}
         <label class="h6">Meeting title</label>
         <div class="form-group">
@@ -21,6 +22,10 @@
         </div>
 
         <button class="btn btn-block book-room-btn h5" id="book-room-button"  type="submit">Book Room</button>
+        <a href="{%url 'dashboard'%}" class="">
+            <i class="bi bi-arrow-left-circle"></i>
+            Rooms
+        </a>
     </form>
 </div>
 {%endblock content%}

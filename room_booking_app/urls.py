@@ -1,6 +1,7 @@
 from .views import *
 from django.urls import path
 
+# app_name = 'room_booking_app'
 urlpatterns = [
     path('index/', index, name='index'),
     path('dashboard/', dashboard, name='dashboard'),

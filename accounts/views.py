@@ -1,3 +1,5 @@
+from time import timezone
+
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect, get_object_or_404
@@ -247,8 +249,11 @@ def approve_booking(request, pk):
     if not request.user.is_authenticated:
         return redirect('signin')
     booking = get_object_or_404(Booking, id=pk)
+    user = User.objects.get(email=request.user)
     if booking.status == 0 or booking.status == 2:
         booking.status = 1
+        booking.actioned_by = user
+        booking.date_actioned = timezone.now
         booking.save()
         return redirect('booking_detail', pk=pk)
 
@@ -257,7 +262,10 @@ def reject_booking(request, pk):
     if not request.user.is_authenticated:
         return redirect('sign')
     booking = get_object_or_404(Booking, id=pk)
+    user = User.objects.get(email=request.user)
     if booking.status == 0 or booking.status == 1:
         booking.status = 2
+        booking.actioned_by = user
+        booking.date_actioned = timezone.now
         booking.save()
         return redirect('booking_detail', pk=pk)

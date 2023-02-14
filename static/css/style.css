@@ -3,7 +3,14 @@ section{
     float: left;
     width: 100%;
 }
-.container{
+/*#toast-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+}
+*/.container{
     padding: 0 !important;
 }
 .header-navigation{
@@ -233,8 +240,9 @@ main {
     font-size: 25px;
 }
 .adminstrator-panel{
-    padding: 3.0rem;
-    margin: 1.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    min-height: 250px;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }
 .admin-card{
@@ -242,6 +250,9 @@ main {
     margin-right: 0.5rem;
     margin-top: 0.5rem;
     max-width: 200px;
+    max-height: 100px;
+    padding: 10px 10px;
+    margin-bottom: 0.5rem;
 }
 .adminstrator-page-card-titles{
     color: #041e42;
@@ -281,6 +292,7 @@ main {
 .user-details-wrapper{
     padding: 0.5rem;
     margin: 0.5rem;
+    min-width: 250px;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }
 .user-details-container{

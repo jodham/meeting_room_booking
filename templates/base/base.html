@@ -26,13 +26,18 @@
 <section class="header-navigation">
 {%include 'navigation/navigation_bar.html'%}
 </section>
+
 <section class="body-content">
     <div class="container">
-{%block content%}
+        <div class="row justify-content-center">
+            <div id="toast-container" class="col-md-12" style="z-index: 9999;"></div>
+        </div>
+    {%block content%}
 
-{%endblock content%}
+    {%endblock content%}
     </div>
 </section>
+
 <section class="footer text-center">
 {%include 'footer/footer.html'%}
 </section>
@@ -47,5 +52,18 @@
           integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
           integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+
+<script>
+$(document).ready(function() {
+    {% for message in messages %}
+        var toast = $('<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="5000">')
+            .addClass('toast-' + '{{ message.tags }}')
+            .append($('<div class="toast-body">').text('{{ message }}'))
+            .appendTo('#toast-container');
+        toast.toast('show');
+    {% endfor %}
+});
+</script>
+
 </body>
 </html>

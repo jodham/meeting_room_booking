@@ -134,32 +134,36 @@ def book_room(request, pk):
     facility = room.facilities_ids.split(',')
     facilities = Facility.objects.filter(id__in=facility)
     if request.method == "POST":
-        title = request.POST.get('meeting_title')
-        starting_time = request.POST.get('starting_time')
-        ending_time = request.POST.get('ending_time')
+        title = request.POST.get('title')
+        starting_time = request.POST.get('starting-date')
+        ending_time = request.POST.get('ending-date')
+        if starting_time is None:
+            messages.error(request, 'Starting time is required.')
+            return redirect('book_room', pk)
         # converting datetime to required format
-        book_starting_time = strptime(starting_time, "%Y/%m/%d, %H:%M:%S")
+        book_starting_time = datetime.datetime.strptime(starting_time, "%Y-%m-%dT%H:%M")
+
         # Check if starting_time is greater than current time
         if book_starting_time < datetime.datetime.now():
             messages.error(request, 'Start time must be greater than current time.')
-            return redirect('room_booking_app:book_room', room)
+            return redirect('book_room', pk)
 
         # Check if ending_time is greater than starting_time
         elif ending_time < starting_time:
             messages.warning(request, 'ending time cannot be less than starting time')
-            return redirect('room_booking_app:book_room', room)
+            return redirect('book_room', pk)
 
         # Check if the time frame for the booking is not within another approved booking
-        overlapping_bookings = Booking.objects.filter(room_id=room, is_approved=True,
+        overlapping_bookings = Booking.objects.filter(room_id=room,
                                                       date_start__lte=ending_time,
                                                       date_end__gte=starting_time)
         if overlapping_bookings.exists():
             messages.warning(request, 'This room is already booked for this time frame.')
-            return redirect('room_booking_app/book_room', room)
+            return redirect('book_room', room)
 
         bookings = Booking()
         bookings.room_id = room
-        bookings.booked_by = booked_by
+        bookings.user_id = booked_by
         bookings.title = title
         bookings.date_start = starting_time
         bookings.date_end = ending_time

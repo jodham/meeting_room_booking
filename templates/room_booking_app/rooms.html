@@ -44,15 +44,23 @@
               {%endif%}
 
               <td class="room-fields">
-                  <a href="{%url 'room_detail' room.pk%}">View</a>
-                  {%if role == "administrator"%}
-                  <a href="{%url 'room_update' room.id%}" class="update_disable_item_link">Update</a>
-                  {%if room.is_active == 1%}
-                  <a href="{%url 'activate_deactivate_room' room.pk%}" class="update_disable_item_link">Disable</a>
-                  {%else%}
-                  <a href="{%url 'activate_deactivate_room' room.pk%}" class="activate_item_link">activate</a>
-                  {%endif%}
-                   {%endif%}
+                    <div class="btn-group dropup">
+                      <button class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Action
+                      </button>
+                      <div class="dropdown-menu">
+                          <a href="{%url 'room_detail' room.pk%}" class="dropdown-item">View</a>
+                          {%if role == "administrator"%}
+                          <a href="{%url 'room_update' room.id%}" class="dropdown-item update_disable_item_link">Update</a>
+                          <a href="{%url 'suspend_room' room.id%}" class="dropdown-item update_disable_item_link">Suspend</a>
+                          {%if room.is_active == 1%}
+                          <a href="{%url 'activate_deactivate_room' room.pk%}" class="dropdown-item update_disable_item_link">Disable</a>
+                          {%else%}
+                          <a href="{%url 'activate_deactivate_room' room.pk%}" class="dropdown-item activate_item_link">activate</a>
+                          {%endif%}
+                           {%endif%}
+                      </div>
+                     </div>
               </td>
           </tr>
 

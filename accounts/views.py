@@ -296,12 +296,12 @@ def suspend_room(request, pk):
 
         if suspension_starting_time < datetime.datetime.now():
             messages.error(request, 'Start time must be greater than current time.')
-            return redirect('', pk)
+            return redirect('suspend_room', pk)
 
         # Check if ending_time is greater than starting_time
         elif ending_date < starting_date:
             messages.warning(request, 'ending time cannot be less than starting time')
-            return redirect('', pk)
+            return redirect('suspend_room', pk)
 
         suspension = Room_Suspension()
         suspension.room = room
@@ -315,6 +315,6 @@ def suspend_room(request, pk):
 
         return redirect('room_detail', pk=pk)
     templatename = 'adminstrator/suspend_room.html'
-    context = {'role': role}
+    context = {'role': role, 'room':room}
     return render(request, templatename, context)
 

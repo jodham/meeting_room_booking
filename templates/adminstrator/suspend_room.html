@@ -1,0 +1,28 @@
+{%extends 'base/base.html'%}
+{%load static%}
+{%block title%}index{%endblock title%}
+{%block content%}
+ <div class="text-center login-text-title">Suspend {{room.title}}</div>
+<div class="row justify-content-center">
+    <form method="post" class="suspend-room-form">
+        {%csrf_token%}
+        <label class="h4">Suspend From</label>
+        <div class="form-group">
+          <input type="datetime-local" required autofocus name="start-date" class="form-control form-control-lg">
+        </div>
+
+        <label class="h4">Suspend To</label>
+        <div class="form-group">
+          <input type="datetime-local" name="end-date" class="form-control form-control-lg">
+        </div>
+
+         <label class="h4">Reason</label>
+         <div class="form-group">
+          <input type="text" name="reason" class="form-control form-control-lg">
+        </div>
+
+        <button class="btn btn-block loginbtn h5" type="submit">Suspend Room</button>
+         <a class="update_disable_item_link" href="{%url 'room_detail' room.pk%}">Cancel</a>
+    </form>
+</div>
+{%endblock content%}

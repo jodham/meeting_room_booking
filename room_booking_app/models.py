@@ -122,6 +122,7 @@ class Rooms(models.Model):
     capacity = models.IntegerField()
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+    is_suspended = models.BooleanField(default=False)
     facilities_ids = models.CharField(max_length=255, default='', blank=True)
     is_active = models.BooleanField(default=True)
 
@@ -162,3 +163,13 @@ class Booking(models.Model):
 
     def get_absolute_url(self):
         return reverse('bookings_detail', kwargs={'pk': self.pk})
+
+
+class Room_Suspension(models.Model):
+    room = models.ForeignKey(Rooms, on_delete=models.CASCADE)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    suspension_reason = models.CharField(max_length=250, blank=True)
+
+    def __str__(self):
+        return f"Suspension for {{self.room.title}}"

@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from accounts.forms import CreateUserAccount, create_user, UserUpdateForm, peripheralUpdate
 from room_booking_app.controllers import *
-from room_booking_app.models import User, Facility, Rooms, Roles, Booking, Room_Suspension
+from room_booking_app.models import User, Facility, Rooms, Roles, Booking
 
 
 # Create your views here.
@@ -280,7 +280,7 @@ def reject_booking(request, pk):
         booking.save()
         return redirect('booking_detail', pk=pk)
 
-
+"""
 def suspend_room(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -317,4 +317,5 @@ def suspend_room(request, pk):
     templatename = 'adminstrator/suspend_room.html'
     context = {'role': role, 'room':room}
     return render(request, templatename, context)
+    """
 

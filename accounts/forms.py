@@ -39,6 +39,8 @@ class peripheralUpdate(forms.Form):
 
 class suspend_room_form(forms.Form):
     suspension_reason = forms.CharField(max_length=200, required=True)
+    suspension_start = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+    suspension_end = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
 
     class Meta:
         model = Rooms
@@ -49,6 +51,6 @@ class suspend_room_form(forms.Form):
         suspension_start = cleaned_data.get("suspension_start")
         suspension_end = cleaned_data.get("suspension_end")
         if suspension_start and suspension_end and suspension_start >= suspension_end:
-            raise forms.ValidationError(
-                "Suspension end date must be after suspension start date."
-            )
+            self.add_error('suspension_end',
+                           "Suspension end date must be after suspension start date."
+                           )

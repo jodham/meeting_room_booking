@@ -141,6 +141,14 @@ class Rooms(models.Model):
     def get_absolute_url(self):
         return reverse('room_detail', kwargs={'pk': self.pk})
 
+    def unsuspend_if_needed(self):
+        if self.is_suspended and self.suspension_end and self.suspension_end <= timezone.now():
+            self.is_suspended = False
+            self.suspension_reason = None
+            self.suspension_start = None
+            self.suspension_end = None
+            self.save()
+
 
 class Booking(models.Model):
     STATUS_PENDING = 0
@@ -166,6 +174,8 @@ class Booking(models.Model):
 
     def get_absolute_url(self):
         return reverse('bookings_detail', kwargs={'pk': self.pk})
+
+
 """
 class Room_Suspension(models.Model):
     room = models.ForeignKey(Rooms, on_delete=models.CASCADE)

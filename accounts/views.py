@@ -287,13 +287,29 @@ def suspend_room(request, pk):
     else:
         role = None
     room = get_object_or_404(Rooms, id=pk)
-    form = suspend_room_form(request.POST or None)
+    if request.method == "POST":
+        start_date = request.POST.get('start-date')
+        end_date = request.POST.get('end-date')
 
-    if form.is_valid():
+        suspension_starting_time = datetime.datetime.strptime(start_date, "%Y-%m-%dT%H:%M")
+
+        if suspension_starting_time < datetime.datetime.now():
+            messages.error(request, 'Start time must be greater than current time.')
+            return redirect('suspend_room', pk)
+
+        elif end_date < start_date:
+            messages.warning(request, 'ending time cannot be less than starting time')
+            return redirect('suspend_room', pk)
+
+        room.suspension_start = suspension_starting_time
+        room.suspension_end = request.POST.get('end-date')
+        room.suspension_reason = request.POST.get('reason')
         room.is_suspended = True
         room.save()
         return redirect('room_detail', pk=pk)
+    else:
+        form = suspend_room_form()
     templatename = 'adminstrator/suspend_room.html'
-    context = {'role': role, 'room': room}
+    context = {'role': role, 'room': room, 'form': form}
     return render(request, templatename, context)
 

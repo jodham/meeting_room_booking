@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib import messages
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth import authenticate, login, logout
@@ -7,7 +9,7 @@ from django.utils import timezone
 
 from accounts.forms import CreateUserAccount, create_user, UserUpdateForm, peripheralUpdate
 from room_booking_app.controllers import *
-from room_booking_app.models import User, Facility, Rooms, Roles, Booking
+from room_booking_app.models import User, Facility, Rooms, Roles, Booking, Room_Suspension
 
 
 # Create your views here.
@@ -277,3 +279,42 @@ def reject_booking(request, pk):
         booking.date_actioned = timezone.now()
         booking.save()
         return redirect('booking_detail', pk=pk)
+
+
+def suspend_room(request, pk):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    room = get_object_or_404(Rooms, id=pk)
+    if request.method == 'POST':
+        starting_date = request.POST.get('start-date')
+        ending_date = request.POST.get('end-date')
+        reason = request.POST.get('reason')
+
+        suspension_starting_time = datetime.datetime.strptime(starting_date, "%Y-%m-%dT%H:%M")
+
+        if suspension_starting_time < datetime.datetime.now():
+            messages.error(request, 'Start time must be greater than current time.')
+            return redirect('', pk)
+
+        # Check if ending_time is greater than starting_time
+        elif ending_date < starting_date:
+            messages.warning(request, 'ending time cannot be less than starting time')
+            return redirect('', pk)
+
+        suspension = Room_Suspension()
+        suspension.room = room
+        suspension.start_date = starting_date
+        suspension.end_date = ending_date
+        suspension.suspension_reason = reason
+        suspension.save()
+
+        room.is_suspended = True
+        room.save()
+
+        return redirect('room_detail', pk=pk)
+    templatename = 'adminstrator/suspend_room.html'
+    context = {'role': role}
+    return render(request, templatename, context)
+

@@ -30,6 +30,7 @@ class RoomForm(forms.Form):
     )
     title = forms.CharField(max_length=100)
     capacity = forms.IntegerField()
+
     facilities = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
         choices=[(facility.id, facility.title) for facility in Facility.objects.all()]

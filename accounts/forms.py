@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from room_booking_app.models import User, Roles, Facility
+from room_booking_app.models import User, Roles, Facility, Rooms
 
 
 class CreateUserAccount(UserCreationForm):
@@ -35,3 +35,20 @@ class peripheralUpdate(forms.Form):
     class Meta:
         model = Facility
         fields = ['title']
+
+
+class suspend_room_form(forms.Form):
+    suspension_reason = forms.CharField(max_length=200, required=True)
+
+    class Meta:
+        model = Rooms
+        fields = ['suspension_start', 'suspension_end', 'suspension_reason']
+
+    def clean(self):
+        cleaned_data = super().clean()
+        suspension_start = cleaned_data.get("suspension_start")
+        suspension_end = cleaned_data.get("suspension_end")
+        if suspension_start and suspension_end and suspension_start >= suspension_end:
+            raise forms.ValidationError(
+                "Suspension end date must be after suspension start date."
+            )

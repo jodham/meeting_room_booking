@@ -1,4 +1,6 @@
-from room_booking_app.models import Roles
+from room_booking_app.models import Roles, Rooms
+from django.contrib.auth.signals import user_logged_in
+from django.dispatch import receiver
 
 
 def get_role_names(user):
@@ -20,3 +22,12 @@ def check_user_role(user):
     roles = get_role_names(user)
     return check_role(roles)
 
+
+@receiver(user_logged_in)
+def unsuspend_rooms(sender, user, request, **kwargs):
+    # Get all rooms that are currently suspended
+    suspended_rooms = Rooms.objects.filter(is_suspended=True)
+
+    # Call unsuspend_if_needed() on each suspended room
+    for room in suspended_rooms:
+        room.unsuspend_if_needed()

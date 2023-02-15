@@ -34,10 +34,15 @@
 
 <section class="body-content">
     <div class="container ">
-        <div class="row justify-content-center">
-            <div id="toast-container" class="col-md-12" style="z-index: 9999;"></div>
-        </div>
+        {%if messages%}
+            {% for message in messages%}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+            {% endfor %}
+	    {%endif%}
     {%block content%}
+
 
     {%endblock content%}
     </div>

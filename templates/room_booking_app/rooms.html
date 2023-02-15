@@ -18,7 +18,7 @@
         {%endif%}
     </div>
 
-     <table class="table data-table">
+     <table class="table table-striped table-bordered data-table">
           <thead>
             <tr>
                 <th scope="col">No.</th>
@@ -26,6 +26,9 @@
               <th scope="col">Location</th>
               <th scope="col">Capacity</th>
               <th scope="col">Status</th>
+                {%if room.is_suspended%}
+                <th scope="col">Active From</th>
+                {%endif%}
               <th scope="col">View</th>
 
             </tr>
@@ -37,12 +40,15 @@
               <td class="text-capitalize room-fields">{{room.title}}</td>
               <td class="text-capitalize room-fields">{{room.location}}</td>
               <td class="room-fields">{{room.capacity}}</td>
+              {%if room.is_suspended%}
+              <td class="room-fields" style="color: #cb6015">Suspended</td>
+              {%else%}
               {%if room.is_active == 1%}
               <td class="room-fields">Active</td>
               {%else%}
               <td class="room-fields">Not Active</td>
               {%endif%}
-
+              {%endif%}
               <td class="room-fields">
                     <div class="btn-group dropup">
                       <button class="btn btn-secondary btn-sm dropdown-toggle dropdown-toggle-split" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -15,6 +15,13 @@
                 Rooms
             </a>
           </div>
+          {%if room.is_suspended%}
+          <div class="py-2 float-right">
+           <a href="#" class="btn book-room-button">
+             room is suspended
+           </a>
+       </div>
+          {%else%}
           {%if room.is_active == 1%}
        <div class="py-2 float-right">
            <a href="{%url 'book_room' room.pk%}" class="btn book-room-button">
@@ -27,6 +34,7 @@
              In active
            </a>
        </div>
+          {%endif%}
           {%endif%}
       </div>
     <div class="col-md-6">
@@ -56,19 +64,29 @@
                {{room.capacity}}
            </div>
        </div>
+        {%if room.is_suspended%}
+          <div class="row shadow-sm mx-2 mt-2">
+           <div class="col book-detail-title-text">
+               Suspension Reason
+           </div>
+           <div class="col">
+               {{room.suspension_reason}}
+           </div>
+       </div>
+        {%endif%}
 
    </div>
 
 <div class="col-md-6">
    <div class="row shadow-sm mx-2 mt-2">
-       <div class="col text-center facilities-title-text">
+       <div class="col text-center facilities-title-text h4">
            Facilities
        </div>
    </div>
     <div class="row shadow-sm mx-2 mt-2">
     {%for item in facilities%}
 
-   <div class="col-sm-6 mt-2 shadow-sm">{{forloop.counter}}. {{item.title}}</div>
+   <div class="col-sm-12 mt-2 shadow-sm">{{forloop.counter}}. {{item.title}}</div>
     {%endfor%}
     </div>
 
@@ -78,7 +96,7 @@
 <div class="col-md-12 mt-4 mb-3">
     <div class="py-3 text-center room-detail-titles h5">Room Bookings</div>
   <div class="card">
-      <table class="table data-table">
+      <table class="table table-striped data-table">
           <thead>
             <tr>
               <th scope="col">Booked by</th>

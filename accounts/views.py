@@ -40,6 +40,7 @@ def signin(request):
         if user is not None:
             if user.active:
                 login(request, user)
+                messages.success(request, f'login successful')
             else:
                 messages.warning(request, 'account disabled contact admin')
                 return render(request, 'accounts/signin.html')
@@ -50,10 +51,9 @@ def signin(request):
             else:
                 return redirect('rooms')
         else:
-            error = messages.error(request, 'Invalid details try again!!')
+            messages.warning(request, 'Invalid details try again!!')
             templatename = 'accounts/signin.html'
-            context = {"error": error}
-            return render(request, templatename, context)
+            return render(request, templatename)
     else:
         templatename = 'accounts/signin.html'
         return render(request, templatename)
@@ -120,7 +120,7 @@ def add_user(request):
             return redirect('system_users')
     else:
         form = create_user()
-        messages.error(request, "wrong user details")
+        messages.error(request, f"wrong user details")
     templatename = 'accounts/register.html'
     return render(request, templatename, {'form': form, 'role': role})
 
@@ -142,6 +142,7 @@ def update_user(request, pk):
 
         user.role = ','.join(selected_roles)
         user.save()
+        messages.success(request, f'user updated successfully')
         return redirect('system_users')
 
     form.fields['email'].initial = user.email
@@ -159,12 +160,12 @@ def activate_deactivate_user(request, id):
     if user.active:
         user.active = False
         user.save()
-        messages.success(request, 'user has been deactivated', extra_tags="alert alert warning dismissable show")
+        messages.success(request, f'user has been deactivated')
         return redirect('system_users')
     else:
         user.active = True
         user.save()
-        messages.success(request, 'user has been activated', extra_tags="alert alert warning dismissable show")
+        messages.success(request, f'user has been activated')
         return redirect('system_users')
 
 

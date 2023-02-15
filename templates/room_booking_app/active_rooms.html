@@ -37,10 +37,14 @@
               <td class="text-capitalize room-fields">{{room.title}}</td>
               <td class="text-capitalize room-fields">{{room.location}}</td>
               <td class="room-fields">{{room.capacity}}</td>
+              {%if room.is_suspended%}
+              <td class="room-fields" style="color: #cb6015">Suspended</td>
+              {%else%}
               {%if room.is_active == 1%}
               <td class="room-fields">Active</td>
               {%else%}
               <td class="room-fields">Not Active</td>
+              {%endif%}
               {%endif%}
 
               <td class="room-fields">

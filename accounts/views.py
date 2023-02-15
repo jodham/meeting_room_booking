@@ -1,13 +1,12 @@
-from time import timezone
-
 from django.contrib import messages
+from django.contrib.admin.models import LogEntry
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-from django.views.generic import ListView, CreateView, UpdateView
-from django.contrib.admin.models import LogEntry
-from room_booking_app.controllers import *
+from django.utils import timezone
+
 from accounts.forms import CreateUserAccount, create_user, UserUpdateForm, peripheralUpdate
+from room_booking_app.controllers import *
 from room_booking_app.models import User, Facility, Rooms, Roles, Booking
 
 
@@ -37,7 +36,12 @@ def signin(request):
         password = request.POST.get('password')
         user = authenticate(username=username, password=password)
         if user is not None:
-            login(request, user)
+            if user.active:
+                login(request, user)
+            else:
+                messages.warning(request, 'account disabled contact admin')
+                return render(request, 'accounts/signin.html')
+
             role = check_user_role(request.user)
             if role == 'administrator':
                 return redirect('adminstrator_page')
@@ -120,6 +124,10 @@ def add_user(request):
 
 
 def update_user(request, pk):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
     user = get_object_or_404(User, id=pk)
     role_ids = user.role.split(',')
     roles = Roles.objects.all()
@@ -139,7 +147,7 @@ def update_user(request, pk):
     form.fields['last_name'].initial = user.last_name
     form.fields['role'].initial = role_ids
 
-    return render(request, 'adminstrator/update_user.html', {'form': form, 'roles': roles})
+    return render(request, 'adminstrator/update_user.html', {'form': form, 'roles': roles, 'role': role, 'user': user})
 
 
 def activate_deactivate_user(request, id):
@@ -253,7 +261,7 @@ def approve_booking(request, pk):
     if booking.status == 0 or booking.status == 2:
         booking.status = 1
         booking.actioned_by = user
-        booking.date_actioned = timezone.now
+        booking.date_actioned = timezone.now()
         booking.save()
         return redirect('booking_detail', pk=pk)
 
@@ -266,6 +274,6 @@ def reject_booking(request, pk):
     if booking.status == 0 or booking.status == 1:
         booking.status = 2
         booking.actioned_by = user
-        booking.date_actioned = timezone.now
+        booking.date_actioned = timezone.now()
         booking.save()
         return redirect('booking_detail', pk=pk)

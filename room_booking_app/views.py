@@ -1,16 +1,16 @@
 # from django.shortcuts import render, redirect
 import datetime
-from time import strftime, strptime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.shortcuts import render, redirect
 # from django.shortcuts import render, redirect
 from django.views.generic import DetailView, UpdateView
-from django.shortcuts import render, redirect
-from .models import Rooms, Campus, Facility
+
 from .controllers import *
 from .forms import RoomForm
 from .models import Booking, User
+from .models import Rooms, Campus, Facility
 
 
 # Create your views here.
@@ -27,7 +27,7 @@ def dashboard(request):
     else:
         role = None
     templatename = 'room_booking_app/rooms.html'
-    rooms = Rooms.objects.all()
+    rooms = Rooms.objects.all().order_by('-date_created')
     context = {'rooms': rooms, 'role': role}
     return render(request, templatename, context)
 
@@ -124,7 +124,6 @@ def room_detail_view(request, pk):
         role = None
     room = Rooms.objects.get(pk=pk)
     bookings = Booking.objects.filter(room_id_id=pk)
-    booked_by = User.objects.get(email=request.user)
     facility = room.facilities_ids.split(',')
     facilities = Facility.objects.filter(id__in=facility)
 
@@ -165,12 +164,12 @@ def book_room(request, pk):
             return redirect('book_room', pk)
 
         # Check if the time frame for the booking is not within another approved booking
-        overlapping_bookings = Booking.objects.filter(room_id=room,
+        overlapping_bookings = Booking.objects.filter(room_id=room, status=1,
                                                       date_start__lte=ending_time,
                                                       date_end__gte=starting_time)
         if overlapping_bookings.exists():
             messages.warning(request, 'This room is already booked for this time frame.')
-            return redirect('book_room', room)
+            return redirect('book_room', pk)
 
         bookings = Booking()
         bookings.room_id = room
@@ -192,7 +191,7 @@ def Bookings_View(request):
         role = check_user_role(request.user)
     else:
         role = None
-    room_booking = Booking.objects.all()
+    room_booking = Booking.objects.all().order_by('-date_created')
     templatename = "room_booking_app/bookings.html"
     context = {'room_booking': room_booking, 'role': role}
     return render(request, templatename, context)

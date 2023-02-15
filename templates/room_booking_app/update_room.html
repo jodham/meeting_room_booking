@@ -14,7 +14,7 @@
             {%csrf_token%}
             {{form.as_p}}
             <button class="btn btn-block create-room-submit-btn h5" type="submit">Update Room</button>
-
+             <a class="update_disable_item_link" href="{%url 'dashboard'%}">Cancel</a>
         </form>
 
     </div>

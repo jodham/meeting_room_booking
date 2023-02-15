@@ -22,7 +22,11 @@
         </div>
 
         <button class="btn btn-block book-room-btn h5" id="book-room-button"  type="submit">Book Room</button>
+         {%if role == 'administrator'%}
         <a href="{%url 'dashboard'%}" class="">
+            {%else%}
+            <a href="{%url 'rooms'%}" class="">
+            {%endif%}
             <i class="bi bi-arrow-left-circle"></i>
             Rooms
         </a>

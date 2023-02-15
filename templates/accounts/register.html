@@ -2,6 +2,7 @@
 {%load static%}
 {%block title%}Login{%endblock title%}
 {%block content%}
+<div class="py-3 text-center h4 users-page-title">Add New User</div>
 <div class="row justify-content-center">
     <form method="post" class="form-container text-center frmlogin">
         {%csrf_token%}
@@ -12,6 +13,7 @@
         </div>
         {%endfor%}
         <button class="btn btn-block loginbtn h5" type="submit">Create User</button>
+        <a href="{%url 'system_users'%}" class="text-dark"><i class="bi bi-arrow-left-circle"></i>Users</a>
     </form>
 </div>
 {%endblock content%}

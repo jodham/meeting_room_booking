@@ -151,7 +151,7 @@ class Booking(models.Model):
     room_id = models.ForeignKey(Rooms, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bookings_created")
     title = models.CharField(max_length=100)
-    is_approved = models.BooleanField(default=False)
+    reject_reason = models.TextField(null=True)
     status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=STATUS_PENDING)
     actioned_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='bookings_actioned')
     date_actioned = models.DateTimeField(null=True)

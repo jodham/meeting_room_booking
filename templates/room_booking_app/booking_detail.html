@@ -3,7 +3,8 @@
 {%block content%}
 <div class="py-4 h4 text-center user-detail-title">Booking Details</div>
 
-<div class="row booking-details-wrapper justify-content-center">
+<div class="row  justify-content-center">
+    <div class="card booking-details-wrapper">
        <div class="col-md-12 user-details-container">
 
            <div class="row shadow-sm mx-2 mt-2">
@@ -30,7 +31,7 @@
                    Meeting Time
                </div>
                <div class="col">
-                   {{booking.date_start}}  <label class="h6">To</label> {{booking.date_end}}
+                   {{booking.date_start}}  <label style="color: #cb6015; font-weight: bolder;">To</label> <br>{{booking.date_end}}
                </div>
            </div>
              <div class="row shadow-sm  mx-2 mt-2">
@@ -65,27 +66,38 @@
                    Rejected
                    {%endif%}
                </div>
-           </div>
          </div>
 <div class="col-md-12 booking-details-buttons">
      <div class="row shadow-sm  mx-2 mt-2">
          <div class="col book-detail-title-text">
-           <a href="{%url 'dashboard'%}" class="btn approve-booking-btn mt-2">
+           <a href="{%url 'room_detail' booking.room_id_id%}" class="btn approve-booking-btn mt-2">
                <i class="bi bi-arrow-left-circle"></i>
                Bookings
            </a>
        </div>
           {%if role == 'approver' or role == 'administrator'%}
+            {%if booking.status == 0%}
        <div class="col book-detail-title-text">
            <a href="{%url 'approve_booking' booking.pk%}" class="btn approve-booking-btn mt-2">Approve</a>
        </div>
        <div class="col">
           <a href="{%url 'reject_booking' booking.pk%}" class="btn reject-booking-btn mt-2">Reject</a>
        </div>
+         {%elif booking.status == 1%}
+      <div class="col">
+          <a href="{%url 'reject_booking' booking.pk%}" class="btn reject-booking-btn mt-2">Reject</a>
+       </div>
+         {%else%}
+          <div class="col">
+          <a href="{%url 'approve_booking' booking.pk%}" class="btn approve-booking-btn mt-2">Approve</a>
+       </div>
+         {%endif%}
          {%endif%}
    </div>
 </div>
+</div>
 
+</div>
 </div>
 
 {%endblock content%}

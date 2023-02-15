@@ -6,16 +6,28 @@
   <div class="row room-detail-container">
       <div class="col-md-12">
           <div class="py-2 float-left text-center h6">
+              {%if role == 'administrator'%}
             <a href="{%url 'dashboard'%}" class="btn back-to-dashboard-button">
+                {%else%}
+                 <a href="{%url 'rooms'%}" class="btn back-to-dashboard-button">
+              {%endif%}
                 <i class="bi bi-arrow-left-circle"></i>
                 Rooms
             </a>
-        </div>
+          </div>
+          {%if room.is_active == 1%}
        <div class="py-2 float-right">
            <a href="{%url 'book_room' room.pk%}" class="btn book-room-button">
                Book Room
            </a>
        </div>
+          {%else%}
+      <div class="py-2 float-right">
+           <a href="#" class="btn book-room-button">
+             In active
+           </a>
+       </div>
+          {%endif%}
       </div>
     <div class="col-md-6">
        <div class="row shadow-sm mx-2 mt-2">

@@ -122,10 +122,6 @@ class Rooms(models.Model):
     capacity = models.IntegerField()
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    is_suspended = models.BooleanField(default=False)
-    suspension_start = models.DateTimeField(null=True)
-    suspension_end = models.DateTimeField(null=True)
-    suspension_reason = models.CharField(max_length=200, null=True, blank=True)
     facilities_ids = models.CharField(max_length=255, default='', blank=True)
     is_active = models.BooleanField(default=True)
 
@@ -141,6 +137,8 @@ class Rooms(models.Model):
     def get_absolute_url(self):
         return reverse('room_detail', kwargs={'pk': self.pk})
 
+
+"""
     def unsuspend_if_needed(self):
         if self.is_suspended and self.suspension_end and self.suspension_end <= timezone.localtime():
             self.is_suspended = False
@@ -148,6 +146,7 @@ class Rooms(models.Model):
             self.suspension_start = None
             self.suspension_end = None
             self.save()
+"""
 
 
 class Booking(models.Model):
@@ -184,5 +183,4 @@ class Room_Suspension(models.Model):
     suspension_reason = models.CharField(max_length=250, blank=True)
 
     def __str__(self):
-        return f"Suspension for {{self.room.title}}"
-
+        return f"Suspension for {{self.room}}"

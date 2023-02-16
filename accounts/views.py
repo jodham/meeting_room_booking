@@ -289,7 +289,7 @@ def suspend_room(request, pk):
     else:
         role = None
     room = get_object_or_404(Rooms, id=pk)
-    user = request.user()
+    user = User.objects.get(email=request.user)
     if request.method == "POST":
         start_date = request.POST.get('start-date')
         end_date = request.POST.get('end-date')
@@ -306,8 +306,9 @@ def suspend_room(request, pk):
             return redirect('suspend_room', pk)
 
         x = Room_Suspension()
-        x.suspension_start = start_date
-        x.suspension_end = end_date
+        x.room = room
+        x.start_date = start_date
+        x.end_date = end_date
         x.user = user
         x.suspension_reason = reason
         x.is_suspended = True

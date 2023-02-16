@@ -142,7 +142,7 @@ class Rooms(models.Model):
         return reverse('room_detail', kwargs={'pk': self.pk})
 
     def unsuspend_if_needed(self):
-        if self.is_suspended and self.suspension_end and self.suspension_end <= timezone.now():
+        if self.is_suspended and self.suspension_end and self.suspension_end <= timezone.localtime():
             self.is_suspended = False
             self.suspension_reason = None
             self.suspension_start = None

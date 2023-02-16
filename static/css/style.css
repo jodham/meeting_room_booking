@@ -107,11 +107,10 @@ section{
     font-weight: bold;
 }
 .room-create-form{
-    width: 300px;
+    width: 23rem;
     margin-left: 1.5rem;
     margin-right: 1.5rem;
-    max-width: 300px;
-    padding: 1.5rem;
+    padding: 0.5rem;
     border-radius: 5px;
     border: 2px solid #0000;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
@@ -265,6 +264,7 @@ main {
 }
 .adminstrator-users-panel{
     margin: 0.5rem;
+    width: 100%;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }
 .add-user-button{
@@ -281,7 +281,7 @@ main {
     color: white;
 }
 .users-table-container{
-    width: 95%;
+    width: 100%;
     margin-top: 0.5rem;
 }
 .user-detail-title{

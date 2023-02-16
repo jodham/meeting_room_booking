@@ -160,6 +160,7 @@ def activate_deactivate_user(request, id):
     if user.active:
         user.active = False
         user.save()
+        print(timezone.localtime())
         messages.success(request, f'user has been deactivated')
         return redirect('system_users')
     else:

@@ -4,13 +4,6 @@
 <div class="col-md-12 text-center create-room-title">Add Room</div>
     <div class="row justify-content-center">
         <form method="post" class="room-create-form">
-              {% if messages %}
-                <ul class="messages">
-                    {% for message in messages %}
-                    <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                    {% endfor %}
-                </ul>
-                {% endif %}
             {%csrf_token%}
 
             <label class="h6">Location</label>
@@ -35,8 +28,8 @@
             <label class="h6">Facilities</label>
             <div class="form-group">
                 {%for facility in facility%}
-                <label>{{facility.title}}</label>
                 <input type="checkbox" name="facilities" value="{{facility.id}}">
+                <label>{{facility.title}}</label><br>
                 {%endfor%}
             </div>
 

@@ -7,13 +7,16 @@
       <div class="col-md-12">
           <div class="py-2 float-left text-center h6">
               {%if role == 'administrator'%}
-            <a href="{%url 'dashboard'%}" class="btn back-to-dashboard-button">
+                <a href="{%url 'dashboard'%}" class="btn back-to-dashboard-button">
+                      <i class="bi bi-arrow-left-circle"></i>
+                    Rooms
+                </a>
                 {%else%}
                  <a href="{%url 'rooms'%}" class="btn back-to-dashboard-button">
+                           <i class="bi bi-arrow-left-circle"></i>
+                    Rooms
+                 </a>
               {%endif%}
-                <i class="bi bi-arrow-left-circle"></i>
-                Rooms
-            </a>
           </div>
           {%if room.is_suspended%}
           <div class="py-2 float-right">
@@ -38,6 +41,14 @@
           {%endif%}
       </div>
     <div class="col-md-6">
+
+        <div class="row shadow-lg mx-2 mt-2">
+           <div class="col text-center h4 facilities-title-text">
+               Details
+           </div>
+
+       </div>
+
        <div class="row shadow-sm mx-2 mt-2">
            <div class="col book-detail-title-text">
                Location
@@ -65,7 +76,7 @@
            </div>
        </div>
         {%if room.is_suspended%}
-          <div class="row shadow-sm mx-2 mt-2">
+      <div class="row shadow-sm mx-2 mt-2">
            <div class="col book-detail-title-text">
                Suspension Reason
            </div>
@@ -73,12 +84,20 @@
                {{room.suspension_reason}}
            </div>
        </div>
+        <div class="row shadow-sm mx-2 mt-2">
+           <div class="col book-detail-title-text">
+               Active From
+           </div>
+           <div class="col">
+               {{room.suspension_end}}
+           </div>
+       </div>
         {%endif%}
 
    </div>
 
 <div class="col-md-6">
-   <div class="row shadow-sm mx-2 mt-2">
+   <div class="row shadow-lg mx-2 mt-2">
        <div class="col text-center facilities-title-text h4">
            Facilities
        </div>
@@ -93,8 +112,8 @@
 </div>
 
 
-<div class="col-md-12 mt-4 mb-3">
-    <div class="py-3 text-center room-detail-titles h5">Room Bookings</div>
+<div class="col-md-12 mt-5 mb-3">
+    <div class="py-3 text-center room-detail-titles h4">Room Bookings</div>
   <div class="card">
       <table class="table table-striped data-table">
           <thead>

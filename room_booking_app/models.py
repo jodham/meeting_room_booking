@@ -176,13 +176,13 @@ class Booking(models.Model):
         return reverse('bookings_detail', kwargs={'pk': self.pk})
 
 
-"""
 class Room_Suspension(models.Model):
     room = models.ForeignKey(Rooms, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     suspension_reason = models.CharField(max_length=250, blank=True)
 
     def __str__(self):
         return f"Suspension for {{self.room.title}}"
-"""
+

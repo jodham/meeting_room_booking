@@ -9,7 +9,7 @@ from django.utils import timezone
 
 from accounts.forms import CreateUserAccount, create_user, UserUpdateForm, peripheralUpdate, suspend_room_form
 from room_booking_app.controllers import *
-from room_booking_app.models import User, Facility, Rooms, Roles, Booking
+from room_booking_app.models import User, Facility, Rooms, Roles, Booking, Room_Suspension
 
 
 # Create your views here.
@@ -289,9 +289,11 @@ def suspend_room(request, pk):
     else:
         role = None
     room = get_object_or_404(Rooms, id=pk)
+    user = request.user()
     if request.method == "POST":
         start_date = request.POST.get('start-date')
         end_date = request.POST.get('end-date')
+        reason = request.POST.get('reason')
 
         suspension_starting_time = datetime.datetime.strptime(start_date, "%Y-%m-%dT%H:%M")
 
@@ -303,11 +305,13 @@ def suspend_room(request, pk):
             messages.warning(request, 'ending time cannot be less than starting time')
             return redirect('suspend_room', pk)
 
-        room.suspension_start = suspension_starting_time
-        room.suspension_end = request.POST.get('end-date')
-        room.suspension_reason = request.POST.get('reason')
-        room.is_suspended = True
-        room.save()
+        x = Room_Suspension()
+        x.suspension_start = start_date
+        x.suspension_end = end_date
+        x.user = user
+        x.suspension_reason = reason
+        x.is_suspended = True
+        x.save()
         return redirect('room_detail', pk=pk)
     else:
         form = suspend_room_form()

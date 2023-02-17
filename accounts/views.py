@@ -113,16 +113,27 @@ def add_user(request):
         role = check_user_role(request.user)
     else:
         role = None
+
     if request.method == 'POST':
         form = create_user(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('system_users')
+            email = form.cleaned_data.get('email')
+            if not email.endswith('@zetech.ac.ke'):
+                messages.error(request, f'Invalid email, email must end with .@zetech.ac.ke')
+                return redirect('create_user')
+            else:
+                form.save()
+                messages.success(request, f'User created successfully!')
+                return redirect('system_users')
+        else:
+            messages.error(request, f'Please correct the errors below.')
     else:
         form = create_user()
-        messages.error(request, f"wrong user details")
+
     templatename = 'accounts/register.html'
     return render(request, templatename, {'form': form, 'role': role})
+
+
 
 
 def update_user(request, pk):

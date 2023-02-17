@@ -282,7 +282,6 @@ main {
 }
 .users-table-container{
     width: 100%;
-    margin-top: 0.5rem;
 }
 .user-detail-title{
 
@@ -352,6 +351,34 @@ main {
     margin-right: 1.5rem;
     padding: 0.5rem;
     width: 400px;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+/*------------------------book--room---form----------------*/
+.book_room_form{
+    margin-top: 1.0rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.book_update_form{
+    margin-top: 1.0rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.form-control-book-update {
+  border: 1px solid #ced4da; /* remove the double border */
+}
+.create-user-form{
+     margin-top: 1.0rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    padding: 0.5rem;
     border-radius: 5px;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }

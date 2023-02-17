@@ -35,3 +35,13 @@ class RoomForm(forms.Form):
         widget=forms.CheckboxSelectMultiple,
         choices=[(facility.id, facility.title) for facility in Facility.objects.all()]
     )
+
+
+class BookUpdateForm(forms.ModelForm):
+    title = forms.CharField(max_length=100)
+    date_start = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+    date_end = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+
+    class Meta:
+        model = Booking
+        fields = ['title', 'date_start', 'date_end']

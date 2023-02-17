@@ -3,62 +3,50 @@
 {%block content%}
 <div class="py-4 h4 text-center user-detail-title">Booking Details</div>
 
-<div class="row  justify-content-center">
-    <div class="card booking-details-wrapper">
-       <div class="col-md-12 user-details-container">
+<div class="row shadow-lg">
+    {%if role == 'administrator' or role == 'approver'%}
+       <div class="col-md-12 m-2">
+        <a href="{%url 'bookings'%}" class="btn approve-booking-btn mt-2">
+           <i class="bi bi-arrow-left-circle"></i>
+           Bookings
+       </a>
+      </div>
+    {%else%}
+    <div class="col-md-12 m-2">
+        <a href="{%url 'my_booking'%}" class="btn approve-booking-btn mt-2">
+           <i class="bi bi-arrow-left-circle"></i>
+           Bookings
+       </a>
+   </div>
+    {%endif%}
 
-           <div class="row shadow-sm mx-2 mt-2">
-               <div class="col book-detail-title-text">
-                   Meeting Room   :
-               </div>
-               <div class="col">
-                   {{booking.room_id}}
+    <div class="col-md-6 mt-2 p-3" style="border-right: 1px solid #ccc; border-top: 1px solid #ccc;">
+        <label class="h5 bold"> Meeting Room</label>
+        <p class="meeting">
+            {{booking.room_id}}
                   ( {{booking.room_id.location}} )
-               </div>
-           </div>
+        </p>
 
-           <div class="row shadow-sm mx-2 mt-2">
-               <div class="col book-detail-title-text">
-                   Meeting Purpose
-               </div>
-               <div class="col">
-                   {{booking.title}}
-               </div>
-           </div>
+         <label class="h5 bold"> Meeting Purpose</label>
+        <p class="meeting"> {{booking.title}}</p>
 
-           <div class="row shadow-sm mx-2 mt-2">
-               <div class="col book-detail-title-text">
-                   Meeting Time
-               </div>
-               <div class="col">
-                   {{booking.date_start}}  <label style="color: #cb6015; font-weight: bolder;">To</label> <br>{{booking.date_end}}
-               </div>
-           </div>
-             <div class="row shadow-sm  mx-2 mt-2">
-               <div class="col book-detail-title-text">
-                   Booked by
-               </div>
-               <div class="col">
-                   {{booking.user_id}}
-               </div>
-           </div>
-           <div class="row shadow-sm  mx-2 mt-2">
-               <div class="col book-detail-title-text">
-                   Date Booked
-               </div>
-               <div class="col">
-                   {{booking.date_created}}
-               </div>
-           </div>
+         <label class="h5 bold"> Meeting Time</label>
+        <p class="meeting">{{booking.date_start}}
+            <label style="color: #cb6015; font-weight: bolder;">
+            To
+            </label> <br>{{booking.date_end}}
+        </p>
+    </div>
+    <div class="col-md-6 mt-2  p-3" style="border-top: 1px solid #ccc;">
+        <label class="h5 bold"> Booked by </label>
+        <p class="meeting"> {{booking.user_id}}</p>
 
+         <label class="h5 bold">Date Booked</label>
+        <p class="meeting">{{booking.date_created}}</p>
 
-          <div class="row shadow-sm  mx-2 mt-2">
-               <div class="col book-detail-title-text">
-                   Status
-               </div>
-
-               <div class="col">
-                   {%if booking.status == 0%}
+         <label class="h5 bold">Status</label>
+        <p class="meeting">
+            {%if booking.status == 0%}
                    Pending
                    {%elif booking.status == 1%}
                    Approved
@@ -67,47 +55,53 @@
                    {%else%}
                    Cancelled
                    {%endif%}
-               </div>
-         </div>
-<div class="col-md-12 booking-details-buttons">
+        </p>
+
+    </div>
+
+<div class="col-md-12 m-3 booking-details-buttons">
      <div class="row shadow-sm  mx-2 mt-2">
          <div class="col book-detail-title-text">
-           <a href="{%url 'room_detail' booking.room_id_id%}" class="btn approve-booking-btn mt-2">
-               <i class="bi bi-arrow-left-circle"></i>
-               Bookings
-           </a>
-       </div>
-        {%if booking.user_id == user and booking.status == 0 or booking.status == 1%}
-      <div class="col book-detail-title-text">
-           <a href="{%url 'cancel_booking' booking.pk%}" class="btn reject-booking-btn mt-2">Cancel</a>
-       </div>
-         {%endif%}
+
           {%if role == 'approver' or role == 'administrator'%}
 
             {%if booking.status == 0%}
        <div class="col book-detail-title-text">
-           <a href="{%url 'approve_booking' booking.pk%}" class="btn approve-booking-btn mt-2">Approve</a>
+           <a href="{%url 'approve_booking' booking.pk%}" class="btn approve-booking-btn float-left mt-2">Approve</a>
        </div>
        <div class="col">
-          <a href="{%url 'reject_booking' booking.pk%}" class="btn reject-booking-btn mt-2">Reject</a>
+          <a href="{%url 'reject_booking' booking.pk%}" class="btn reject-booking-btn float-right mt-2">Reject</a>
        </div>
          {%elif booking.status == 1%}
       <div class="col">
-          <a href="{%url 'reject_booking' booking.pk%}" class="btn reject-booking-btn mt-2">Reject</a>
+          <a href="{%url 'reject_booking' booking.pk%}"
+             onclick="return confirm('Are you sure you want to REJECT this booking?');"
+             class="btn reject-booking-btn float-right mt-2" >Reject</a>
        </div>
          {%elif booking.status == 2%}
           <div class="col">
-          <a href="{%url 'approve_booking' booking.pk%}" class="btn approve-booking-btn mt-2">Approve</a>
+          <a href="{%url 'approve_booking' booking.pk%}" class="btn approve-booking-btn float-left mt-2">Approve</a>
         </div>
          {%else%}
          <label style="color: #cb6015"> booking cancelled</label>
          {%endif%}
          {%endif%}
+
+         {%if booking.user_id == user and booking.status == 0%}
+             <a href="{%url 'booking_update' booking.pk%}" class="btn reject-booking-btn m-2">Edit</a>
+         {%endif%}
+
+        {%if booking.user_id == user and booking.status == 0 and booking.status == 1%}
+
+           <a href="{%url 'cancel_booking' booking.pk%}"
+              onclick="return confirm('Are you sure you want to cancel this booking?');"
+              class="btn reject-booking-btn float-right m-2">Cancel</a>
+
+         {%endif%}
+
    </div>
 </div>
 </div>
-
-</div>
-</div>
+    </div>
 
 {%endblock content%}

@@ -49,7 +49,8 @@
                           </button>
                           <div class="dropdown-menu">
                               <a class="dropdown-item" href="{%url 'user_detail' user.pk%}">view</a>
-                              <a class="dropdown-item update_disable_item_link" href="{%url 'update_user' user.pk%}">update</a>
+                              <a class="dropdown-item update_disable_item_link" href="{%url 'update_user' user.pk%}">Edit</a>
+
                               {%if user.active == 1%}
                               <a class="dropdown-item update_disable_item_link" href="{%url 'activate_deactivate_user' user.id%}">disable</a>
                               {%else%}

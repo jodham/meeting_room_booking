@@ -2,7 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-
+from accounts.validators import validate_zetech_email
 
 # Create your models here.
 
@@ -186,4 +186,4 @@ class Room_Suspension(models.Model):
     suspension_reason = models.CharField(max_length=250, blank=True)
 
     def __str__(self):
-        return self.room
+        return f"self.room"

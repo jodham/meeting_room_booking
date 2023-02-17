@@ -3,33 +3,45 @@
 {%block title%}book room{%endblock title%}
 {%block content%}
 <div class="col-md-12 text-center bookings-title">Book Room</div>
-<div class="row justify-content-center">
-    <form method="post" class="frmlogin">
+
+    <form method="post" class="row book_room_form">
+    <div class="col-md-12 m-2">
+         {%if role == 'administrator'%}
+           <a href="{%url 'dashboard'%}" class="btn btn-lg back-to-dashboard-button">
+             <i class="bi bi-arrow-left-circle"></i>
+             Dashboard
+         </a>
+            {%else%}
+            <a href="{%url 'rooms'%}" class="btn btn-lg back-to-dashboard-button">
+             <i class="bi bi-arrow-left-circle"></i>
+             Rooms
+         </a>
+            {%endif%}
+    </div>
         {%csrf_token%}
-        <label class="h6">Meeting title</label>
-        <div class="form-group">
-          <input type="text" required autofocus name="title" placeholder='meeting title' class="form-control">
+        <div class="col-md-6 mt-2">
+            <label class="h6">Meeting title</label>
+            <div class="form-group">
+              <input type="text" required autofocus name="title" placeholder='meeting title' class="form-control">
+            </div>
         </div>
 
+        <div class="col-md-6 mt-2">
         <label class="h6">Starting date:</label>
         <div class="form-group">
           <input type="datetime-local" required name="starting-date" class="form-control">
         </div>
+        </div>
 
+        <div class="col-md-6 mt-2">
          <label class="h6">Ending date:</label>
         <div class="form-group">
           <input type="datetime-local" required name="ending-date" class="form-control">
         </div>
+        </div>
 
-        <button class="btn btn-block book-room-btn h5" id="book-room-button"  type="submit">Book Room</button>
-         {%if role == 'administrator'%}
-        <a href="{%url 'dashboard'%}" class="">
-            {%else%}
-            <a href="{%url 'rooms'%}" class="">
-            {%endif%}
-            <i class="bi bi-arrow-left-circle"></i>
-            Rooms
-        </a>
+        <div class="col-md-12 text-center mt-2">
+        <button class="btn btn-secondary book-room-btn h5" id="book-room-button"  type="submit">Book Room</button>
+        </div>
     </form>
-</div>
 {%endblock content%}

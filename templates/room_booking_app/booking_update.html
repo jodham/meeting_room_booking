@@ -1,0 +1,39 @@
+{%extends 'base/base.html'%}
+{%load static%}
+{%block title%}Update Booking{%endblock title%}
+{%block content%}
+<div class="col-md-12 text-center bookings-title">Book Room</div>
+<div class="row justify-content-center">
+    <form method="post" class="row book_update_form">
+         <div class="col-md-12 m-2">
+         {%if role == 'administrator'%}
+           <a href="{%url 'dashboard'%}" class="btn btn-lg back-to-dashboard-button">
+             <i class="bi bi-arrow-left-circle"></i>
+             Dashboard
+         </a>
+            {%else%}
+            <a href="{%url 'rooms'%}" class="btn btn-lg back-to-dashboard-button">
+             <i class="bi bi-arrow-left-circle"></i>
+             Rooms
+         </a>
+            {%endif%}
+    </div>
+    {% csrf_token %}
+
+        {% for field in form %}
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="h4">{{ field.label_tag }}</label>
+                    <div class=".form-control-book-update form-control-custom">
+                        {{ field }}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        <div class="col-md-12 text-center">
+            <button class="btn btn-secondary book-room-btn h5" id="book-room-button"  type="submit">Update Booking</button>
+        </div>
+    </form>
+
+</div>
+{%endblock content%}

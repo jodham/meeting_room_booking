@@ -91,7 +91,7 @@
              <a href="{%url 'booking_update' booking.pk%}" class="btn reject-booking-btn m-2">Edit</a>
          {%endif%}
 
-        {%if booking.user_id == user and booking.status == 0 and booking.status == 1%}
+        {%if booking.user_id == user and booking.status == 0%}
 
            <a href="{%url 'cancel_booking' booking.pk%}"
               onclick="return confirm('Are you sure you want to cancel this booking?');"

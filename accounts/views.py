@@ -10,7 +10,10 @@ from django.utils import timezone
 from accounts.forms import CreateUserAccount, create_user, UserUpdateForm, peripheralUpdate, suspend_room_form
 from room_booking_app.controllers import *
 from room_booking_app.models import User, Facility, Rooms, Roles, Booking, Room_Suspension
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 
+from room_booking_app.models import User
 
 # Create your views here.
 def register(request):
@@ -115,25 +118,22 @@ def add_user(request):
         role = None
 
     if request.method == 'POST':
-        form = create_user(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data.get('email')
-            if not email.endswith('@zetech.ac.ke'):
-                messages.error(request, f'Invalid email, email must end with .@zetech.ac.ke')
-                return redirect('create_user')
-            else:
-                form.save()
-                messages.success(request, f'User created successfully!')
-                return redirect('system_users')
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        if not email.endswith('@zetech.ac.ke'):
+            messages.error(request, f'Invalid email, email must end with .@zetech.ac.ke')
+        elif password1 != password2:
+            messages.error(request, f'Passwords do not match, Please check')
         else:
-            messages.error(request, f'Please correct the errors below.')
-    else:
-        form = create_user()
-
+            user = User.objects.create_user(email=email, password=password1, first_name=first_name,
+                                            last_name=last_name)
+            messages.success(request, f'User created successfully!')
+            return redirect('system_users')
     templatename = 'accounts/register.html'
-    return render(request, templatename, {'form': form, 'role': role})
-
-
+    return render(request, templatename, {'role': role})
 
 
 def update_user(request, pk):

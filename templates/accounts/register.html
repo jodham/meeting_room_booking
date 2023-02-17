@@ -1,6 +1,6 @@
 {%extends 'base/base.html'%}
 {%load static%}
-{%block title%}Login{%endblock title%}
+{%block title%}Create User{%endblock title%}
 {%block content%}
 <div class="py-3 text-center h4 users-page-title">Add New User</div>
 
@@ -14,14 +14,40 @@
     </div>
 
     {% csrf_token %}
-    {% for field in form %}
-    <div class="col-md-6 form-column">
-        {{ field.label_tag }}
-        <div class="form-group">
-            {{ field }}
+    <div class="col-md-6 mt-2">
+            <label class="h6">Email</label>
+            <div class="form-group">
+              <input type="text" required autofocus name="email" placeholder='email' class="form-control">
+            </div>
         </div>
-    </div>
-    {% endfor %}
+
+        <div class="col-md-6 mt-2">
+            <label class="h6">First Name</label>
+            <div class="form-group">
+              <input type="text" required autofocus name="first_name" placeholder='first name' class="form-control">
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-2">
+            <label class="h6">Last Name</label>
+            <div class="form-group">
+              <input type="text" required autofocus name="last_name" placeholder='last_name' class="form-control">
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-2">
+            <label class="h6">Password</label>
+            <div class="form-group">
+              <input type="password" required autofocus name="password1" placeholder='.............' class="form-control">
+            </div>
+        </div>
+
+        <div class="col-md-6 mt-2">
+            <label class="h6">Password Confirmation</label>
+            <div class="form-group">
+              <input type="password" required autofocus name="title" placeholder='password2' class="form-control">
+            </div>
+        </div>
 
     <div class="col-md-12 text-center mt-3 mb-2">
         <button class="btn btn-secondary loginbtn h5" type="submit">Create User</button>

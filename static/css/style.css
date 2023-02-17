@@ -382,3 +382,8 @@ main {
     border-radius: 5px;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }
+/*.form-column {
+    border-right: 1px solid #ccc;
+    padding-right: 15px;
+    margin-right: 15px;
+}*/

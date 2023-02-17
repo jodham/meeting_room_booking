@@ -75,25 +75,18 @@
                {{room.capacity}}
            </div>
        </div>
-        {%if room.is_suspended%}
+        {%for x in  suspended_rooms%}
+        {%if x.start_date > current_time%}
       <div class="row shadow-sm mx-2 mt-2">
            <div class="col book-detail-title-text">
-               Suspension Reason
+               Unavailable <label style="color: #cb6015; font-weight: bolder;"> From</label>
            </div>
            <div class="col">
-               {{room.suspension_reason}}
-           </div>
-       </div>
-        <div class="row shadow-sm mx-2 mt-2">
-           <div class="col book-detail-title-text">
-               Active From
-           </div>
-           <div class="col">
-               {{room.suspension_end}}
+               {{x.start_date}} <label style="color: #cb6015; font-weight: bolder;"> TO</label> {{x.end_date}}
            </div>
        </div>
         {%endif%}
-
+        {%endfor%}
    </div>
 
 <div class="col-md-6">
@@ -122,17 +115,22 @@
               <th scope="col">Meeting</th>
               <th scope="col">Starting time</th>
               <th scope="col">Ending time</th>
+                {%if role == 'adminstrator'%}
               <th scope="col">View</th>
+                {%endif%}
             </tr>
           </thead>
           <tbody>
           {%for book in bookings%}
+
           <tr>
               <td>{{book.user_id}}</td>
               <td class="text-capitalize">{{book.title}}</td>
               <td>{{book.date_start}}</td>
               <td>{{book.date_end}}</td>
+              {%if role == 'adminstrator'%}
               <td><a href="{%url 'booking_detail' book.pk%}">View</a></td>
+              {%endif%}
           </tr>
           {%endfor%}
           </tbody>

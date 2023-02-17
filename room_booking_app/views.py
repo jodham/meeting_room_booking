@@ -3,13 +3,15 @@ import datetime
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.db.models import Q
+from django.shortcuts import render, redirect, get_object_or_404
+from django.utils import timezone
 # from django.shortcuts import render, redirect
 from django.views.generic import DetailView, UpdateView
 
 from .controllers import *
 from .forms import RoomForm
-from .models import Booking, User
+from .models import Booking, User, Room_Suspension
 from .models import Rooms, Campus, Facility
 
 
@@ -27,8 +29,9 @@ def dashboard(request):
     else:
         role = None
     templatename = 'room_booking_app/rooms.html'
+    suspended_rooms = Room_Suspension.objects.all()
     rooms = Rooms.objects.all().order_by('-date_created')
-    context = {'rooms': rooms, 'role': role}
+    context = {'rooms': rooms, 'role': role, 'suspended_rooms': suspended_rooms}
     return render(request, templatename, context)
 
 
@@ -123,12 +126,16 @@ def room_detail_view(request, pk):
     else:
         role = None
     room = Rooms.objects.get(pk=pk)
-    bookings = Booking.objects.filter(room_id_id=pk)
+    current_time = timezone.localtime()
+    suspended_rooms = Room_Suspension.objects.filter(pk=pk)
+    bookings = Booking.objects.filter(room_id_id=pk).order_by('-date_created')
+
     facility = room.facilities_ids.split(',')
     facilities = Facility.objects.filter(id__in=facility)
 
     templatename = 'room_booking_app/room_detail.html'
-    context = {"room": room, 'pk': pk, 'bookings': bookings, 'facilities': facilities, 'role': role}
+    context = {"room": room, 'pk': pk, 'bookings': bookings, 'current_time': current_time,
+               'facilities': facilities, 'role': role, 'suspended_rooms': suspended_rooms}
     return render(request, templatename, context)
 
 
@@ -160,7 +167,7 @@ def book_room(request, pk):
 
         # Check if ending_time is greater than starting_time
         elif ending_time < starting_time:
-            messages.warning(request, 'ending time cannot be less than starting time')
+            messages.warning(request, f'ending time cannot be less than starting time')
             return redirect('book_room', pk)
 
         # Check if the time frame for the booking is not within another approved booking
@@ -168,7 +175,15 @@ def book_room(request, pk):
                                                       date_start__lte=ending_time,
                                                       date_end__gte=starting_time)
         if overlapping_bookings.exists():
-            messages.warning(request, 'This room is already booked for this time frame.')
+            messages.warning(request, f'This room is already booked for this time frame.')
+            return redirect('book_room', pk)
+
+        overlapping_suspension = Room_Suspension.objects.filter(room=room,
+                                                                start_date__lte=ending_time,
+                                                                end_date__gte=starting_time)
+
+        if overlapping_suspension.exists():
+            messages.warning(request, f"Meeting Room is unavailable at this time")
             return redirect('book_room', pk)
 
         bookings = Booking()
@@ -179,7 +194,7 @@ def book_room(request, pk):
         bookings.date_end = ending_time
         bookings.save()
 
-        return redirect('bookings')
+        return redirect('room_detail', pk)
 
     templatename = 'room_booking_app/book_room.html'
     context = {"room": room, 'pk': pk, 'bookings': bookings, 'facilities': facilities, 'role': role}
@@ -197,13 +212,20 @@ def Bookings_View(request):
     return render(request, templatename, context)
 
 
+def My_Booking(request):
+    user = User.objects.get(email=request.user)
+    bookings = Booking.objects.filter(user_id=user)
+    templatename = 'room_booking_app/my_booking.html'
+    context = {'bookings': bookings}
+    return render(request, templatename, context)
+
+
 def booking_detail_view(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
     else:
         role = None
     booking = Booking.objects.get(id=pk)
-    # booking = book.filter(Q(date_end > ))
     templatename = 'room_booking_app/booking_detail.html'
     context = {'booking': booking, "role": role}
     return render(request, templatename, context)

@@ -153,11 +153,13 @@ class Booking(models.Model):
     STATUS_PENDING = 0
     STATUS_APPROVED = 1
     STATUS_REJECTED = 2
+    STATUS_CANCELLED = 3
 
     STATUS_CHOICES = [
         (STATUS_PENDING, 'pending'),
         (STATUS_APPROVED, 'approved'),
         (STATUS_REJECTED, 'rejected'),
+        (STATUS_CANCELLED, 'cancelled'),
     ]
     room_id = models.ForeignKey(Rooms, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bookings_created")
@@ -166,6 +168,7 @@ class Booking(models.Model):
     status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=STATUS_PENDING)
     actioned_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='bookings_actioned')
     date_actioned = models.DateTimeField(null=True)
+    cancelled = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
     date_start = models.DateTimeField(default=timezone.now)
     date_end = models.DateTimeField(default=timezone.now)
@@ -183,4 +186,4 @@ class Room_Suspension(models.Model):
     suspension_reason = models.CharField(max_length=250, blank=True)
 
     def __str__(self):
-        return f"Suspension for {{self.room}}"
+        return self.room

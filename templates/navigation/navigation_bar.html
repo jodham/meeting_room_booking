@@ -20,6 +20,10 @@
       <li class="nav-item">
         <a class="nav-link text-white" href="{%url 'bookings'%}">Bookings</a>
       </li>
+        {%else%}
+         <li class="nav-item">
+         <a class="nav-link text-white" href="{%url 'my_booking'%}">My Bookings</a>
+        </li>
         {%endif%}
     {%if role == 'administrator'%}
      <li class="nav-item">

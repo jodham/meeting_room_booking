@@ -26,5 +26,6 @@ urlpatterns = [
 
     path('adminstrator/approve/booking/<int:pk>', approve_booking, name='approve_booking'),
     path('adminstrator/reject/booking/<int:pk>', reject_booking, name='reject_booking'),
+    path('user/cancel/booking/<int:pk>', cancel_booking, name='cancel_booking'),
     path('adminstrator/room/suspend/<int:pk>', suspend_room, name='suspend_room')
 ]

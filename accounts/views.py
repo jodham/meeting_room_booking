@@ -267,6 +267,21 @@ def approve_booking(request, pk):
         booking.actioned_by = user
         booking.date_actioned = timezone.now()
         booking.save()
+        messages.success(request, f'booking is approved')
+        return redirect('booking_detail', pk=pk)
+
+
+def cancel_booking(request, pk):
+    if not request.user.is_authenticated:
+        return redirect('sign')
+    booking = get_object_or_404(Booking, id=pk)
+    user = User.objects.get(email=request.user)
+    if booking.status == 0 or booking.status == 1 or booking.status == 2:
+        booking.status = 3
+        booking.actioned_by = user
+        booking.date_actioned = timezone.now()
+        booking.save()
+        messages.success(request, f'booking is cancelled')
         return redirect('booking_detail', pk=pk)
 
 
@@ -280,6 +295,7 @@ def reject_booking(request, pk):
         booking.actioned_by = user
         booking.date_actioned = timezone.now()
         booking.save()
+        messages.success(request, f'booking is rejected')
         return redirect('booking_detail', pk=pk)
 
 
@@ -319,4 +335,3 @@ def suspend_room(request, pk):
     templatename = 'adminstrator/suspend_room.html'
     context = {'role': role, 'room': room, 'form': form}
     return render(request, templatename, context)
-

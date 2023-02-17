@@ -22,7 +22,7 @@ def check_user_role(user):
     roles = get_role_names(user)
     return check_role(roles)
 
-
+"""
 @receiver(user_logged_in)
 def unsuspend_rooms(sender, user, request, **kwargs):
     # Get all rooms that are currently suspended
@@ -31,3 +31,4 @@ def unsuspend_rooms(sender, user, request, **kwargs):
     # Call unsuspend_if_needed() on each suspended room
     for room in suspended_rooms:
         room.unsuspend_if_needed()
+"""

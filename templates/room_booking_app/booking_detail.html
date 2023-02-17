@@ -62,8 +62,10 @@
                    Pending
                    {%elif booking.status == 1%}
                    Approved
-                   {%else%}
+                   {%elif booking.status == 2%}
                    Rejected
+                   {%else%}
+                   Cancelled
                    {%endif%}
                </div>
          </div>
@@ -75,7 +77,13 @@
                Bookings
            </a>
        </div>
+        {%if booking.user_id == user and booking.status == 0 or booking.status == 1%}
+      <div class="col book-detail-title-text">
+           <a href="{%url 'cancel_booking' booking.pk%}" class="btn reject-booking-btn mt-2">Cancel</a>
+       </div>
+         {%endif%}
           {%if role == 'approver' or role == 'administrator'%}
+
             {%if booking.status == 0%}
        <div class="col book-detail-title-text">
            <a href="{%url 'approve_booking' booking.pk%}" class="btn approve-booking-btn mt-2">Approve</a>
@@ -87,10 +95,12 @@
       <div class="col">
           <a href="{%url 'reject_booking' booking.pk%}" class="btn reject-booking-btn mt-2">Reject</a>
        </div>
-         {%else%}
+         {%elif booking.status == 2%}
           <div class="col">
           <a href="{%url 'approve_booking' booking.pk%}" class="btn approve-booking-btn mt-2">Approve</a>
-       </div>
+        </div>
+         {%else%}
+         <label style="color: #cb6015"> booking cancelled</label>
          {%endif%}
          {%endif%}
    </div>

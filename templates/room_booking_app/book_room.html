@@ -50,16 +50,26 @@
     </form>
 <script>
 $(function () {
-$('#datetimepicker').datetimepicker({
-    defaultValue: '{{ datetime|date:"Y-m-d H" }}'
+  var now = new Date();
+  now.setSeconds(0);
+  now.setMilliseconds(0);
+  var nextMinute = new Date(now.getTime() + 60 * 1000);
 
-  });
-
-  $('#datetimepicker2').datetimepicker({
-    defaultValue: '{{ datetime|date:"Y-m-d H" }}'
+  var disabledDates = [
+    {%for book in bookings%}
+    new Date('{{book.date_end|hour:"Y-m-d H"}}'),
+    new Date('{{book.date_end|hour:"Y-m-d H"}}')
+    {%endfor%}
+  ]
+  console.log(disabledDates);
+  $('#datetimepicker, #datetimepicker2').datetimepicker({
+    defaultValue: '{{ datetime|date:"Y-m-d H" }}',
+    minDateTime: nextMinute,
+    disabledDates: disabledDates
   });
 
 });
+
 
 </script>
 {%endblock content%}

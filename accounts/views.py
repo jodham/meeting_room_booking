@@ -7,13 +7,11 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
 from django.utils import timezone
 
-from accounts.forms import CreateUserAccount, create_user, UserUpdateForm, peripheralUpdate, suspend_room_form
+from accounts.forms import CreateUserAccount, UserUpdateForm, peripheralUpdate, suspend_room_form
 from room_booking_app.controllers import *
-from room_booking_app.models import User, Facility, Rooms, Roles, Booking, Room_Suspension
-from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
-
+from room_booking_app.models import Facility, Rooms, Roles, Booking, Room_Suspension
 from room_booking_app.models import User
+
 
 # Create your views here.
 def register(request):
@@ -116,7 +114,7 @@ def add_user(request):
         role = check_user_role(request.user)
     else:
         role = None
-
+    available_users = User.objects.all()
     if request.method == 'POST':
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
@@ -125,6 +123,8 @@ def add_user(request):
         password2 = request.POST.get('password2')
         if not email.endswith('@zetech.ac.ke'):
             messages.error(request, f'Invalid email, email must end with .@zetech.ac.ke')
+        elif available_users.filter(email=email).exists():
+            messages.error(request, f'user with that email already exists')
         elif password1 != password2:
             messages.error(request, f'Passwords do not match, Please check')
         else:

@@ -1,10 +1,9 @@
 # from django.shortcuts import render, redirect
 import datetime
-
+from datetime import time, date, timedelta, datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect
 from django.utils import timezone
 # from django.shortcuts import render, redirect
 from django.views.generic import DetailView, UpdateView
@@ -147,9 +146,25 @@ def book_room(request, pk):
         role = None
     room = Rooms.objects.get(pk=pk)
     bookings = Booking.objects.filter(room_id_id=pk)
+    bookings_json = bookings
     booked_by = User.objects.get(email=request.user)
     facility = room.facilities_ids.split(',')
     facilities = Facility.objects.filter(id__in=facility)
+
+    time_now = timezone.localtime()
+
+    start_of_day = datetime.combine(time_now.date(), time.min)
+    end_of_day = datetime.combine(time_now.date(), time.max)
+
+    time_room_booked = Booking.objects.filter(date_start__gte=start_of_day, date_end__lte=end_of_day)
+
+    times_booked = []
+    for x in time_room_booked:
+        start_hour = x.date_start.hour
+        end_hour = x.date_end.hour
+        for hour in range(start_hour, end_hour):
+            times_booked.append(hour)
+
     if request.method == "POST":
         title = request.POST.get('title')
         starting_time = request.POST.get('starting-date')
@@ -158,7 +173,7 @@ def book_room(request, pk):
             messages.error(request, 'Starting time is required.')
             return redirect('book_room', pk)
         # converting datetime to required format
-        book_starting_time = datetime.datetime.strptime(starting_time, "%Y-%m-%dT%H:%M")
+        book_starting_time = datetime.strptime(starting_time, "%Y-%m-%dT%H")
 
         # Check if starting_time is greater than current time
         if book_starting_time < datetime.datetime.now():
@@ -197,7 +212,8 @@ def book_room(request, pk):
         return redirect('booking_detail', pk=new_bookings.pk)
 
     templatename = 'room_booking_app/book_room.html'
-    context = {"room": room, 'pk': pk, 'bookings': bookings, 'facilities': facilities, 'role': role}
+    context = {"room": room, 'pk': pk, 'bookings': bookings,
+               'facilities': facilities, 'role': role, 'times_booked': times_booked}
     return render(request, templatename, context)
 
 

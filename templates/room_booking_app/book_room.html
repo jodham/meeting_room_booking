@@ -24,24 +24,42 @@
             <div class="form-group">
               <input type="text" required autofocus name="title" placeholder='meeting title' class="form-control">
             </div>
-        </div>
 
-        <div class="col-md-6 mt-2">
+
+
         <label class="h6">Starting date:</label>
         <div class="form-group">
-          <input type="datetime-local" required name="starting-date" class="form-control">
+          <input type="text" required name="starting-date" id="datetimepicker"  value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
+        </div>
+
+
+
+         <label class="h6">Ending date:</label>
+        <div class="form-group">
+          <input type="text" required name="ending-date" id="datetimepicker2" value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
         </div>
         </div>
 
-        <div class="col-md-6 mt-2">
-         <label class="h6">Ending date:</label>
-        <div class="form-group">
-          <input type="datetime-local" required name="ending-date" class="form-control">
-        </div>
+         <div class="col-md-6 mt-2 text-center">
+         <label class="h6">Peripherals</label>
         </div>
 
         <div class="col-md-12 text-center mt-2">
         <button class="btn btn-secondary book-room-btn h5" id="book-room-button"  type="submit">Book Room</button>
         </div>
     </form>
+<script>
+$(function () {
+$('#datetimepicker').datetimepicker({
+    defaultValue: '{{ datetime|date:"Y-m-d H" }}'
+
+  });
+
+  $('#datetimepicker2').datetimepicker({
+    defaultValue: '{{ datetime|date:"Y-m-d H" }}'
+  });
+
+});
+
+</script>
 {%endblock content%}

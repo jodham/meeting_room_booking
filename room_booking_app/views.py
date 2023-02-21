@@ -173,12 +173,12 @@ def book_room(request, pk):
             messages.error(request, 'Starting time is required.')
             return redirect('book_room', pk)
         # converting datetime to required format
-        book_starting_time = datetime.strptime(starting_time, "%Y-%m-%dT%H")
+        # book_starting_time = datetime.strptime(starting_time, '%Y-%m-%dT%H:%M')
 
         # Check if starting_time is greater than current time
-        if book_starting_time < datetime.datetime.now():
-            messages.error(request, 'Start time must be greater than current time.')
-            return redirect('book_room', pk)
+        # if book_starting_time < datetime.datetime.now():
+        #     messages.error(request, 'Start time must be greater than current time.')
+        #     return redirect('book_room', pk)
 
         # Check if ending_time is greater than starting_time
         elif ending_time < starting_time:
@@ -186,7 +186,7 @@ def book_room(request, pk):
             return redirect('book_room', pk)
 
         # Check if the time frame for the booking is not within another approved booking
-        overlapping_bookings = Booking.objects.filter(room_id=room, status=1,
+        overlapping_bookings = Booking.objects.filter(room_id=room,
                                                       date_start__lte=ending_time,
                                                       date_end__gte=starting_time)
         if overlapping_bookings.exists():
@@ -223,6 +223,9 @@ def Bookings_View(request):
     else:
         role = None
     room_booking = Booking.objects.all().order_by('-date_created')
+    for book in room_booking:
+        time_diff = book.date_end - book.date_start
+        book.duration_hours = round(time_diff.total_seconds() / 3600)
     templatename = "room_booking_app/bookings.html"
     context = {'room_booking': room_booking, 'role': role}
     return render(request, templatename, context)
@@ -236,6 +239,9 @@ def My_Booking(request):
     user = User.objects.get(email=request.user)
     upcoming_bookings = Booking.objects.filter(date_start__gte=timezone.localtime())
     bookings = upcoming_bookings.filter(user_id=user).order_by('-date_created')
+    for book in bookings:
+        time_diff = book.date_end - book.date_start
+        book.duration_hours = round(time_diff.total_seconds() / 3600)
     templatename = 'room_booking_app/my_booking.html'
     context = {'bookings': bookings, 'role': role}
     return render(request, templatename, context)

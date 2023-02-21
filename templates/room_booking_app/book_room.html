@@ -2,7 +2,7 @@
 {%load static%}
 {%block title%}book room{%endblock title%}
 {%block content%}
-<div class="col-md-12 text-center bookings-title">Book Room</div>
+<div class="col-md-12 text-center bookings-title">Book Room {{room.title}}</div>
 
     <form method="post" class="row book_room_form">
     <div class="col-md-12 m-2">
@@ -40,8 +40,13 @@
         </div>
         </div>
 
-         <div class="col-md-6 mt-2 text-center">
-         <label class="h6">Peripherals</label>
+         <div class="col-md-6 mt-2">
+         <div class="py text-center"><label class="h6">Peripherals</label></div>
+             {%for x in facilities%}
+            <p><input class="bg-info" type="checkbox" checked disabled> {{x.title}}</p>
+             {%endfor%}
+         <div class="py text-center"><label class="h6">Refreshments</label></div>
+
         </div>
 
         <div class="col-md-12 text-center mt-2">
@@ -51,25 +56,39 @@
 <script>
 $(function () {
   var now = new Date();
+  now.setMinutes(0);
   now.setSeconds(0);
   now.setMilliseconds(0);
-  var nextMinute = new Date(now.getTime() + 60 * 1000);
+  var nextHour = new Date(now.getTime() + 60 * 60 * 1000);
 
   var disabledDates = [
-    {%for book in bookings%}
-    new Date('{{book.date_end|hour:"Y-m-d H"}}'),
-    new Date('{{book.date_end|hour:"Y-m-d H"}}')
-    {%endfor%}
-  ]
-  console.log(disabledDates);
+    {% for book in bookings %}
+      new Date('{{ book.date_start|date:"Y-m-d H:i:s" }}'),
+      new Date('{{ book.date_end|date:"Y-m-d H:i:s" }}'),
+    {% endfor %}
+  ];
+
+  var disabledTimeIntervals = [];
+  for (var i = 0; i < disabledDates.length; i += 2) {
+    var start = disabledDates[i];
+    var end = disabledDates[i + 1];
+    if (start.getDate() !== end.getDate()) {
+      // Skip if start and end dates are different
+      continue;
+    }
+    disabledTimeIntervals.push([start.getHours() + ':00', end.getHours() + ':00']);
+  }
+
+  console.log(disabledTimeIntervals);
+
   $('#datetimepicker, #datetimepicker2').datetimepicker({
     defaultValue: '{{ datetime|date:"Y-m-d H" }}',
-    minDateTime: nextMinute,
-    disabledDates: disabledDates
+    minDateTime: nextHour,
+    format: 'Y-m-d H:00',
+    step: 60,
+    disabledTimeIntervals: disabledTimeIntervals
   });
-
 });
-
 
 </script>
 {%endblock content%}

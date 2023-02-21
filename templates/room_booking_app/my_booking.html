@@ -20,10 +20,11 @@
           <thead>
             <tr>
                 <th scope="col">No.</th>
-              <th scope="col">Meeting Room</th>
+                <th scope="col">Meeting Room</th>
                 <th scope="col">Starting Date</th>
                 <th scope="col">Ending Date</th>
-              <th scope="col">View</th>
+                 <th scope="col">Duration</th>
+               <th scope="col">View</th>
             </tr>
           </thead>
           <tbody>
@@ -32,8 +33,9 @@
           <tr>
               <td>{{forloop.counter}}</td>
               <td>{{book.room_id}}</td>
-               <td>{{book.date_start}}</td>
-               <td>{{book.date_end}}</td>
+              <td>{{book.date_start}}</td>
+              <td>{{book.date_end}}</td>
+              <td>{{book.duration_hours}} hrs</td>
               <td><a href="{%url 'booking_detail' book.pk%}">View</a></td>
           </tr>
           {%endfor%}

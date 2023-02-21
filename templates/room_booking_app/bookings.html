@@ -25,6 +25,7 @@
               <th scope="col">Booked by</th>
                 <th scope="col">Starting Date</th>
                 <th scope="col">Ending Date</th>
+                <th scope="col">Duration</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -36,6 +37,7 @@
               <td>{{book.user_id}}</td>
                <td>{{book.date_start}}</td>
                <td>{{book.date_end}}</td>
+              <td>{{book.duration_hours}} hrs</td>
               <td><a href="{%url 'booking_detail' book.pk%}">View</a></td>
           </tr>
           {%endfor%}

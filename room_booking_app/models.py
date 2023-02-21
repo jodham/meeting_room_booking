@@ -43,6 +43,12 @@ class Roles(models.Model):
     def __str__(self):
         return self.role_name
 
+class Refreshments(models.Model):
+    title = models.CharField(max_length=30)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+
 
 class User(AbstractBaseUser):
     email = models.EmailField(
@@ -107,6 +113,13 @@ class Campus(models.Model):
 
 
 class Facility(models.Model):
+    IT_Facility = 0
+    Ground_Facility = 1
+
+    CATEGORY_CHOICES = [
+        (IT_Facility, 'IT'),
+        (Ground_Facility, 'Ground Facility'),
+    ]
     title = models.CharField(max_length=30)
     active = models.BooleanField(default=True)
     date_created = models.DateTimeField(auto_now_add=True)
@@ -164,6 +177,7 @@ class Booking(models.Model):
     room_id = models.ForeignKey(Rooms, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bookings_created")
     title = models.CharField(max_length=100)
+    refreshments = models.CharField(max_length=30, null=True)
     reject_reason = models.TextField(null=True)
     status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=STATUS_PENDING)
     actioned_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='bookings_actioned')

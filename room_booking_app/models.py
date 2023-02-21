@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from accounts.validators import validate_zetech_email
 
+
 # Create your models here.
 
 
@@ -43,11 +44,11 @@ class Roles(models.Model):
     def __str__(self):
         return self.role_name
 
+
 class Refreshments(models.Model):
     title = models.CharField(max_length=30)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-
 
 
 class User(AbstractBaseUser):

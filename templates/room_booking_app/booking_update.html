@@ -1,11 +1,11 @@
 {%extends 'base/base.html'%}
 {%load static%}
-{%block title%}Update Booking{%endblock title%}
+{%block title%}Edit Booking{%endblock title%}
 {%block content%}
-<div class="col-md-12 text-center bookings-title">Book Room</div>
-<div class="row justify-content-center">
-    <form method="post" class="row book_update_form">
-         <div class="col-md-12 m-2">
+<div class="col-md-12 text-center bookings-title">Edit Booking</div>
+
+    <form method="post" class="row book_room_form">
+    <div class="col-md-12 m-2">
          {%if role == 'administrator'%}
            <a href="{%url 'dashboard'%}" class="btn btn-lg back-to-dashboard-button">
              <i class="bi bi-arrow-left-circle"></i>
@@ -18,22 +18,72 @@
          </a>
             {%endif%}
     </div>
-    {% csrf_token %}
-
-        {% for field in form %}
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label class="h4">{{ field.label_tag }}</label>
-                    <div class=".form-control-book-update form-control-custom">
-                        {{ field }}
-                    </div>
-                </div>
+        {%csrf_token%}
+        <div class="col-md-6 mt-2">
+            <label class="h6">Meeting title</label>
+            <div class="form-group">
+              <input type="text" required autofocus name="title" placeholder='meeting title' class="form-control">
             </div>
-        {% endfor %}
-        <div class="col-md-12 text-center">
-            <button class="btn btn-secondary book-room-btn h5" id="book-room-button"  type="submit">Update Booking</button>
+
+
+
+        <label class="h6">Starting date:</label>
+        <div class="form-group">
+          <input type="text" required name="starting_time" id="datetimepicker"  value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
+        </div>
+
+
+
+         <label class="h6">Ending date:</label>
+        <div class="form-group">
+          <input type="text" required name="ending_time" id="datetimepicker2" value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
+        </div>
+        </div>
+
+         <div class="col-md-6 mt-2">
+         <div class="py text-center"><label class="h6">Peripherals</label></div>
+             {%for x in peripherals%}
+            <p><input class="bg-info" type="checkbox" checked disabled> {{x.title}}</p>
+             {%endfor%}
+         <div class="py text-center"><label class="h6">Refreshments</label></div>
+         <div class="py"><label class="h6 text-danger">NOTE : Bookings that require refreshments should be done a day earlier.</label></div>
+        <div class="form-group">
+            {%for item in refreshments%}
+          <input type="checkbox"  name="refreshments" value="{{item.id}}">
+            <label>{{item.title}}</label><br>
+            {%endfor%}
+        </div>
+
+        </div>
+
+        <div class="col-md-12 text-center mt-2">
+        <button class="btn btn-secondary book-room-btn h5" id="book-room-button"  type="submit">Book Room</button>
         </div>
     </form>
+<script>
+$(function () {
+  var now = new Date();
+  now.setMinutes(0);
+  now.setSeconds(0);
+  now.setMilliseconds(0);
+  var nextHour = new Date(now.getTime() + 60 * 60 * 1000);
 
-</div>
+  var disabledDates = [
+    {% for book in bookings %}
+      new Date('{{ book.date_start|date:"Y/m/d H:i" }}'),
+      new Date('{{ book.date_end|date:"Y/m/d H:i" }}'),
+    {% endfor %}
+  ];
+
+  $('#datetimepicker, #datetimepicker2').datetimepicker({
+    defaultValue: '{{ datetime|date:"Y-m-d H" }}',
+    minDateTime: nextHour,
+    format: 'Y-m-d H:00',
+    step: 60,
+    allowTimes: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+    disabledDates: disabledDates
+  });
+});
+
+</script>
 {%endblock content%}

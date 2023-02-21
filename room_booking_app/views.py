@@ -9,8 +9,8 @@ from django.utils import timezone
 from django.views.generic import DetailView, UpdateView
 
 from .controllers import *
-from .forms import RoomForm, BookUpdateForm
-from .models import Booking, User, Room_Suspension
+from .forms import RoomForm, BookUpdateForm, EditBookingForm
+from .models import Booking, User, Room_Suspension, Refreshments
 from .models import Rooms, Campus, Facility
 
 
@@ -146,7 +146,7 @@ def book_room(request, pk):
         role = None
     room = Rooms.objects.get(pk=pk)
     bookings = Booking.objects.filter(room_id_id=pk)
-    bookings_json = bookings
+    refreshments = Refreshments.objects.all()
     booked_by = User.objects.get(email=request.user)
     facility = room.facilities_ids.split(',')
     facilities = Facility.objects.filter(id__in=facility)
@@ -164,6 +164,8 @@ def book_room(request, pk):
         end_hour = x.date_end.hour
         for hour in range(start_hour, end_hour):
             times_booked.append(hour)
+
+    refreshment_ids = []
 
     if request.method == "POST":
         title = request.POST.get('title')
@@ -204,6 +206,7 @@ def book_room(request, pk):
         new_bookings = Booking()
         new_bookings.room_id = room
         new_bookings.user_id = booked_by
+        new_bookings.refreshments = ','.join(request.POST.getlist('refreshments'))
         new_bookings.title = title
         new_bookings.date_start = starting_time
         new_bookings.date_end = ending_time
@@ -213,7 +216,7 @@ def book_room(request, pk):
 
     templatename = 'room_booking_app/book_room.html'
     context = {"room": room, 'pk': pk, 'bookings': bookings,
-               'facilities': facilities, 'role': role, 'times_booked': times_booked}
+               'facilities': facilities, 'role': role, 'times_booked': times_booked, 'refreshments': refreshments}
     return render(request, templatename, context)
 
 
@@ -255,57 +258,68 @@ def update_my_booking(request, pk):
     booking = Booking.objects.get(id=pk)
     user = User.objects.get(email=request.user)
     room = Rooms.objects.get(id=booking.room_id_id)
-    form = BookUpdateForm(request.POST or None, instance=booking)
+    refreshments = Refreshments.objects.all()
+
+    peripheral = room.facilities_ids.split(',')
+    peripherals = Facility.objects.filter(id__in=peripheral)
+    form = EditBookingForm(request.POST or None)
     if booking.user_id != user:
         messages.error(request, f'No permission to carry out this action')
         return redirect('booking_detail', pk)
     else:
-        if request.method == "POST":
-            if form.is_valid():
 
-                title = form.cleaned_data.get('title')
-                starting_time = form.cleaned_data.get('date_start')
-                ending_time = form.cleaned_data.get('date_end')
+        if form.is_valid():
 
-                # book_starting_time = datetime.datetime.strptime(starting_time, "%Y-%m-%dT%H:%M")
+            title = form.cleaned_data.get('title')
+            starting_time = form.cleaned_data.get('starting_time')
+            ending_time = form.cleaned_data.get('ending_time')
 
-                # Check if starting_time is greater than current time
-                if starting_time < timezone.localtime():
-                    messages.error(request, 'Start time must be greater than current time.')
-                    return redirect('book_room', pk)
+            # book_starting_time = datetime.datetime.strptime(starting_time, "%Y-%m-%dT%H:%M")
 
-                # Check if ending_time is greater than starting_time
-                elif ending_time < starting_time:
-                    messages.warning(request, f'ending time cannot be less than starting time')
-                    return redirect('book_room', pk)
+            # Check if starting_time is greater than current time
+            if starting_time < timezone.localtime():
+                messages.error(request, 'Start time must be greater than current time.')
+                return redirect('book_room', pk)
 
-                # Check if the time frame for the booking is not within another approved booking
-                overlapping_bookings = Booking.objects.filter(room_id=room, status=1,
-                                                              date_start__lte=ending_time,
-                                                              date_end__gte=starting_time)
-                if overlapping_bookings.exists():
-                    messages.warning(request, f'This room is already booked for this time frame.')
-                    return redirect('book_room', pk)
+            # Check if ending_time is greater than starting_time
+            elif ending_time < starting_time:
+                messages.warning(request, f'ending time cannot be less than starting time')
+                return redirect('book_room', pk)
 
-                overlapping_suspension = Room_Suspension.objects.filter(room=room,
-                                                                        start_date__lte=ending_time,
-                                                                        end_date__gte=starting_time)
+            # Check if the time frame for the booking is not within another approved booking
+            overlapping_bookings = Booking.objects.filter(room_id=room, status=1,
+                                                          date_start__lte=ending_time,
+                                                          date_end__gte=starting_time)
+            if overlapping_bookings.exists():
+                messages.warning(request, f'This room is already booked for this time frame.')
+                return redirect('book_room', pk)
 
-                if overlapping_suspension.exists():
-                    messages.warning(request, f"Meeting Room is unavailable at this time")
-                    return redirect('book_room', pk)
+            overlapping_suspension = Room_Suspension.objects.filter(room=room,
+                                                                    start_date__lte=ending_time,
+                                                                    end_date__gte=starting_time)
 
-                booking.user_id = user
-                booking.title = title
-                booking.date_start = starting_time
-                booking.date_end = ending_time
-                booking.save()
-                messages.success(request, f'booking updated successfully')
-                return redirect('booking_detail', booking.pk)
-            else:
-                form = BookUpdateForm(instance=booking)
+            if overlapping_suspension.exists():
+                messages.warning(request, f"Meeting Room is unavailable at this time")
+                return redirect('book_room', pk)
+
+            booking.user_id = user
+            booking.title = title
+            booking.date_start = starting_time
+            booking.date_end = ending_time
+            booking.refreshments = ','.join(form.cleaned_data.get('refreshments'))
+            booking.save()
+            messages.success(request, f'booking updated successfully')
+            return redirect('booking_detail', booking.pk)
+        else:
+            form = EditBookingForm()
+
+        form.fields['title'].initial = booking.title
+        #
+        # form.fields['ending_time'].initial = booking.date_end
+        # form.fields['refreshments'].initial = booking.refreshments
+
     templatename = 'room_booking_app/booking_update.html'
-    context = {'role': role, 'form': form}
+    context = {'role': role, 'form': form, 'peripherals': peripherals, 'refreshments': refreshments}
     return render(request, templatename, context)
 
 

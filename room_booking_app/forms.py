@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Booking, Campus
+from .models import Booking, Campus, Refreshments
 from .models import Facility
 
 
@@ -45,3 +45,14 @@ class BookUpdateForm(forms.ModelForm):
     class Meta:
         model = Booking
         fields = ['title', 'date_start', 'date_end']
+
+
+class EditBookingForm(forms.Form):
+    title = forms.CharField(max_length=100)
+    date_start = forms.DateTimeField()
+    date_end = forms.DateTimeField()
+
+    facilities = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        choices=[(item.id, item.title) for item in Refreshments.objects.all()]
+    )

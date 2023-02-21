@@ -1,10 +1,31 @@
 $(document).ready(function() {
     var table = $('.data-table').DataTable({
-        responsive: true
-     buttons: [
-        'copy', 'excel', 'pdf'
-    ]
+        responsive: true,
     });
-table.buttons().container()
-    .appendTo( $('.col-sm-6:eq(0)', table.table().container() ) );
+
+    var roomsTable = $('.rooms-table').DataTable({
+        responsive: true,
+        dom: 'Bfrtip',
+        buttons: [
+            {
+                text: 'TRC',
+                action: function ( e, dt, node, config ) {
+                    dt.column(2).search( 'TRC' ).draw();
+                }
+            },
+            {
+                text: 'TOWN',
+                action: function ( e, dt, node, config ) {
+                    dt.column(2).search( 'TOWN' ).draw();
+                }
+            },
+            {
+                text: 'MANGU',
+                action: function ( e, dt, node, config ) {
+                    dt.column(2).search( 'MANGU' ).draw();
+                }
+            }
+
+        ]
+    });
 });

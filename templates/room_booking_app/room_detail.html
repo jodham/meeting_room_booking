@@ -75,18 +75,7 @@
                {{room.capacity}}
            </div>
        </div>
-        {%for x in  suspended_rooms%}
-        {%if x.start_date > current_time%}
-      <div class="row shadow-sm mx-2 mt-2">
-           <div class="col book-detail-title-text">
-               Unavailable <label style="color: #cb6015; font-weight: bolder;"> From</label>
-           </div>
-           <div class="col">
-               {{x.start_date}} <label style="color: #cb6015; font-weight: bolder;"> TO</label> {{x.end_date}}
-           </div>
-       </div>
-        {%endif%}
-        {%endfor%}
+
    </div>
 
 <div class="col-md-6">
@@ -104,6 +93,32 @@
 
 </div>
 
+
+{%if suspension_count > 0%}
+<div class="col-md-12 mt-5 shadow-sm">
+    <div class="py-3 text-center room-detail-titles h4">This room will not be available on this dates</div>
+    <table id="table_id" class="display">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Suspended from</th>
+            <th>Suspended To</th>
+            <th>Reason</th>
+        </tr>
+    </thead>
+    <tbody>
+    {%for item in suspended_days%}
+        <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{item.start_date}}</td>
+            <td>{{item.end_date}}</td>
+            <td>{{item.suspension_reason}}</td>
+        </tr>
+      {%endfor%}
+    </tbody>
+</table>
+</div>
+{%endif%}
 
 <div class="col-md-12 mt-5 mb-3">
     <div class="py-3 text-center room-detail-titles h4">Upcoming meetings in this room </div>

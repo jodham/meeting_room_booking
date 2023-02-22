@@ -3,6 +3,7 @@ import datetime
 from datetime import time, date, timedelta, datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import render, redirect
 from django.utils import timezone
 # from django.shortcuts import render, redirect
@@ -126,7 +127,9 @@ def room_detail_view(request, pk):
         role = None
     room = Rooms.objects.get(pk=pk)
     current_time = timezone.localtime()
-    suspended_rooms = Room_Suspension.objects.filter(pk=pk)
+    suspended_days = Room_Suspension.objects.filter(room=room, start_date__gte=current_time)
+    suspension_count = suspended_days.count()
+    print(suspension_count)
     bookings = Booking.objects.filter(room_id_id=pk).order_by('-date_created')
 
     facility = room.facilities_ids.split(',')
@@ -134,7 +137,7 @@ def room_detail_view(request, pk):
 
     templatename = 'room_booking_app/room_detail.html'
     context = {"room": room, 'pk': pk, 'bookings': bookings, 'current_time': current_time,
-               'facilities': facilities, 'role': role, 'suspended_rooms': suspended_rooms}
+               'facilities': facilities, 'role': role, 'suspended_days': suspended_days, 'suspension_count': suspension_count}
     return render(request, templatename, context)
 
 

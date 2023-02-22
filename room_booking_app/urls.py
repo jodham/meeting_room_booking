@@ -4,7 +4,7 @@ from django.urls import path
 # app_name = 'room_booking_app'
 urlpatterns = [
     path('index/', index, name='index'),
-    path('dashboard/', dashboard, name='dashboard'),
+    path('', dashboard, name='dashboard'),
 
     path('book/room/<int:pk>', book_room, name='book_room'),
     path('bookings/', Bookings_View, name='bookings'),

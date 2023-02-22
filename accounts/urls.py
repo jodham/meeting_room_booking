@@ -4,7 +4,7 @@ from.views import *
 
 urlpatterns = [
     path('register', register, name='register'),
-    path('', signin, name='signin'),
+    path('signin/', signin, name='signin'),
     path('signout/', signout, name='signout'),
 
     path('adminstrator/panel/', adminstrator, name='adminstrator_page'),

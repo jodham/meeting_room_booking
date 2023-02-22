@@ -3,6 +3,10 @@ $(document).ready(function() {
         responsive: true,
     });
 
+    var table = $('#table_id').DataTable({
+        responsive: true,
+    });
+
     var roomsTable = $('.rooms-table').DataTable({
         responsive: true,
         dom: 'Bfrtip',

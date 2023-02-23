@@ -29,14 +29,14 @@
 
         <label class="h6">Starting date:</label>
         <div class="form-group">
-          <input type="text" required name="starting_time" id="datetimepicker"  value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
+          <input type="text" autocomplete="off" readonly required name="starting_time" id="datetimepicker"  value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
         </div>
 
 
 
          <label class="h6">Ending date:</label>
         <div class="form-group">
-          <input type="text" required name="ending_time" id="datetimepicker2" value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
+          <input type="text" autocomplete="off" readonly required name="ending_time" id="datetimepicker2" value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
         </div>
         </div>
 

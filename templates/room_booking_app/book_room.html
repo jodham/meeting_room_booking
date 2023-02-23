@@ -29,14 +29,13 @@
 
         <label class="h6">Starting date:</label>
         <div class="form-group">
-          <input type="text" required name="starting-date" id="datetimepicker"  value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
+          <input type="text" autocomplete="off" readonly required name="starting-date" id="datetimepicker"  value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
         </div>
-
 
 
          <label class="h6">Ending date:</label>
         <div class="form-group">
-          <input type="text" required name="ending-date" id="datetimepicker2" value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
+          <input type="text" autocomplete="off" readonly required name="ending-date" id="datetimepicker2" value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
         </div>
         </div>
 
@@ -84,10 +83,5 @@ console.log(disabledDates)
     disabledDates: disabledDates
   });
 });
-
-
-
-
-
 </script>
 {%endblock content%}

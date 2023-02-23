@@ -378,6 +378,7 @@ main {
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     padding: 0.5rem;
+    min-height: 15rem;
     border-radius: 5px;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }
@@ -386,6 +387,34 @@ main {
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     padding: 0.5rem;
+    min-height: 15rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.create_category_form{
+    margin-top: 1.0rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    padding: 0.5rem;
+    min-height: 15rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.create_peripheral_form{
+    margin-top: 1.0rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    min-height: 15rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.peripheral_update_form{
+    margin-top: 1.0rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    padding: 0.5rem;
+    min-height: 15rem;
     border-radius: 5px;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }

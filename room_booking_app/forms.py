@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Booking, Campus, Refreshments
+from .models import Booking, Campus, Refreshments, Facility_Category
 from .models import Facility
 
 

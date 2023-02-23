@@ -4,12 +4,14 @@ from django.contrib import messages
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.utils import timezone
+from django.views.generic import UpdateView
 
-from accounts.forms import CreateUserAccount, UserUpdateForm, peripheralUpdate, suspend_room_form
+from accounts.forms import CreateUserAccount, UserUpdateForm, peripheralUpdate, suspend_room_form, CategoryForm, \
+    PeripheralForm
 from room_booking_app.controllers import *
-from room_booking_app.models import Facility, Rooms, Roles, Booking, Room_Suspension
+from room_booking_app.models import Facility, Rooms, Roles, Booking, Room_Suspension, Facility_Category
 from room_booking_app.models import User
 
 
@@ -208,29 +210,26 @@ def create_peripheral(request):
         role = check_user_role(request.user)
     else:
         role = None
-    if request.method == "POST":
-        title = request.POST.get('title')
-        facility = Facility()
-        facility.title = title
-        facility.save()
-        return reverse('peripherals')
-    templatename = 'adminstrator/create_peripheral.html'
-    return render(request, templatename, {'role': role})
-
-
-def PeripheralUpdateView(request, pk):
-    if request.user.is_authenticated:
-        role = check_user_role(request.user)
-    else:
-        role = None
-    peripheral = get_object_or_404(Facility, id=pk)
-    form = peripheralUpdate(request.POST or None)
+    form = PeripheralForm(request.POST or None)
     if form.is_valid():
-        peripheral.title = form.cleaned_data.get('title')
-        peripheral.save()
+        form.save()
         return redirect('peripherals')
-    form.fields['title'].initial = peripheral.title
-    return render(request, 'adminstrator/peripheral_update.html', {'role': role, 'form': form})
+    else:
+        form = PeripheralForm()
+    templatename = 'adminstrator/create_peripheral.html'
+    return render(request, templatename, {'role': role, 'form': form})
+
+
+class PeripheralUpdateView(UpdateView):
+    model = Facility
+    form_class = PeripheralForm
+    template_name = 'adminstrator/peripheral_update.html'
+    success_url = reverse_lazy('peripherals')
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        # You can add any extra logic here to customize how the object is retrieved
+        return obj
 
 
 def activate_deactivate_peripheral(request, pk):
@@ -345,4 +344,52 @@ def suspend_room(request, pk):
         form = suspend_room_form()
     templatename = 'adminstrator/suspend_room.html'
     context = {'role': role, 'room': room, 'form': form}
+    return render(request, templatename, context)
+
+
+def add_facility_category(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    if request.method == "POST":
+        title = request.POST.get('title')
+        new_category = Facility_Category()
+        new_category.title = title
+        new_category.save()
+        return redirect('facility_category')
+    templatename = 'adminstrator/add_category.html'
+    context = {'role': role}
+    return render(request, templatename, context)
+
+
+def edit_facility_category(request, pk):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    category = get_object_or_404(Facility_Category, pk=pk)
+
+    form = CategoryForm(request.POST, instance=category)
+    if form.is_valid():
+        form.save()
+        messages.success(request, f'category edited susccessfully')
+        return redirect('facility_category')
+
+    else:
+        form = CategoryForm(instance=category)
+
+    templatename = 'adminstrator/edit_category.html'
+    context = {'form': form, 'category': category, 'role': role}
+    return render(request, templatename, context)
+
+
+def facility_category(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    categories = Facility_Category.objects.all()
+    templatename = 'adminstrator/facility_categories.html'
+    context = {'categories': categories, 'role': role}
     return render(request, templatename, context)

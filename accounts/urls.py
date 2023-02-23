@@ -18,7 +18,7 @@ urlpatterns = [
 
     path('adminstrator/peripherals', peripherals, name='peripherals'),
     path('adminstrator/peripheral/create', create_peripheral, name='create_peripheral'),
-    path('adminstrator/peripheral/update/<int:pk>', PeripheralUpdateView, name='update_peripheral'),
+    path('adminstrator/peripheral/update/<int:pk>', PeripheralUpdateView.as_view(), name='update_peripheral'),
     path('adminstrator/peripheral/activate_deactivate/<int:pk>', activate_deactivate_peripheral,
          name='activate_deactivate_peripheral'),
     path('adminstrator/rooms/activate_deactivate_room/<int:pk>', activate_deactivate_room,
@@ -27,5 +27,9 @@ urlpatterns = [
     path('adminstrator/approve/booking/<int:pk>', approve_booking, name='approve_booking'),
     path('adminstrator/reject/booking/<int:pk>', reject_booking, name='reject_booking'),
     path('user/cancel/booking/<int:pk>', cancel_booking, name='cancel_booking'),
-    path('adminstrator/room/suspend/<int:pk>', suspend_room, name='suspend_room')
+    path('adminstrator/room/suspend/<int:pk>', suspend_room, name='suspend_room'),
+
+    path('administrator/facility/categories', facility_category, name='facility_category'),
+    path('administrator/categories/create', add_facility_category, name='add_category'),
+    path('administrator/categories/edit/<int:pk>', edit_facility_category, name='edit_facility_category')
 ]

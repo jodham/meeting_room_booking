@@ -1,17 +1,28 @@
 {%extends 'base/base.html'%}
 {%load static%}
 {%block title%}create peripheral{%endblock title%}
-{%block content%}
-<div class="create-peripheral-title text-center">Create Peripheral</div>
-<div class="row justify-content-center">
-    <form method="post" class="form-container frmlogin">
-        {%csrf_token%}
-       <div class="form-group">
-         <label for="title" class="h5">Peripheral Name</label>
-         <input type="text" value="" class="form-control form-control-lg" name="title" id="title">
-       </div>
-        <button class="btn btn-block loginbtn h5" type="submit">Create Peripheral</button>
-        <a href="{%url 'peripherals'%}" class="text-dark"><i class="bi bi-arrow-left-circle"></i>Peripherals</a>
-    </form>
-</div>
-{%endblock content%}
+{% block content %}
+  <div class="create-peripheral-title text-center">Create Peripheral</div>
+
+  <form method="post" class="row create_peripheral_form">
+    {% csrf_token %}
+
+    <div class="col-md-6">
+      <div class="form-group">
+        {{ form.title.label_tag }}
+        {{ form.title }}
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="form-group">
+        {{ form.category.label_tag }}
+        {{ form.category }}
+      </div>
+    </div>
+    <div class="col-md-12 text-center mt-4">
+    <button type="submit" class="btn loginbtn">Save</button>
+    </div>
+    <a href="{%url 'peripherals'%}" class="text-dark"><i class="bi bi-arrow-left-circle"></i>Peripherals</a>
+  </form>
+{% endblock content %}

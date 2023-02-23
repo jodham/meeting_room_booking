@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from room_booking_app.models import User, Roles, Facility, Rooms
+from room_booking_app.models import User, Roles, Facility, Rooms, Facility_Category
 
 
 class CreateUserAccount(UserCreationForm):
@@ -29,6 +29,22 @@ class UserUpdateForm(forms.Form):
     )
 
 
+class PeripheralForm(forms.ModelForm):
+    title = forms.CharField(
+        label='Peripheral Name',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'required': True})
+    )
+    category = forms.ModelChoiceField(
+        label='Category Title',
+        queryset=Facility_Category.objects.all(),
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = Facility
+        fields = ('title', 'category')
+
+
 class peripheralUpdate(forms.Form):
     title = forms.CharField(max_length=30)
 
@@ -54,3 +70,14 @@ class suspend_room_form(forms.Form):
             self.add_error('suspension_end',
                            "Suspension end date must be after suspension start date."
                            )
+
+
+class CategoryForm(forms.ModelForm):
+    title = forms.CharField(
+        label='Category Title',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'required': True})
+    )
+
+    class Meta:
+        model = Facility_Category
+        fields = ('title',)

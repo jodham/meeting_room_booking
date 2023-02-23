@@ -9,7 +9,7 @@ from accounts.validators import validate_zetech_email
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, password=None):
+    def create_user(self, email, password=None, **extra_fields):
         """
         Creates and saves a User with the given email and password.
         """
@@ -17,7 +17,7 @@ class UserManager(BaseUserManager):
             raise ValueError('Users must have an email address')
 
         user = self.model(
-            email=self.normalize_email(email),
+            email=self.normalize_email(email), **extra_fields
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -61,7 +61,7 @@ class User(AbstractBaseUser):
     last_name = models.CharField(verbose_name='last name', max_length=50)
     active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
-    role = models.CharField(max_length=255, default=2)
+    role = models.CharField(max_length=255, default=3)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     objects = UserManager()
@@ -113,15 +113,18 @@ class Campus(models.Model):
         return self.title
 
 
-class Facility(models.Model):
-    IT_Facility = 0
-    Ground_Facility = 1
-
-    CATEGORY_CHOICES = [
-        (IT_Facility, 'IT'),
-        (Ground_Facility, 'Ground Facility'),
-    ]
+class Facility_Category(models.Model):
     title = models.CharField(max_length=30)
+    date_created = models.DateTimeField(auto_now_add=True)
+    date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
+
+
+class Facility(models.Model):
+    title = models.CharField(max_length=30)
+    category = models.ForeignKey(Facility_Category, on_delete=models.CASCADE)
     active = models.BooleanField(default=True)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
@@ -202,3 +205,7 @@ class Room_Suspension(models.Model):
 
     def __str__(self):
         return f"self.room"
+
+
+class Booking_Approval(models.Model):
+    need_approval = models.BooleanField(default=False)

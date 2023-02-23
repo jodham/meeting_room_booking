@@ -9,9 +9,9 @@ from django.utils import timezone
 from django.views.generic import UpdateView
 
 from accounts.forms import CreateUserAccount, UserUpdateForm, peripheralUpdate, suspend_room_form, CategoryForm, \
-    PeripheralForm
+    PeripheralForm, CampusForm
 from room_booking_app.controllers import *
-from room_booking_app.models import Facility, Rooms, Roles, Booking, Room_Suspension, Facility_Category
+from room_booking_app.models import Facility, Rooms, Roles, Booking, Room_Suspension, Facility_Category, Campus
 from room_booking_app.models import User
 
 
@@ -231,6 +231,19 @@ class PeripheralUpdateView(UpdateView):
         # You can add any extra logic here to customize how the object is retrieved
         return obj
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            role = check_user_role(self.request.user)
+        else:
+            role = None
+        context['role'] = role
+        return context
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Peripheral updated successfully.')
+        return response
 
 def activate_deactivate_peripheral(request, pk):
     if not request.user.is_admin:
@@ -393,3 +406,58 @@ def facility_category(request):
     templatename = 'adminstrator/facility_categories.html'
     context = {'categories': categories, 'role': role}
     return render(request, templatename, context)
+
+
+def add_campus(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    form = CampusForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, f'successfully added a campus')
+        return redirect('campus_list')
+    else:
+        form = CampusForm()
+
+    templatename = 'adminstrator/add_campus.html'
+    context = {'form': form, 'role': role}
+    return render(request, templatename, context)
+
+
+def Campuses(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    campuses = Campus.objects.all()
+    templatename = 'adminstrator/campuses.html'
+    context = {'campuses': campuses, 'role': role}
+    return render(request, templatename, context)
+
+
+class CampusUpdateView(UpdateView):
+    model = Campus
+    form_class = CampusForm
+    template_name = 'adminstrator/campus_update.html'
+    success_url = reverse_lazy('campus_list')
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        # You can add any extra logic here to customize how the object is retrieved
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            role = check_user_role(self.request.user)
+        else:
+            role = None
+        context['role'] = role
+        return context
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Campus edited successfully.')
+        return response

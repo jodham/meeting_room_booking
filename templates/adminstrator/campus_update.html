@@ -1,0 +1,19 @@
+{%extends 'base/base.html'%}
+{%load static%}
+{%block title%}Edit Campus{%endblock title%}
+{%block content%}
+<div class="create-peripheral-title text-center">Edit Campus</div>
+    <form method="post" class="row create_campus_form">
+        {%csrf_token%}
+    <div class="col-md-6">
+      <div class="form-group">
+        {{ form.title.label_tag }}
+        {{ form.title }}
+      </div>
+    </div>
+        <div class="col-md-12 text-center">
+        <button class="btn loginbtn h5" type="submit">Submit</button>
+        </div>
+        <a href="{%url 'campus_list'%}" class="text-dark"><i class="bi bi-arrow-left-circle"></i>Campus List</a>
+    </form>
+{%endblock content%}

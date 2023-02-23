@@ -31,5 +31,9 @@ urlpatterns = [
 
     path('administrator/facility/categories', facility_category, name='facility_category'),
     path('administrator/categories/create', add_facility_category, name='add_category'),
-    path('administrator/categories/edit/<int:pk>', edit_facility_category, name='edit_facility_category')
+    path('administrator/categories/edit/<int:pk>', edit_facility_category, name='edit_facility_category'),
+
+    path('administrator/campus/create', add_campus, name='add_campus'),
+path('administrator/campus/<int:pk>', CampusUpdateView.as_view(), name='edit_campus'),
+    path('administrator/campus/list', Campuses, name='campus_list'),
 ]

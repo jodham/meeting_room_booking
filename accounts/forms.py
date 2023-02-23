@@ -1,6 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
-from room_booking_app.models import User, Roles, Facility, Rooms, Facility_Category
+from room_booking_app.models import User, Roles, Facility, Rooms, Facility_Category, Campus
 
 
 class CreateUserAccount(UserCreationForm):
@@ -80,4 +80,15 @@ class CategoryForm(forms.ModelForm):
 
     class Meta:
         model = Facility_Category
+        fields = ('title',)
+
+
+class CampusForm(forms.ModelForm):
+    title = forms.CharField(
+        label='Campus Name',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'required': True})
+    )
+
+    class Meta:
+        model = Campus
         fields = ('title',)

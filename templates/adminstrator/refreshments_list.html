@@ -37,7 +37,9 @@
                   <td>{{item.date_modified}}</td>
 
                   <td>
-                  action
+                    <a class="update_disable_item_link" href="{%url 'edit_refreshment' item.pk%}">
+                          <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                      </a>
                   </td>
               </tr>
               {%endfor%}

@@ -44,6 +44,7 @@ urlpatterns = [
 
     path('administrator/refreshments/list', Refreshments_View, name='refreshments_list'),
     path('administrator/refreshments/create', Add_refreshment, name='add_refreshment'),
+    path('administrator/refreshments/<int:pk>/edit', edit_refreshment, name='edit_refreshment'),
 
 
 ]

@@ -492,3 +492,21 @@ def Add_refreshment(request):
     templatename = 'adminstrator/add_refreshment.html'
     context = {'form': form, 'role': role}
     return render(request, templatename, context)
+
+
+def edit_refreshment(request, pk):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    refreshment = get_object_or_404(Refreshments, pk=pk)
+    form = RefreshmentsForm(request.POST, instance=refreshment)
+    if form.is_valid():
+        form.save()
+        messages.success(request, f'succefully edited refreshment')
+        return redirect('refreshments_list')
+    else:
+        form = RefreshmentsForm(instance=refreshment)
+    templatename = 'adminstrator/edit_refreshment.html'
+    context = {'form': form, 'role': role}
+    return render(request, templatename, context)

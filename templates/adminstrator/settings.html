@@ -1,0 +1,23 @@
+{%extends 'base/base.html'%}
+{%block title%}settings{%endblock title%}
+{%block content%}
+<div class="py-3 text-center h4 users-page-title">Change settings</div>
+
+ <div class="row settings_content_wrapper">
+     {%if setting%}
+    <div class="col-md-6 h6 py-3">
+        Set Bookings to be approved directly without administrator approval
+    </div>
+     <div class="col-md-6">
+      <a class="btn btn-danger mr-3" href="{%url 'reset'%}">Set</a>
+     </div>
+     {%else%}
+      <div class="col-md-6 h6 py-3 mr-3">
+        Set Bookings to require administrator approval
+     </div>
+     <div class="col-md-6">
+     <a class="btn btn-primary mr-3" href="{%url 'reset'%}">Set</a>
+     </div>
+     {%endif%}
+ </div>
+{%endblock content%}

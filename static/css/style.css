@@ -107,7 +107,16 @@ section{
     font-weight: bold;
 }
 .room-create-form{
-    width: 23rem;
+    margin-top: 1.0rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 2px solid #0000;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+    }
+.room-update-form{
+    margin-top: 1.0rem;
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     padding: 0.5rem;
@@ -299,6 +308,15 @@ main {
     min-height: 17rem;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }
+.user-update-form{
+    margin-top: 1.0rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    border: 2px solid #0000;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+    }
 .user-details-container{
     padding: 0;
 }
@@ -423,6 +441,26 @@ main {
     margin-left: 1.5rem;
     margin-right: 1.5rem;
     padding: 0.5rem;
+    min-height: 15rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.settings_content_wrapper{
+    margin-top: 1.0rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    padding: 0.5rem;
+    width: 100%;
+    min-height: 15rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.edit-facility-category-form{
+    margin-top: 1.0rem;
+    margin-left: 1.5rem;
+    margin-right: 1.5rem;
+    padding: 0.5rem;
+    width: 100%;
     min-height: 15rem;
     border-radius: 5px;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;

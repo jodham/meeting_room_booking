@@ -2,10 +2,10 @@
 {%block title%}Create Room{%endblock title%}
 {%block content%}
 <div class="col-md-12 text-center create-room-title">Add Room</div>
-    <div class="row justify-content-center">
-        <form method="post" class="room-create-form">
-            {%csrf_token%}
 
+        <form method="post" class="row room-create-form">
+            {%csrf_token%}
+            <div class="col-md-6">
             <label class="h6">Location</label>
             <div class="form-group">
               <select class="form-control form-control-lg" required name="location_id">
@@ -14,17 +14,23 @@
                   {%endfor%}
               </select>
             </div>
-
-            <label class="h6">Room Name</label>
-            <div class="form-group">
-                <input type="text" required name="title" class="form-control form-control-lg">
             </div>
 
+            <div class="col-md-6">
+                <label class="h6">Room Name</label>
+                <div class="form-group">
+                    <input type="text" required name="title" class="form-control form-control-lg">
+                </div>
+            </div>
+
+            <div class="col-md-6">
             <label class="h6">Capacity</label>
             <div class="form-group">
                 <input type="number" name="capacity" required class="form-control form-control-lg">
             </div>
+            </div>
 
+            <div class="col-md-6">
             <label class="h6">Facilities</label>
             <div class="form-group">
                 {%for facility in facility%}
@@ -32,10 +38,10 @@
                 <label>{{facility.title}}</label><br>
                 {%endfor%}
             </div>
-
-            <button class="btn btn-block create-room-submit-btn h5" type="submit">Create Room</button>
+            </div>
+            <div class="col-md-12 text-center">
+             <button class="btn  create-room-submit-btn h5" type="submit">Create Room</button>
+            </div>
             <a class="update_disable_item_link" href="{%url 'dashboard'%}">Cancel</a>
         </form>
-
-    </div>
 {%endblock content%}

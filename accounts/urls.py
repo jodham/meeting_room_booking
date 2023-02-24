@@ -1,4 +1,6 @@
 from django.urls import path
+
+from room_booking_app.views import settings_page, reset_booking_requirement
 from.views import *
 
 
@@ -34,6 +36,12 @@ urlpatterns = [
     path('administrator/categories/edit/<int:pk>', edit_facility_category, name='edit_facility_category'),
 
     path('administrator/campus/create', add_campus, name='add_campus'),
-path('administrator/campus/<int:pk>', CampusUpdateView.as_view(), name='edit_campus'),
+    path('administrator/campus/<int:pk>', CampusUpdateView.as_view(), name='edit_campus'),
     path('administrator/campus/list', Campuses, name='campus_list'),
+
+    path('administrator/settings', settings_page, name='settings'),
+    path('administrator/set', reset_booking_requirement, name='reset'),
+
+    path('administrator/refreshments/list', Refreshments_View, name='refreshments_list'),
+
 ]

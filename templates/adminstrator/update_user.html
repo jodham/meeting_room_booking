@@ -2,22 +2,27 @@
 {%block title%}Update User{%endblock title%}
 {%block content%}
 <div class="py-3 text-center h4 users-page-title">Update {{user.email}}</div>
-<div class="row justify-content-center">
-    <form method="post" class="room-create-form">
-          {% if messages %}
-            <ul class="messages">
-                {% for message in messages %}
-                <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-        {%csrf_token%}
-        {{form.as_p}}
-        <label></label>
 
-        <button class="btn btn-block create-room-submit-btn h5" type="submit">Update User</button>
-        <a href="{%url 'system_users'%}" class="text-dark"><i class="bi bi-arrow-left-circle"></i>Users</a>
-    </form>
-
-</div>
+<form method="post" class="row user-update-form">
+      {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li>{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+    {%csrf_token%}
+    {%for field in form%}
+    <div class="col-md-6">
+        <div class="form-group">
+            <label>{{field.label_tag}}</label>
+            {{field}}
+        </div>
+    </div>
+    {%endfor%}
+    <div class="col-md-12 text-center">
+    <button class="btn create-room-submit-btn h5" type="submit">Update User</button>
+    </div>
+    <a href="{%url 'system_users'%}" class="text-dark"><i class="bi bi-arrow-left-circle"></i>Users</a>
+</form>
 {%endblock content%}

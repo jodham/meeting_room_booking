@@ -1,9 +1,9 @@
 {%extends 'base/base.html'%}
 {%load static%}
-{%block title%}create category{%endblock title%}
+{%block title%}Edit category{%endblock title%}
 {%block content%}
-<div class="create-peripheral-title text-center">Create Facility Category</div>
-    <form method="post" class="row">
+<div class="create-peripheral-title text-center">Edit Facility Category</div>
+    <form method="post" class="row edit-facility-category-form">
     {% csrf_token %}
 
       <div class="col-md-6">
@@ -12,7 +12,9 @@
           {{ form.title }}
         </div>
       </div>
-
-    <button type="submit" class="btn btn-primary">Save</button>
+    <div class="col-md-12 text-center">
+    <button type="submit" class="btn loginbtn">Submit</button>
+    </div>
+    <a href="{%url 'facility_category'%}" class="text-dark"><i class="bi bi-arrow-left-circle"></i>Categories</a>
   </form>
 {%endblock content%}

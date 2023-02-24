@@ -5,41 +5,43 @@
 <div class="col-md-12 text-center bookings-title">Edit Booking</div>
 
     <form method="post" class="row book_room_form">
-    <div class="col-md-12 m-2">
-         {%if role == 'administrator'%}
-           <a href="{%url 'dashboard'%}" class="btn btn-lg back-to-dashboard-button">
-             <i class="bi bi-arrow-left-circle"></i>
-             Dashboard
-         </a>
-            {%else%}
-            <a href="{%url 'rooms'%}" class="btn btn-lg back-to-dashboard-button">
-             <i class="bi bi-arrow-left-circle"></i>
-             Rooms
-         </a>
-            {%endif%}
-    </div>
+        <div class="col-md-12 m-2">
+             {%if role == 'administrator'%}
+               <a href="{%url 'dashboard'%}" class="btn btn-lg back-to-dashboard-button">
+                 <i class="bi bi-arrow-left-circle"></i>
+                 Dashboard
+             </a>
+                {%else%}
+                <a href="{%url 'rooms'%}" class="btn btn-lg back-to-dashboard-button">
+                 <i class="bi bi-arrow-left-circle"></i>
+                 Rooms
+             </a>
+                {%endif%}
+        </div>
         {%csrf_token%}
         <div class="col-md-6 mt-2">
-            <label class="h6">Meeting title</label>
-            <div class="form-group">
-              <input type="text" required autofocus name="title" placeholder='meeting title' class="form-control">
-            </div>
 
-
-
-        <label class="h6">Starting date:</label>
         <div class="form-group">
-          <input type="text" autocomplete="off" readonly required name="starting_time" id="datetimepicker"  value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
+          {{ form.title.label_tag }}
+          {{ form.title }}
         </div>
 
 
+       <div class="form-group">
+          {{ form.date_start.label_tag }}
+          <input type="datetime-local" id="{{ form.date_start.id_for_label }}" name="{{ form.date_start.name }}" class="form-control"
+                 autocomplete="off" readonly required value="{{ form.date_start.value|date:'Y-m-d\TH:i' }}">
+       </div>
 
-         <label class="h6">Ending date:</label>
+
+
+
         <div class="form-group">
-          <input type="text" autocomplete="off" readonly required name="ending_time" id="datetimepicker2" value="{{ datetime|date:'Y-m-d H' }}" class="form-control">
+          {{ form.date_end.label_tag }}
+          <input type="datetime-local" id="{{ form.date_end.id_for_label }}" name="{{ form.date_end.name }}" class="form-control"
+                 autocomplete="off" readonly required value="{{ form.date_end.value|date:'Y-m-d\TH:i' }}">
+       </div>
         </div>
-        </div>
-
          <div class="col-md-6 mt-2">
          <div class="py text-center"><label class="h6">Peripherals</label></div>
              {%for x in peripherals%}
@@ -57,8 +59,9 @@
         </div>
 
         <div class="col-md-12 text-center mt-2">
-        <button class="btn btn-secondary book-room-btn h5" id="book-room-button"  type="submit">Book Room</button>
+        <button class="btn btn-secondary book-room-btn h5" id="book-room-button"  type="submit">Submit</button>
         </div>
+
     </form>
 <script>
 $(function () {

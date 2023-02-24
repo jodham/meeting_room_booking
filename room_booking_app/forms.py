@@ -25,29 +25,46 @@ class BookingForm(forms.ModelForm):
 class RoomForm(forms.Form):
     location = forms.ModelChoiceField(
         queryset=Campus.objects.all(),
-        widget=forms.Select,
+        widget=forms.Select(attrs={'class': 'form-control', 'required': True}),
         to_field_name='id'
     )
-    title = forms.CharField(max_length=100)
+    title = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'required': True})
+    )
     capacity = forms.IntegerField()
 
     facilities = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
+        widget=forms.CheckboxSelectMultiple(attrs={'required': False}),
         choices=[(facility.id, facility.title) for facility in Facility.objects.all()]
     )
 
 
 class BookUpdateForm(forms.ModelForm):
-    title = forms.CharField(max_length=100)
-    date_start = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
-    date_end = forms.DateTimeField(widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
+    title = forms.CharField(
+        max_length=100,
+        label='Meeting Title',
+        widget=forms.TextInput(attrs={'class': 'form-control', 'required': True})
+    )
+    date_start = forms.DateTimeField(
+        label='Starting Date',
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local', 'id': 'datetimepicker'}))
+    date_end = forms.DateTimeField(
+        label='Ending Date',
+        widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local', 'id': 'datetimepicker2'}))
+
+    facilities = forms.MultipleChoiceField(
+        label='Facilities',
+        widget=forms.CheckboxSelectMultiple,
+        choices=[(item.id, item.title) for item in Refreshments.objects.all()]
+    )
 
     class Meta:
         model = Booking
-        fields = ['title', 'date_start', 'date_end']
+        fields = ['title', 'date_start', 'date_end', 'facilities']
 
 
-class EditBookingForm(forms.Form):
+class EditBookingForm(forms.ModelForm):
     title = forms.CharField(max_length=100)
     date_start = forms.DateTimeField()
     date_end = forms.DateTimeField()

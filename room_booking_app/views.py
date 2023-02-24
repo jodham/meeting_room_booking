@@ -11,7 +11,7 @@ from django.views.generic import DetailView, UpdateView
 
 from .controllers import *
 from .forms import RoomForm, BookUpdateForm, EditBookingForm
-from .models import Booking, User, Room_Suspension, Refreshments
+from .models import Booking, User, Room_Suspension, Refreshments, Booking_Approval
 from .models import Rooms, Campus, Facility
 
 
@@ -129,7 +129,7 @@ def room_detail_view(request, pk):
     current_time = timezone.localtime()
     suspended_days = Room_Suspension.objects.filter(room=room, start_date__gte=current_time)
     suspension_count = suspended_days.count()
-    print(suspension_count)
+
     bookings = Booking.objects.filter(room_id_id=pk).order_by('-date_created')
 
     facility = room.facilities_ids.split(',')
@@ -137,7 +137,8 @@ def room_detail_view(request, pk):
 
     templatename = 'room_booking_app/room_detail.html'
     context = {"room": room, 'pk': pk, 'bookings': bookings, 'current_time': current_time,
-               'facilities': facilities, 'role': role, 'suspended_days': suspended_days, 'suspension_count': suspension_count}
+               'facilities': facilities, 'role': role, 'suspended_days': suspended_days,
+               'suspension_count': suspension_count}
     return render(request, templatename, context)
 
 
@@ -153,6 +154,7 @@ def book_room(request, pk):
     booked_by = User.objects.get(email=request.user)
     facility = room.facilities_ids.split(',')
     facilities = Facility.objects.filter(id__in=facility)
+    approval_settings = Booking_Approval.need_approval
 
     time_now = timezone.localtime()
 
@@ -205,12 +207,16 @@ def book_room(request, pk):
         if overlapping_suspension.exists():
             messages.warning(request, f"Meeting Room is unavailable at this time")
             return redirect('book_room', pk)
+        status = Booking.STATUS_PENDING  # set default status
+        if not approval_settings:
+            status = Booking.STATUS_APPROVED
 
         new_bookings = Booking()
         new_bookings.room_id = room
         new_bookings.user_id = booked_by
         new_bookings.refreshments = ','.join(request.POST.getlist('refreshments'))
         new_bookings.title = title
+        new_bookings.status = status
         new_bookings.date_start = starting_time
         new_bookings.date_end = ending_time
         new_bookings.save()
@@ -253,6 +259,31 @@ def My_Booking(request):
     return render(request, templatename, context)
 
 
+def reset_booking_requirement(request):
+    if not request.user.is_authenticated:
+        return redirect('signin')
+    if Booking_Approval.need_approval:
+        Booking_Approval.need_approval = False
+        messages.success(request, f'bookings will be approved directly upon submission')
+        return redirect('settings')
+    else:
+        Booking_Approval.need_approval = True
+        messages.success(request, f'Bookings will require administrator approval')
+        return redirect('settings')
+
+
+def settings_page(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    setting = Booking_Approval.need_approval
+    print(setting)
+    templatename = 'adminstrator/settings.html'
+    context = {'role': role, 'setting': setting}
+    return render(request, templatename, context)
+
+
 def update_my_booking(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -265,7 +296,7 @@ def update_my_booking(request, pk):
 
     peripheral = room.facilities_ids.split(',')
     peripherals = Facility.objects.filter(id__in=peripheral)
-    form = EditBookingForm(request.POST or None)
+    form = BookUpdateForm(request.POST, instance=booking)
     if booking.user_id != user:
         messages.error(request, f'No permission to carry out this action')
         return redirect('booking_detail', pk)
@@ -314,7 +345,7 @@ def update_my_booking(request, pk):
             messages.success(request, f'booking updated successfully')
             return redirect('booking_detail', booking.pk)
         else:
-            form = EditBookingForm()
+            form = BookUpdateForm(instance=booking)
 
         form.fields['title'].initial = booking.title
         #

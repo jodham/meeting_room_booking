@@ -20,11 +20,20 @@ class create_user(UserCreationForm):
 
 
 class UserUpdateForm(forms.Form):
-    email = forms.EmailField()
-    first_name = forms.CharField(max_length=50)
-    last_name = forms.CharField(max_length=50)
+    email = forms.EmailField(
+        widget=forms.EmailInput(attrs={'class': 'form-control', 'required': True})
+    )
+    first_name = forms.CharField(
+        max_length=50,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'required': True})
+
+    )
+    last_name = forms.CharField(
+        max_length=50,
+        widget=forms.TextInput(attrs={'class': 'form-control', 'required': True})
+    )
     role = forms.MultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
+        widget=forms.CheckboxSelectMultiple(attrs={'required': True}),
         choices=[(role.id, role.role_name) for role in Roles.objects.all()]
     )
 

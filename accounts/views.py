@@ -11,7 +11,8 @@ from django.views.generic import UpdateView
 from accounts.forms import CreateUserAccount, UserUpdateForm, peripheralUpdate, suspend_room_form, CategoryForm, \
     PeripheralForm, CampusForm
 from room_booking_app.controllers import *
-from room_booking_app.models import Facility, Rooms, Roles, Booking, Room_Suspension, Facility_Category, Campus
+from room_booking_app.models import Facility, Rooms, Roles, Booking, Room_Suspension, Facility_Category, Campus, \
+    Refreshments
 from room_booking_app.models import User
 
 
@@ -245,6 +246,7 @@ class PeripheralUpdateView(UpdateView):
         messages.success(self.request, 'Peripheral updated successfully.')
         return response
 
+
 def activate_deactivate_peripheral(request, pk):
     if not request.user.is_admin:
         return redirect(signin)
@@ -461,3 +463,14 @@ class CampusUpdateView(UpdateView):
         response = super().form_valid(form)
         messages.success(self.request, 'Campus edited successfully.')
         return response
+
+
+def Refreshments_View(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    refreshments = Refreshments.objects.all()
+    templatename = 'adminstrator/refreshments_list.html'
+    context = {'refreshments': refreshments, 'role': role}
+    return render(request, templatename, context)

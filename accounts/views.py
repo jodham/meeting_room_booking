@@ -9,7 +9,7 @@ from django.utils import timezone
 from django.views.generic import UpdateView
 
 from accounts.forms import CreateUserAccount, UserUpdateForm, peripheralUpdate, suspend_room_form, CategoryForm, \
-    PeripheralForm, CampusForm
+    PeripheralForm, CampusForm, RefreshmentsForm
 from room_booking_app.controllers import *
 from room_booking_app.models import Facility, Rooms, Roles, Booking, Room_Suspension, Facility_Category, Campus, \
     Refreshments
@@ -473,4 +473,22 @@ def Refreshments_View(request):
     refreshments = Refreshments.objects.all()
     templatename = 'adminstrator/refreshments_list.html'
     context = {'refreshments': refreshments, 'role': role}
+    return render(request, templatename, context)
+
+
+def Add_refreshment(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    form = RefreshmentsForm(request.POST or None)
+    if form.is_valid():
+        title = form.cleaned_data.get('title')
+        form.save()
+        messages.success(request, f'successsfully added refreshment {title}')
+        return redirect('refreshments_list')
+    else:
+        form = RefreshmentsForm()
+    templatename = 'adminstrator/add_refreshment.html'
+    context = {'form': form, 'role': role}
     return render(request, templatename, context)

@@ -1,0 +1,20 @@
+{%extends 'base/base.html'%}
+{%load static%}
+{%block title%}Add Refreshment{%endblock title%}
+{%block content%}
+<div class="create-peripheral-title text-center">Add Refreshment</div>
+    <form method="post" class="row edit-facility-category-form">
+    {% csrf_token %}
+
+      <div class="col-md-6">
+        <div class="form-group">
+          {{ form.title.label_tag }}
+          {{ form.title }}
+        </div>
+      </div>
+    <div class="col-md-12 text-center">
+    <button type="submit" class="btn loginbtn">Submit</button>
+    </div>
+    <a href="{%url 'refreshments_list'%}" class="text-dark"><i class="bi bi-arrow-left-circle"></i>Refreshments</a>
+  </form>
+{%endblock content%}

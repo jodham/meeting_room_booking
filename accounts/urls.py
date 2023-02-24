@@ -43,5 +43,7 @@ urlpatterns = [
     path('administrator/set', reset_booking_requirement, name='reset'),
 
     path('administrator/refreshments/list', Refreshments_View, name='refreshments_list'),
+    path('administrator/refreshments/create', Add_refreshment, name='add_refreshment'),
+
 
 ]

@@ -2,7 +2,7 @@
 {%load static%}
 {%block title%}dashboard{%endblock title%}
 {%block content%}
-<div class="col-md-12 text-center room-title">Rooms</div>
+<div class="col-md-12 text-center room-title">Facilities</div>
 <div class="room-bookings-card">
     <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
         {%if role == 'administrator'%}
@@ -12,9 +12,9 @@
                 Dashboard
             </a>
         </div>
-        <div class="float-right"><a class="btn add-room-button" href="{%url 'create_room'%}"> Add Room</a></div>
+        <div class="float-right"><a class="btn add-room-button" href="{%url 'create_room'%}"> Add Facility</a></div>
         {%else%}
-        <div class="py-2 float-left text-center h4">Available Rooms</div>
+        <div class="py-2 float-left text-center h4">Facilities</div>
         {%endif%}
     </div>
 
@@ -25,7 +25,9 @@
               <th scope="col">Name</th>
               <th scope="col">Location</th>
               <th scope="col">Capacity</th>
+                {%if role == 'administrator'%}
                 <th scope="col">status</th>
+                {%endif%}
               <th scope="col">Action</th>
 
             </tr>
@@ -37,10 +39,12 @@
               <td class="text-capitalize room-fields">{{room.title}}</td>
               <td class="text-capitalize room-fields">{{room.location}}</td>
               <td class="room-fields">{{room.capacity}}</td>
+              {%if role == 'administrator'%}
               {%if room.is_active == 1%}
               <td class="room-fields">Active</td>
               {%else%}
               <td class="room-fields">Not Active</td>
+              {%endif%}
               {%endif%}
               <td class="room-fields">
                     <div class="btn-group dropup">

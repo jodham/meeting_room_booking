@@ -104,20 +104,14 @@ def RoomUpdateView(request, pk):
     return render(request, 'room_booking_app/update_room.html', {'form': form, 'facilities': facilities, 'role': role})
 
 
-class BookingUpdateView(UpdateView):
-    model = Booking
-    template_name = 'room_booking_app/rooms_form.html'
-    fields = ['title', 'starting_time', 'ending_time']
-
-
 def clear_session(request):
     request.session.clear()
     return redirect('dashboard')
 
 
 # ------------------------------------DetailView Views---------------------------
-class BookDetailView(DetailView):
-    model = Booking
+# class BookDetailView(DetailView):
+#     model = Booking
 
 
 def room_detail_view(request, pk):
@@ -154,6 +148,7 @@ def book_room(request, pk):
     booked_by = User.objects.get(email=request.user)
     facility = room.facilities_ids.split(',')
     facilities = Facility.objects.filter(id__in=facility)
+    extra_peripherals = Facility.objects.exclude(id__in=facility)
     approval_settings = Booking_Approval.need_approval
 
     time_now = timezone.localtime()
@@ -215,6 +210,7 @@ def book_room(request, pk):
         new_bookings.room_id = room
         new_bookings.user_id = booked_by
         new_bookings.refreshments = ','.join(request.POST.getlist('refreshments'))
+        new_bookings.extra_peripherals = ','.join(request.POST.getlist('extra-peripherals'))
         new_bookings.title = title
         new_bookings.status = status
         new_bookings.date_start = starting_time
@@ -225,7 +221,8 @@ def book_room(request, pk):
 
     templatename = 'room_booking_app/book_room.html'
     context = {"room": room, 'pk': pk, 'bookings': bookings,
-               'facilities': facilities, 'role': role, 'times_booked': times_booked, 'refreshments': refreshments}
+               'facilities': facilities, 'role': role, 'extra_peripherals': extra_peripherals,
+               'times_booked': times_booked, 'refreshments': refreshments}
     return render(request, templatename, context)
 
 
@@ -308,10 +305,16 @@ def update_my_booking(request, pk):
             starting_time = form.cleaned_data.get('starting_time')
             ending_time = form.cleaned_data.get('ending_time')
 
-            # book_starting_time = datetime.datetime.strptime(starting_time, "%Y-%m-%dT%H:%M")
+            book_starting_time = datetime.datetime.strptime(starting_time, "%Y-%m-%dT%H:%M")
+
+            if starting_time is None:
+                messages.error(request, 'Starting time is required.')
+                return redirect('book_room', pk)
+            # converting datetime to required format
+            book_starting_time = datetime.strptime(starting_time, '%Y-%m-%dT%H:%M')
 
             # Check if starting_time is greater than current time
-            if starting_time < timezone.localtime():
+            if book_starting_time < datetime.datetime.now():
                 messages.error(request, 'Start time must be greater than current time.')
                 return redirect('book_room', pk)
 

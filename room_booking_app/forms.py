@@ -39,7 +39,6 @@ class RoomForm(forms.Form):
         choices=[(facility.id, facility.title) for facility in Facility.objects.all()]
     )
 
-
 class BookUpdateForm(forms.ModelForm):
     title = forms.CharField(
         max_length=100,
@@ -53,15 +52,15 @@ class BookUpdateForm(forms.ModelForm):
         label='Ending Date',
         widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local', 'id': 'datetimepicker2'}))
 
-    facilities = forms.MultipleChoiceField(
-        label='Facilities',
+    refreshments = forms.MultipleChoiceField(
+        label='Refreshments',
         widget=forms.CheckboxSelectMultiple,
         choices=[(item.id, item.title) for item in Refreshments.objects.all()]
     )
 
     class Meta:
         model = Booking
-        fields = ['title', 'date_start', 'date_end', 'facilities']
+        fields = ['title', 'date_start', 'date_end', 'refreshments']
 
 
 class EditBookingForm(forms.ModelForm):

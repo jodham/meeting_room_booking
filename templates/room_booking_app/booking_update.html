@@ -29,26 +29,23 @@
 
        <div class="form-group">
           {{ form.date_start.label_tag }}
-          <input type="datetime-local" id="{{ form.date_start.id_for_label }}" name="{{ form.date_start.name }}" class="form-control"
-                 autocomplete="off" readonly required value="{{ form.date_start.value|date:'Y-m-d\TH:i' }}">
+         <input type="text" id="{{ form.date_start.id_for_label }}" name="{{ form.date_start.name }}" class="form-control"
+                 autocomplete="off" readonly required value="{{ form.initial.date_start|date:'Y-m-d\TH:i' }}">
        </div>
-
-
-
 
         <div class="form-group">
           {{ form.date_end.label_tag }}
-          <input type="datetime-local" id="{{ form.date_end.id_for_label }}" name="{{ form.date_end.name }}" class="form-control"
-                 autocomplete="off" readonly required value="{{ form.date_end.value|date:'Y-m-d\TH:i' }}">
+         <input type="text" id="{{ form.date_end.id_for_label }}" name="{{ form.date_end.name }}" class="form-control"
+                 autocomplete="off" readonly required value="{{ form.initial.date_end|date:'Y-m-d\TH:i' }}">
        </div>
         </div>
          <div class="col-md-6 mt-2">
-         <div class="py text-center"><label class="h6">Peripherals</label></div>
+         <div class="py text-center"><label class="h6">Available Peripherals</label></div>
              {%for x in peripherals%}
             <p><input class="bg-info" type="checkbox" checked disabled> {{x.title}}</p>
              {%endfor%}
-         <div class="py text-center"><label class="h6">Refreshments</label></div>
-         <div class="py"><label class="h6 text-danger">NOTE : Bookings that require refreshments should be done a day earlier.</label></div>
+         <div class="py text-center"><label class="h6">Request Refreshments</label></div>
+         <div class="py"><label class="h6 text-danger">NOTE : Bookings that require refreshments should be booked a day earlier.</label></div>
         <div class="form-group">
             {%for item in refreshments%}
           <input type="checkbox"  name="refreshments" value="{{item.id}}">

@@ -2,7 +2,7 @@
 {%load static%}
 {%block title%}dashboard{%endblock title%}
 {%block content%}
-<div class="col-md-12 text-center room-title">Rooms</div>
+<div class="col-md-12 text-center room-title">Facilities</div>
 <div class="room-bookings-card">
     <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
         {%if role == 'administrator'%}
@@ -12,9 +12,9 @@
                 Dashboard
             </a>
         </div>
-        <div class="float-right"><a class="btn add-room-button" href="{%url 'create_room'%}"> Add Room</a></div>
+        <div class="float-right"><a class="btn add-room-button" href="{%url 'create_room'%}"> Add Facility</a></div>
         {%else%}
-        <div class="py-2 float-left text-center h4">Available Rooms</div>
+        <div class="py-2 float-left text-center h4">Facilities</div>
         {%endif%}
     </div>
     <div class="table-responsive">

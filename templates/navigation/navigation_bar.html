@@ -11,9 +11,9 @@
     <ul class="navbar-nav">
      <li class="nav-item">
       {%if role == 'administrator'%}
-         <a class="nav-link text-white" href="{%url 'dashboard'%}">Rooms</a>
+         <a class="nav-link text-white" href="{%url 'dashboard'%}">Facilities</a>
          {%else%}
-         <a class="nav-link text-white" href="{%url 'rooms'%}">Rooms</a>
+         <a class="nav-link text-white" href="{%url 'rooms'%}">Facilities</a>
      {%endif%}
       </li>
          {%if role == 'administrator' or role == 'approver'%}

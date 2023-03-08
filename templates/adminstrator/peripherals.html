@@ -44,7 +44,7 @@
                     {%endif%}
                   </td>
                   <td>
-                      <a class="update_disable_item_link" href="{%url 'update_peripheral' item.pk%}">update</a>
+                      <a class="update_disable_item_link" href="{%url 'update_peripheral' item.pk%}">Edit</a>
                       {%if item.active == 1%}
                       <a class="update_disable_item_link" href="{%url 'activate_deactivate_peripheral' item.pk%}">disable</a>
                       {%else%}

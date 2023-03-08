@@ -18,7 +18,7 @@ urlpatterns = [
     path('room/update/<int:pk>', RoomUpdateView, name='room_update'),
     path('room/active_rooms/', activeRooms, name='rooms'),
 
-
+    path('adminstrator/booking_approval/',  booking_approval_api, name='settings'),
     path('session/', clear_session, name='clear_session')
     # path('book/create_book/', BookCreateView.as_view(), name='book_create')
 ]

@@ -1,0 +1,32 @@
+{%extends 'base/base.html'%}
+{%block title%}profile{%endblock title%}
+{% block content %}
+<div class="col-md-12 text-center bookings-title">Profile Information</div>
+<div class="row profile_content_wrapper">
+<div class="col-md-12">
+      <div class="float-left h6">
+      {%if role == 'administrator'%}
+        <a href="{%url 'room_detail' room.pk%}" class="btn back-to-dashboard-button">
+            <i class="bi bi-arrow-left-circle"></i>
+            Bookings
+        </a>
+        {%else%}
+        <a href="{%url 'room_detail' room.pk%}" class="btn back-to-dashboard-button">
+            <i class="bi bi-arrow-left-circle"></i>
+            Facilities
+        </a>
+      {%endif%}
+    </div>
+</div>
+<div class="col-md-6">
+    <label class="mb-3 h6">Email Address</label><br>
+    <span class="">{{user.email}}</span>
+</div>
+
+<div class="col-md-6">
+    <label class="mb-3 h6">Full Name</label><br>
+    <span class="text-capitalize">{{user.first_name}} {{user.last_name}}</span>
+</div>
+
+</div>
+{% endblock %}

@@ -1,5 +1,5 @@
 {%extends 'base/base.html'%}
-{%block title%}Room-Bookings{%endblock title%}
+{%block title%}Facility-Bookings{%endblock title%}
 {%block content%}
 <div class="col-md-12 text-center bookings-title">Bookings</div>
 <div class="col-md-12 room-bookings-card">
@@ -12,7 +12,7 @@
                 {%else%}
                 <a href="{%url 'rooms'%}" class="btn back-to-dashboard-button">
                     <i class="bi bi-arrow-left-circle"></i>
-                    Rooms
+                    Facilities
                 </a>
               {%endif%}
             </div>
@@ -21,7 +21,7 @@
           <thead>
             <tr>
               <th>No.</th>
-              <th>Meeting Room</th>
+              <th>Facility</th>
               <th>Booked by</th>
               <th>Starting Date</th>
               <th>Ending Date</th>
@@ -34,7 +34,7 @@
           <tr>
               <td>{{forloop.counter}}</td>
               <td>{{book.room_id}}</td>
-              <td>{{book.user_id}}</td>
+              <td class="text-capitalize"><a href="#">{{book.user_id.first_name}}</a></td>
                <td>{{book.date_start}}</td>
                <td>{{book.date_end}}</td>
               <td>{{book.duration_hours}} hrs</td>

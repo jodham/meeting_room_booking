@@ -1,7 +1,7 @@
 {%extends 'base/base.html'%}
 {%block title%}Update Room{%endblock title%}
 {%block content%}
-<div class="update-room-title text-center">Update Room</div>
+<div class="update-room-title text-center">Update Facility</div>
        <form method="post" class="row room-update-form">
               {% if messages %}
                 <ul class="messages">
@@ -20,8 +20,8 @@
             </div>
             {%endfor%}
            <div class="col-md-12 text-center">
-            <button class="btn create-room-submit-btn h5" type="submit">Update Room</button>
+            <button class="btn create-room-submit-btn h5" type="submit">Submit</button>
+                <a class="btn cancel-user-creation-btn ml-4" href="{%url 'dashboard'%}">Cancel</a>
            </div>
-             <a class="update_disable_item_link" href="{%url 'dashboard'%}">Cancel</a>
        </form>
 {%endblock content%}

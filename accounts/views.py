@@ -510,3 +510,15 @@ def edit_refreshment(request, pk):
     templatename = 'adminstrator/edit_refreshment.html'
     context = {'form': form, 'role': role}
     return render(request, templatename, context)
+
+
+def user_profile(request, user_id, room_id):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    user = get_object_or_404(User, pk=user_id)
+    room = get_object_or_404(Rooms, pk=room_id)
+    context = {'user': user, 'role': role, 'room': room}
+    templatename = 'accounts/profile.html'
+    return render(request, templatename, context)

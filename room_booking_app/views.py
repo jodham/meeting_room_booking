@@ -13,6 +13,8 @@ from .controllers import *
 from .forms import RoomForm, BookUpdateForm, EditBookingForm
 from .models import Booking, User, Room_Suspension, Refreshments, Booking_Approval
 from .models import Rooms, Campus, Facility
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
 # Create your views here.
@@ -124,7 +126,7 @@ def room_detail_view(request, pk):
     suspended_days = Room_Suspension.objects.filter(room=room, start_date__gte=current_time)
     suspension_count = suspended_days.count()
 
-    bookings = Booking.objects.filter(room_id_id=pk).order_by('-date_created')
+    bookings = Booking.objects.filter(room_id_id=pk, date_start__gte=current_time).order_by('-date_created')
 
     facility = room.facilities_ids.split(',')
     facilities = Facility.objects.filter(id__in=facility)
@@ -256,31 +258,20 @@ def My_Booking(request):
     return render(request, templatename, context)
 
 
-def reset_booking_requirement(request):
-    if not request.user.is_authenticated:
-        return redirect('signin')
-    if Booking_Approval.need_approval:
-        Booking_Approval.need_approval = False
-        messages.success(request, f'bookings will be approved directly upon submission')
-        return redirect('settings')
+@csrf_exempt
+def booking_approval_api(request):
+    booking_approval = Booking_Approval.objects.first()
+    if request.method == 'POST':
+        need_approval = request.POST.get('need_approval') == 'on'
+        booking_approval.need_approval = need_approval
+        booking_approval.save()
+        return JsonResponse({'success': True, 'need_approval': need_approval})
     else:
-        Booking_Approval.need_approval = True
-        messages.success(request, f'Bookings will require administrator approval')
-        return redirect('settings')
+        need_approval = booking_approval.need_approval
+        return JsonResponse({'success': True, 'need_approval': need_approval})
 
 
-def settings_page(request):
-    if request.user.is_authenticated:
-        role = check_user_role(request.user)
-    else:
-        role = None
-    setting = Booking_Approval.need_approval
-    print(setting)
-    templatename = 'adminstrator/settings.html'
-    context = {'role': role, 'setting': setting}
-    return render(request, templatename, context)
-
-
+"""
 def update_my_booking(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -289,74 +280,108 @@ def update_my_booking(request, pk):
     booking = Booking.objects.get(id=pk)
     user = User.objects.get(email=request.user)
     room = Rooms.objects.get(id=booking.room_id_id)
+
     refreshments = Refreshments.objects.all()
 
     peripheral = room.facilities_ids.split(',')
     peripherals = Facility.objects.filter(id__in=peripheral)
+    extra_peripherals = Facility.objects.exclude(id__in=peripheral)
     form = BookUpdateForm(request.POST, instance=booking)
     if booking.user_id != user:
         messages.error(request, f'No permission to carry out this action')
         return redirect('booking_detail', pk)
+
+    if form.is_valid():
+
+        title = form.cleaned_data.get('title')
+        starting_time = form.cleaned_data.get('starting_time')
+        ending_time = form.cleaned_data.get('ending_time')
+
+        book_starting_time = datetime.datetime.strptime(starting_time, "%Y-%m-%dT%H:%M")
+
+        if starting_time is None:
+            messages.error(request, 'Starting time is required.')
+            return redirect('book_room', pk)
+           
+        # Check if ending_time is greater than starting_time
+        elif ending_time < starting_time:
+            messages.warning(request, f'ending time cannot be less than starting time')
+            return redirect('book_room', pk)
+
+        # Check if the time frame for the booking is not within another approved booking
+        overlapping_bookings = Booking.objects.filter(room_id=room, status=1,
+                                                      date_start__lte=ending_time,
+                                                      date_end__gte=starting_time)
+        if overlapping_bookings.exists():
+            messages.warning(request, f'This room is already booked for this time frame.')
+            return redirect('book_room', pk)
+
+        overlapping_suspension = Room_Suspension.objects.filter(room=room,
+                                                                start_date__lte=ending_time,
+                                                                end_date__gte=starting_time)
+
+        if overlapping_suspension.exists():
+            messages.warning(request, f"Meeting Room is unavailable at this time")
+            return redirect('book_room', pk)
+
+        booking.user_id = user
+        booking.title = title
+        booking.date_start = starting_time
+        booking.date_end = ending_time
+        booking.refreshments = ','.join(form.cleaned_data.get('refreshments'))
+        booking.save()
+        messages.success(request, f'booking updated successfully')
+        return redirect('booking_detail', booking.pk)
     else:
+        form = BookUpdateForm(instance=booking)
 
-        if form.is_valid():
-
-            title = form.cleaned_data.get('title')
-            starting_time = form.cleaned_data.get('starting_time')
-            ending_time = form.cleaned_data.get('ending_time')
-
-            book_starting_time = datetime.datetime.strptime(starting_time, "%Y-%m-%dT%H:%M")
-
-            if starting_time is None:
-                messages.error(request, 'Starting time is required.')
-                return redirect('book_room', pk)
-            # converting datetime to required format
-            book_starting_time = datetime.strptime(starting_time, '%Y-%m-%dT%H:%M')
-
-            # Check if starting_time is greater than current time
-            if book_starting_time < datetime.datetime.now():
-                messages.error(request, 'Start time must be greater than current time.')
-                return redirect('book_room', pk)
-
-            # Check if ending_time is greater than starting_time
-            elif ending_time < starting_time:
-                messages.warning(request, f'ending time cannot be less than starting time')
-                return redirect('book_room', pk)
-
-            # Check if the time frame for the booking is not within another approved booking
-            overlapping_bookings = Booking.objects.filter(room_id=room, status=1,
-                                                          date_start__lte=ending_time,
-                                                          date_end__gte=starting_time)
-            if overlapping_bookings.exists():
-                messages.warning(request, f'This room is already booked for this time frame.')
-                return redirect('book_room', pk)
-
-            overlapping_suspension = Room_Suspension.objects.filter(room=room,
-                                                                    start_date__lte=ending_time,
-                                                                    end_date__gte=starting_time)
-
-            if overlapping_suspension.exists():
-                messages.warning(request, f"Meeting Room is unavailable at this time")
-                return redirect('book_room', pk)
-
-            booking.user_id = user
-            booking.title = title
-            booking.date_start = starting_time
-            booking.date_end = ending_time
-            booking.refreshments = ','.join(form.cleaned_data.get('refreshments'))
-            booking.save()
-            messages.success(request, f'booking updated successfully')
-            return redirect('booking_detail', booking.pk)
-        else:
-            form = BookUpdateForm(instance=booking)
-
-        form.fields['title'].initial = booking.title
+        # form.fields['title'].initial = booking.title
         #
         # form.fields['ending_time'].initial = booking.date_end
         # form.fields['refreshments'].initial = booking.refreshments
 
     templatename = 'room_booking_app/booking_update.html'
-    context = {'role': role, 'form': form, 'peripherals': peripherals, 'refreshments': refreshments}
+    context = {'role': role, 'form': form, 'peripherals': peripherals,
+               'extra_peripherals': extra_peripherals, 'refreshments': refreshments}
+    return render(request, templatename, context)
+"""
+
+
+def update_my_booking(request, pk):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+
+    booking = Booking.objects.get(id=pk)
+    user = User.objects.get(email=request.user)
+    room = Rooms.objects.get(id=booking.room_id_id)
+
+    refreshments = Refreshments.objects.all()
+
+    peripheral = room.facilities_ids.split(',')
+    peripherals = Facility.objects.filter(id__in=peripheral)
+    extra_peripherals = Facility.objects.exclude(id__in=peripheral)
+
+    if booking.user_id != user:
+        messages.error(request, f'No permission to carry out this action')
+        return redirect('booking_detail', pk)
+
+    form = BookUpdateForm(request.POST or None, instance=booking)
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+        messages.success(request, f'Booking updated successfully!')
+        return redirect('booking_detail', pk)
+
+    context = {
+        'form': form,
+        'booking': booking,
+        'peripherals': peripherals,
+        'extra_peripherals': extra_peripherals,
+        'refreshments': refreshments,
+        'role': role,
+    }
+    templatename = 'room_booking_app/booking_update.html'
     return render(request, templatename, context)
 
 

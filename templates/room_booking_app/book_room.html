@@ -9,7 +9,7 @@
          {%if role == 'administrator'%}
            <a href="{%url 'dashboard'%}" class="btn btn-lg back-to-dashboard-button">
              <i class="bi bi-arrow-left-circle"></i>
-             Dashboard
+             Back
          </a>
             {%else%}
             <a href="{%url 'room_detail' room.pk%}" class="btn btn-lg back-to-dashboard-button">
@@ -40,23 +40,10 @@
         </div>
 
          <div class="col-md-6 mt-2">
-         <div class="py text-center"><label class="h6">Available Services</label></div>
+         <div class="py-2"><label class="h6">Available Services</label></div>
              {%for x in facilities%}
             <p><input class="bg-info" type="checkbox" checked disabled> {{x.title}}</p>
              {%endfor%}
-<!--         <div class="py text-center"><label class="h6">Request more Peripherals</label></div>-->
-<!--             {%for item in extra_peripherals%}-->
-<!--             <input type="checkbox"  name="extra-peripherals" value="{{item.id}}">-->
-<!--            <label>{{item.title}}</label><br>-->
-<!--             {%endfor%}-->
-<!--         <div class="py text-center"><label class="h6">Request Refreshments</label></div>-->
-<!--         <div class="py"><label class="h6 text-danger">NOTE : Bookings that require refreshments should be done a day earlier.</label></div>-->
-<!--        <div class="form-group">-->
-<!--            {%for item in refreshments%}-->
-<!--          <input type="checkbox"  name="refreshments" value="{{item.id}}">-->
-<!--            <label>{{item.title}}</label><br>-->
-<!--            {%endfor%}-->
-<!--        </div>-->
 
       <div class="dropdown">
           <button class="btn btn-secondary dropdown-toggle form-control h5" type="button" id="dropdownMenuButton" data-toggle="dropdown"
@@ -70,7 +57,7 @@
                 <label class="ml-4">{{item.title}}</label><br>
               </div>
               {%endfor%}
-              <div class="py-2 px-2"><label class="h6 text-danger">NOTE : Bookings that require refreshments should be done a day earlier.</label></div>
+              <div class="py-2 px-2"><label class="h6 text-danger">NOTE : Bookings that require below services should be done a day earlier.</label></div>
               {%for item in refreshments%}
               <div class="dropdown-item">
                   <input type="checkbox" id="option1" name="refreshments" value="{{item.id}}">

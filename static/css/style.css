@@ -472,10 +472,9 @@ main {
 }
 .profile_content_wrapper{
     margin-top: 1.0rem;
-    margin-left: 1.5rem;
-    margin-right: 1.5rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
     padding: 0.5rem;
-    width: 100%;
     min-height: 15rem;
     border-radius: 5px;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;

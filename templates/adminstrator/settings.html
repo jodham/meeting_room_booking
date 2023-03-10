@@ -1,36 +1,39 @@
-{%extends 'base/base.html'%}
-{%block title%}settings{%endblock title%}
+{% extends 'base/base.html' %}
+{% block title %}Settings{% endblock title %}
 {% block content %}
-<div class="py-3 text-center h4 users-page-title">Change settings</div>
-  <form id="booking-approval-form" class="row settings_content_wrapper">
-    {% csrf_token %}
-    <label>
-      <input type="checkbox" name="need_approval" {% if booking_approval.need_approval %}checked{% endif %}>
-      set bookings to require administrator approval
-    </label>
-  </form>
-{% endblock %}
+<div class="py-3 text-center h4 users-page-title">All settings</div>
+<div id="booking-approval-form" class="row settings_content_wrapper">
+    <form id="approval-form">
+        {% csrf_token %}
+        <input type="checkbox" id="approval-checkbox" name="approval-checkbox" {% if approval_setting and approval_setting.need_approval %}checked{% endif %}>
+        <label style="font-weight: bold;">Enable Administrator approval on facility booking</label>
+    </form>
+</div>
+<script>
+const approvalCheckbox = document.querySelector('#approval-checkbox');
+const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
 
-{% block script %}
-  <script>
-    const form = document.querySelector('#booking-approval-form');
-    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+if (localStorage.getItem('approvalCheckboxState') === 'true') {
+  approvalCheckbox.checked = true;
+}
 
-    form.addEventListener('change', event => {
-      event.preventDefault();
-      const formData = new FormData(form);
-      fetch('{% url "booking_approval_api" %}', {
-        method: 'POST',
-        headers: {'X-CSRFToken': csrftoken},
-        body: formData
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          console.log(`Need approval status: ${data.need_approval}`);
-        }
-      })
-      .catch(error => console.error(error));
-    });
-  </script>
+approvalCheckbox.addEventListener('change', (event) => {
+  const isChecked = event.target.checked;
+  localStorage.setItem('approvalCheckboxState', isChecked);
+
+  const xhr = new XMLHttpRequest();
+  xhr.open('PUT', '/update_approval_setting/');
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.setRequestHeader('X-CSRFToken', csrfToken);
+  xhr.onload = () => {
+    if (xhr.status === 200) {
+      console.log('Checkbox state updated successfully');
+    } else {
+      console.error('Failed to update checkbox state');
+    }
+  };
+  xhr.send(JSON.stringify({ need_approval: isChecked }));
+});
+
+</script>
 {% endblock %}

@@ -8,7 +8,7 @@
       {%if role == 'administrator'%}
         <a href="{%url 'room_detail' room.pk%}" class="btn back-to-dashboard-button">
             <i class="bi bi-arrow-left-circle"></i>
-            Bookings
+            Back
         </a>
         {%else%}
         <a href="{%url 'room_detail' room.pk%}" class="btn back-to-dashboard-button">
@@ -18,12 +18,12 @@
       {%endif%}
     </div>
 </div>
-<div class="col-md-6">
+<div class="col-md-6 shadow-lg">
     <label class="mb-3 h6">Email Address</label><br>
-    <span class="">{{user.email}}</span>
+    <span class="mr-2">{{user.email}}</span>
 </div>
 
-<div class="col-md-6">
+<div class="col-md-6 shadow-lg">
     <label class="mb-3 h6">Full Name</label><br>
     <span class="text-capitalize">{{user.first_name}} {{user.last_name}}</span>
 </div>

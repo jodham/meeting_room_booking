@@ -75,6 +75,8 @@ class BookUpdateForm(forms.ModelForm):
         initial['extra_peripherals'] = True
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
+
+
 class EditBookingForm(forms.ModelForm):
     title = forms.CharField(max_length=100)
     date_start = forms.DateTimeField()

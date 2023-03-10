@@ -1,21 +1,23 @@
 # from django.shortcuts import render, redirect
 import datetime
-from datetime import time, date, timedelta, datetime
+import json
+from datetime import time, datetime
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
-from django.shortcuts import render, redirect
+from django.http import JsonResponse, HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.utils import timezone
-# from django.shortcuts import render, redirect
-from django.views.generic import DetailView, UpdateView
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 
 from .controllers import *
-from .forms import RoomForm, BookUpdateForm, EditBookingForm
+from .forms import RoomForm, BookUpdateForm
 from .models import Booking, User, Room_Suspension, Refreshments, Booking_Approval
 from .models import Rooms, Campus, Facility
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 
+
+# from django.shortcuts import render, redirect
 
 # Create your views here.
 def index(request):
@@ -167,8 +169,6 @@ def book_room(request, pk):
         for hour in range(start_hour, end_hour):
             times_booked.append(hour)
 
-    refreshment_ids = []
-
     if request.method == "POST":
         title = request.POST.get('title')
         starting_time = request.POST.get('starting-date')
@@ -200,6 +200,14 @@ def book_room(request, pk):
         overlapping_suspension = Room_Suspension.objects.filter(room=room,
                                                                 start_date__lte=ending_time,
                                                                 end_date__gte=starting_time)
+        """" send email
+        subject='Facility Booking Confirmation'
+        message = 'Dear {0}, \n\nThank you for booking facility {1} on {2}. Your booking has been confirmed.'.format(
+            user.name, facility.name, booking.date)
+        from_email = 'your_email@gmail.com'
+        recipient_list = [user.email]
+        send_mail(subject, message, from_email, recipient_list)
+        """
 
         if overlapping_suspension.exists():
             messages.warning(request, f"Meeting Room is unavailable at this time")
@@ -260,15 +268,13 @@ def My_Booking(request):
 
 @csrf_exempt
 def booking_approval_api(request):
-    booking_approval = Booking_Approval.objects.first()
-    if request.method == 'POST':
-        need_approval = request.POST.get('need_approval') == 'on'
-        booking_approval.need_approval = need_approval
-        booking_approval.save()
-        return JsonResponse({'success': True, 'need_approval': need_approval})
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
     else:
-        need_approval = booking_approval.need_approval
-        return JsonResponse({'success': True, 'need_approval': need_approval})
+        role = None
+    booking_approval = Booking_Approval.objects.first()
+
+    return render(request, 'adminstrator/settings.html', {'booking_approval': booking_approval, 'role': role})
 
 
 """
@@ -394,3 +400,15 @@ def booking_detail_view(request, pk):
     templatename = 'room_booking_app/booking_detail.html'
     context = {'booking': booking, "role": role}
     return render(request, templatename, context)
+
+
+@require_http_methods(['PUT'])
+def update_booking_approval_status(request):
+    data = json.loads(request.body)
+    need_approval = data.get('need_approval', False)
+    approval_setting = Booking_Approval.objects.first()
+    if not approval_setting:
+        approval_setting = Booking_Approval(need_approval=need_approval)
+    approval_setting.need_approval = need_approval
+    approval_setting.save()
+    return JsonResponse({'status': 'success'})

@@ -7,14 +7,14 @@
     <form method="post" class="row book_room_form">
         <div class="col-md-12 m-2">
              {%if role == 'administrator'%}
-               <a href="{%url 'dashboard'%}" class="btn btn-lg back-to-dashboard-button">
+               <a href="{%url 'booking_detail' booking.pk%}" class="btn btn-lg back-to-dashboard-button">
                  <i class="bi bi-arrow-left-circle"></i>
-                 Dashboard
+                 Back
              </a>
                 {%else%}
-                <a href="{%url 'rooms'%}" class="btn btn-lg back-to-dashboard-button">
+                <a href="{%url 'booking_detail' booking.pk%}" class="btn btn-lg back-to-dashboard-button">
                  <i class="bi bi-arrow-left-circle"></i>
-                 Rooms
+                 Back
              </a>
                 {%endif%}
         </div>
@@ -40,26 +40,42 @@
        </div>
         </div>
          <div class="col-md-6 mt-2">
-         <div class="py text-center"><label class="h6">Available Peripherals</label></div>
+         <div class="py-2"><label class="h6">Available Services</label></div>
              {%for x in peripherals%}
             <p><input class="bg-info" type="checkbox" checked disabled> {{x.title}}</p>
              {%endfor%}
-         <div class="py text-center"><label class="h6">Request more Peripherals</label></div>
-                {%for item in extra_peripherals%}
-          <input type="checkbox"  name="extra_peripherals" value="{{item.id}}">
-            <label>{{item.title}}</label><br>
-            {%endfor%}
 
-         <div class="py text-center"><label class="h6">Request Refreshments</label></div>
-         <div class="py"><label class="h6 text-danger">NOTE : Bookings that require refreshments should be booked a day earlier.</label></div>
-        <div class="form-group">
-            {%for item in refreshments%}
-          <input type="checkbox"  name="refreshments" value="{{item.id}}">
-            <label>{{item.title}}</label><br>
-            {%endfor%}
-        </div>
+        <div class="dropdown mt-4">
+          <button class="btn btn-secondary dropdown-toggle form-control h5" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+              Request Services
+          </button>
 
+        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+           {% for choice in form.extra_peripherals %}
+           <div class="dropdown-item">
+                <div class="form-check">
+                    {{ choice }}
+                </div>
+           </div>
+           {% endfor %}
+             <div class="py-2 px-2">
+                 <label class="h6 text-danger">NOTE : Bookings that require below services should be done a day earlier.</label>
+             </div>
+        {% for choice in form.refreshments %}
+           <div class="dropdown-item">
+                <div class="form-check">
+                    {{ choice }}
+                </div>
         </div>
+       {% endfor %}
+       </div>
+      </div>
+
+       </div>
+
+
+
 
         <div class="col-md-12 text-center mt-2">
         <button class="btn btn-secondary book-room-btn h5" id="book-room-button"  type="submit">Submit</button>

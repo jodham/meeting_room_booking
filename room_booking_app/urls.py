@@ -19,6 +19,7 @@ urlpatterns = [
     path('room/active_rooms/', activeRooms, name='rooms'),
 
     path('adminstrator/booking_approval/',  booking_approval_api, name='settings'),
-    path('session/', clear_session, name='clear_session')
+    path('session/', clear_session, name='clear_session'),
+    path('update_approval_setting/', update_booking_approval_status, name='update_booking_approval_status'),
     # path('book/create_book/', BookCreateView.as_view(), name='book_create')
 ]

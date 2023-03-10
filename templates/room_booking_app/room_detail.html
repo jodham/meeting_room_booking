@@ -9,12 +9,12 @@
               {%if role == 'administrator'%}
                 <a href="{%url 'dashboard'%}" class="btn back-to-dashboard-button">
                       <i class="bi bi-arrow-left-circle"></i>
-                    Facilities
+                    Back
                 </a>
                 {%else%}
                  <a href="{%url 'rooms'%}" class="btn back-to-dashboard-button">
                            <i class="bi bi-arrow-left-circle"></i>
-                    Facilities
+                    Back
                  </a>
               {%endif%}
           </div>
@@ -28,7 +28,7 @@
           {%if room.is_active == 1%}
        <div class="py-2 float-right">
            <a href="{%url 'book_room' room.pk%}" class="btn book-room-button">
-               Book Room
+               Book Facility
            </a>
        </div>
           {%else%}
@@ -81,7 +81,7 @@
 <div class="col-md-6">
    <div class="row shadow-lg mx-2 mt-2">
        <div class="col text-center facilities-title-text h4">
-           Facilities
+           Services
        </div>
    </div>
     <div class="row shadow-sm mx-2 mt-2">

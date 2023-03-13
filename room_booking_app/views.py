@@ -130,8 +130,13 @@ def room_detail_view(request, pk):
 
     bookings = Booking.objects.filter(room_id_id=pk, date_start__gte=current_time).order_by('-date_created')
 
-    facility = room.facilities_ids.split(',')
-    facilities = Facility.objects.filter(id__in=facility)
+    facilities_ids = room.facilities_ids
+
+    if facilities_ids:
+        facility = room.facilities_ids.split(',')
+        facilities = Facility.objects.filter(id__in=facility)
+    else:
+        facilities = []
 
     templatename = 'room_booking_app/room_detail.html'
     context = {"room": room, 'pk': pk, 'bookings': bookings, 'current_time': current_time,
@@ -150,10 +155,14 @@ def book_room(request, pk):
     bookings = Booking.objects.filter(room_id_id=pk)
     refreshments = Refreshments.objects.all()
     booked_by = User.objects.get(email=request.user)
-    facility = room.facilities_ids.split(',')
-    facilities = Facility.objects.filter(id__in=facility)
-    extra_peripherals = Facility.objects.exclude(id__in=facility)
-    approval_settings = Booking_Approval.need_approval
+    facilities_ids = room.facilities_ids
+    if facilities_ids:
+        facility = room.facilities_ids.split(',')
+        facilities = Facility.objects.filter(id__in=facility)
+        extra_peripherals = Facility.objects.exclude(id__in=facility)
+    else:
+        facilities = []
+        extra_peripherals = Facility.objects.all()
 
     time_now = timezone.localtime()
 
@@ -212,9 +221,9 @@ def book_room(request, pk):
         if overlapping_suspension.exists():
             messages.warning(request, f"Meeting Room is unavailable at this time")
             return redirect('book_room', pk)
-        status = Booking.STATUS_PENDING  # set default status
-        if not approval_settings:
-            status = Booking.STATUS_APPROVED
+
+        # set default status
+        approval_settings = Booking_Approval.objects.first()
 
         new_bookings = Booking()
         new_bookings.room_id = room
@@ -222,7 +231,7 @@ def book_room(request, pk):
         new_bookings.refreshments = ','.join(request.POST.getlist('refreshments'))
         new_bookings.extra_peripherals = ','.join(request.POST.getlist('extra-peripherals'))
         new_bookings.title = title
-        new_bookings.status = status
+        new_bookings.status = Booking.STATUS_APPROVED if not approval_settings.need_approval else Booking.STATUS_PENDING
         new_bookings.date_start = starting_time
         new_bookings.date_end = ending_time
         new_bookings.save()
@@ -358,26 +367,39 @@ def update_my_booking(request, pk):
         role = check_user_role(request.user)
     else:
         role = None
-
-    booking = Booking.objects.get(id=pk)
+    booking = get_object_or_404(Booking, id=pk)
     user = User.objects.get(email=request.user)
     room = Rooms.objects.get(id=booking.room_id_id)
 
     refreshments = Refreshments.objects.all()
 
-    peripheral = room.facilities_ids.split(',')
-    peripherals = Facility.objects.filter(id__in=peripheral)
-    extra_peripherals = Facility.objects.exclude(id__in=peripheral)
+    peripherals_ids = room.facilities_ids
+    if peripherals_ids:
+        peripheral = room.facilities_ids.split(',')
+        peripherals = Facility.objects.filter(id__in=peripheral)
+        extra_peripherals = Facility.objects.exclude(id__in=peripheral)
+    else:
+        peripherals = []
+        extra_peripherals = Facility.objects.all()
 
     if booking.user_id != user:
         messages.error(request, f'No permission to carry out this action')
         return redirect('booking_detail', pk)
 
-    form = BookUpdateForm(request.POST or None, instance=booking)
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-        messages.success(request, f'Booking updated successfully!')
-        return redirect('booking_detail', pk)
+    if request.method == 'POST':
+        form = BookUpdateForm(request.POST, instance=booking)
+        if form.is_valid():
+            booking = form.save(commit=False)
+            booking.save()
+            print('Form is valid')
+            messages.success(request, f'Booking updated successfully!')
+            return redirect('booking_detail', pk)
+        else:
+            print('Form is invalid')
+            print(form.errors)
+            print(request.POST)
+    else:
+        form = BookUpdateForm(instance=booking)
 
     context = {
         'form': form,

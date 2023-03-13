@@ -51,31 +51,25 @@
               Request Services
           </button>
 
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-           {% for choice in form.extra_peripherals %}
-           <div class="dropdown-item">
-                <div class="form-check">
-                    {{ choice }}
-                </div>
-           </div>
-           {% endfor %}
-             <div class="py-2 px-2">
-                 <label class="h6 text-danger">NOTE : Bookings that require below services should be done a day earlier.</label>
-             </div>
-        {% for choice in form.refreshments %}
-           <div class="dropdown-item">
-                <div class="form-check">
-                    {{ choice }}
-                </div>
+       <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {% for choice in form.extra_peripherals %}
+            <div class="dropdown-item">
+                {{ choice }}
+            </div>
+            {% endfor %}
+            <div class="py-2 px-2">
+                <label class="h6 text-danger">NOTE : Bookings that require below services should be done a day earlier.</label>
+            </div>
+            {% for choice in form.refreshments %}
+            <div class="form-check">
+                {{ choice }}
+            </div>
+            {% endfor %}
         </div>
-       {% endfor %}
-       </div>
+
       </div>
 
        </div>
-
-
-
 
         <div class="col-md-12 text-center mt-2">
         <button class="btn btn-secondary book-room-btn h5" id="book-room-button"  type="submit">Submit</button>

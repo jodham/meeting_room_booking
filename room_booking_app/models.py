@@ -37,7 +37,7 @@ class UserManager(BaseUserManager):
 
 
 class Roles(models.Model):
-    role_name = models.CharField(max_length=30)
+    role_name = models.CharField(max_length=100)
     data_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
@@ -46,9 +46,12 @@ class Roles(models.Model):
 
 
 class Refreshments(models.Model):
-    title = models.CharField(max_length=30)
+    title = models.CharField(max_length=100)
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.title
 
 
 class User(AbstractBaseUser):
@@ -139,7 +142,7 @@ class Rooms(models.Model):
     capacity = models.IntegerField()
     date_created = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
-    facilities_ids = models.CharField(max_length=255, default='', blank=True)
+    facilities_ids = models.CharField(max_length=255, null=True, blank=True)
     is_active = models.BooleanField(default=True)
 
     def __str__(self):

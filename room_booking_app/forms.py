@@ -53,28 +53,43 @@ class BookUpdateForm(forms.ModelForm):
         label='Ending Date',
         widget=forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local', 'id': 'datetimepicker2'}))
 
-    extra_peripherals = forms.MultipleChoiceField(
-        label='Extra Peripherals',
+    extra_peripherals = forms.ModelMultipleChoiceField(
+        queryset=Facility.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        choices=[(item.id, item.title) for item in Facility.objects.all()]
+        required=False,
+    )
+    refreshments = forms.ModelMultipleChoiceField(
+        queryset=Refreshments.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
     )
 
-    refreshments = forms.MultipleChoiceField(
-        label='Refreshments',
-        widget=forms.CheckboxSelectMultiple,
-        choices=[(item.id, item.title) for item in Refreshments.objects.all()]
-    )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        booking = self.instance
+
+        available_peripherals = Facility.objects.filter(active=True)
+        available_refreshments = Refreshments.objects.all()
+
+        self.fields['extra_peripherals'].queryset = available_peripherals
+        self.fields['refreshments'].queryset = available_refreshments
+
+        if booking:
+            extra_peripheral_ids = []
+            if booking.extra_peripherals:
+                extra_peripheral_ids = [int(pk) for pk in booking.extra_peripherals.split(',') if pk]
+            self.fields['extra_peripherals'].initial = available_peripherals.filter(id__in=extra_peripheral_ids)
+
+            refreshment_ids = []
+            if booking.refreshments:
+                refreshment_ids = [int(pk) for pk in booking.refreshments.split(',') if pk]
+            self.fields['refreshments'].initial = available_refreshments.filter(id__in=refreshment_ids)
 
     class Meta:
         model = Booking
         fields = ['title', 'date_start', 'date_end', 'extra_peripherals', 'refreshments']
 
-    def __init__(self, *args, **kwargs):
-        initial = kwargs.get('initial', {})
-        initial['refreshments'] = True
-        initial['extra_peripherals'] = True
-        kwargs['initial'] = initial
-        super().__init__(*args, **kwargs)
+
 
 
 class EditBookingForm(forms.ModelForm):

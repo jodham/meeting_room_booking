@@ -7,20 +7,20 @@
               {%if role == 'adminstrator'%}
                 <a href="{%url 'adminstrator_page'%}" class="btn back-to-dashboard-button">
                     <i class="bi bi-arrow-left-circle"></i>
-                    Dashboard
+                    Back
                 </a>
                 {%else%}
                 <a href="{%url 'rooms'%}" class="btn back-to-dashboard-button">
                     <i class="bi bi-arrow-left-circle"></i>
-                    Rooms
+                    Back
                 </a>
               {%endif%}
             </div>
      <table class="table table-striped table-bordered data-table">
           <thead>
             <tr>
-                <th scope="col">No.</th>
-                <th scope="col">Meeting Room</th>
+                <th scope="col">#</th>
+                <th scope="col">Facility</th>
                 <th scope="col">Starting Date</th>
                 <th scope="col">Ending Date</th>
                  <th scope="col">Duration</th>

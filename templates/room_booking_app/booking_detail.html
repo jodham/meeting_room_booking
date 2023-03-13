@@ -41,6 +41,20 @@
         <label class="h5 bold"> Booked by </label>
         <p class="meeting"> {{booking.user_id}}</p>
 
+         <label class="h5 bold">Services Requested</label>
+        <p>
+            {%for item in refreshments%}
+            <input type="checkbox" checked disabled>
+            {{item.title}}
+            {%endfor%}
+        </p>
+        <p>
+            <input type="checkbox" checked disabled>
+            {%for item in peripherals%}
+            {{item.title}}
+            {%endfor%}
+        </p>
+
          <label class="h5 bold">Date Booked</label>
         <p class="meeting">{{booking.date_created}}</p>
 

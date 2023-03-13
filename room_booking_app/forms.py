@@ -74,22 +74,30 @@ class BookUpdateForm(forms.ModelForm):
         self.fields['extra_peripherals'].queryset = available_peripherals
         self.fields['refreshments'].queryset = available_refreshments
 
-        if booking:
-            extra_peripheral_ids = []
-            if booking.extra_peripherals:
+        extra_peripheral_ids = []
+        if booking.extra_peripherals:
+            if isinstance(booking.extra_peripherals, str):
                 extra_peripheral_ids = [int(pk) for pk in booking.extra_peripherals.split(',') if pk]
-            self.fields['extra_peripherals'].initial = available_peripherals.filter(id__in=extra_peripheral_ids)
+            else:
+                extra_peripheral_ids = list(booking.extra_peripherals.values_list('id', flat=True))
+        self.fields['extra_peripherals'].initial = available_peripherals.filter(id__in=extra_peripheral_ids)
 
-            refreshment_ids = []
-            if booking.refreshments:
-                refreshment_ids = [int(pk) for pk in booking.refreshments.split(',') if pk]
-            self.fields['refreshments'].initial = available_refreshments.filter(id__in=refreshment_ids)
+        if not extra_peripheral_ids:
+            self.fields['extra_peripherals'].initial = None
+
+        refreshments_ids = []
+        if booking.refreshments:
+            if isinstance(booking.refreshments, str):
+                refreshments_ids = [int(pk) for pk in booking.refreshments.split(',') if pk]
+            else:
+                refreshments_ids = list(booking.refreshments.value_list('id', flat=True))
+            self.fields['refreshments'].initial = available_refreshments.filter(id__in=refreshments_ids)
+        if not refreshments_ids:
+            self.fields['refreshments'].initial = None
 
     class Meta:
         model = Booking
         fields = ['title', 'date_start', 'date_end', 'extra_peripherals', 'refreshments']
-
-
 
 
 class EditBookingForm(forms.ModelForm):

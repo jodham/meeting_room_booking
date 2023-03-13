@@ -139,7 +139,7 @@
           {%for book in bookings%}
 
           <tr>
-              <td class="text-capitalize"><a href="{%url 'profile' room_id=room.pk user_id=book.user_id.pk%}">{{book.user_id.first_name}}  {{book.user_id.last_name}}</a></td>
+              <td class="text-capitalize"><a href="{%url 'profile' room_id=room.pk user_id=book.user_id.pk%}">{{book.user_id.first_name}} {{book.user_id.last_name}}</a></td>
               <td class="text-capitalize">{{book.title}}</td>
               <td>{{book.date_start}}</td>
               <td>{{book.date_end}}</td>

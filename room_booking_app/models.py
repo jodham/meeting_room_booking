@@ -2,8 +2,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
-from accounts.validators import validate_zetech_email
-
+from phonenumber_field.modelfields import PhoneNumberField
 
 # Create your models here.
 
@@ -63,6 +62,7 @@ class User(AbstractBaseUser):
     first_name = models.CharField(verbose_name='first name', max_length=50)
     last_name = models.CharField(verbose_name='last name', max_length=50)
     active = models.BooleanField(default=True)
+    phone_number = PhoneNumberField(blank=True, null=True)
     is_admin = models.BooleanField(default=False)
     role = models.CharField(max_length=255, default=3)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -86,24 +86,6 @@ class User(AbstractBaseUser):
 
     def full_name(self):
         return f"{self.first_name} {self.last_name}"
-
-
-"""
-    # def get_role_name(self):
-    #     role_ids = [int(rid) for rid in self.role.split(',')]
-    #     roles = Roles.objects.filter(id__in=role_ids)
-    #     role_names = [role.role_name for role in roles]
-    # 
-    #     if role_names == ['default']:
-    #         return 'default'
-    #     elif role_names == ['default', 'approver']:
-    #         return 'approver'
-    #     elif role_names == ['default', 'approver', 'admin']:
-    #         return 'admin'
-    #     else:
-    #         return 'default'
-
-"""
 
 
 class Campus(models.Model):
@@ -184,8 +166,8 @@ class Booking(models.Model):
     room_id = models.ForeignKey(Rooms, on_delete=models.CASCADE)
     user_id = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bookings_created")
     title = models.CharField(max_length=100)
-    refreshments = models.CharField(max_length=30, null=True)
-    extra_peripherals = models.CharField(max_length=30, null=True)
+    refreshments = models.CharField(max_length=100, null=True)
+    extra_peripherals = models.CharField(max_length=100, null=True)
     reject_reason = models.TextField(null=True)
     status = models.PositiveSmallIntegerField(choices=STATUS_CHOICES, default=STATUS_PENDING)
     actioned_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='bookings_actioned')

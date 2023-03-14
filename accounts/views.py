@@ -1,5 +1,6 @@
 import datetime
 
+import phonenumbers
 from django.contrib import messages
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth import authenticate, login, logout
@@ -121,18 +122,24 @@ def add_user(request):
     if request.method == 'POST':
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
+        phone = request.POST.get('phone')
         last_name = request.POST.get('last_name')
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
+
+        parsed_number = phonenumbers.parse(phone, "KE")
         if not email.endswith('@zetech.ac.ke'):
-            messages.error(request, f'Invalid email, email must end with .@zetech.ac.ke')
+            messages.warning(request, f'Invalid email, email must end with .@zetech.ac.ke')
+
+        elif not phonenumbers.is_valid_number(parsed_number):
+            messages.warning(request, f'invalid phonenumber check')
         elif available_users.filter(email=email).exists():
-            messages.error(request, f'user with that email already exists')
+            messages.warning(request, f'user with that email already exists')
         elif password1 != password2:
-            messages.error(request, f'Passwords do not match, Please check')
+            messages.warning(request, f'Passwords do not match, Please check')
         else:
             user = User.objects.create_user(email=email, password=password1, first_name=first_name,
-                                            last_name=last_name)
+                                            last_name=last_name, phone_number=phone)
             messages.success(request, f'User created successfully!')
             return redirect('system_users')
     templatename = 'accounts/register.html'
@@ -521,4 +528,14 @@ def user_profile(request, user_id, room_id):
     room = get_object_or_404(Rooms, pk=room_id)
     context = {'user': user, 'role': role, 'room': room}
     templatename = 'accounts/profile.html'
+    return render(request, templatename, context)
+
+
+def reports(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    context = {'role': role}
+    templatename = 'accounts/reports.html'
     return render(request, templatename, context)

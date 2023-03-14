@@ -1,22 +1,27 @@
 from django.contrib.auth.forms import UserCreationForm
 from django import forms
 from room_booking_app.models import User, Roles, Facility, Rooms, Facility_Category, Campus, Refreshments
+from phonenumber_field.formfields import PhoneNumberField
 
 
 class CreateUserAccount(UserCreationForm):
     email = forms.EmailField()
+    phone_number = PhoneNumberField(region="KE")
 
     class Meta:
         model = User
-        fields = ['email', 'first_name', 'last_name', 'password1', 'password2']
+        fields = ['email', 'first_name', 'last_name', 'phone_number', 'password1', 'password2']
 
 
+"""
 class create_user(UserCreationForm):
     email = forms.EmailField()
+    phone_number =
 
     class Meta:
         model = User
         fields = ['email', 'first_name', 'last_name', 'password1', 'password2']
+"""
 
 
 class UserUpdateForm(forms.Form):

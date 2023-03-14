@@ -21,6 +21,14 @@
             </div>
         </div>
 
+         <div class="col-md-6 mt-2">
+            <label for="phone">Phone number:</label>
+            <div class="form-group">
+                <input type="tel" class="form-control" id="phone" name="phone" placeholder="XXX XXX XXX" pattern="\+254\d{9}" required>
+
+            </div>
+        </div>
+
         <div class="col-md-6 mt-2">
             <label class="h6">First Name</label>
             <div class="form-group">
@@ -28,17 +36,17 @@
             </div>
         </div>
 
-        <div class="col-md-6 mt-2">
-            <label class="h6">Password</label>
+         <div class="col-md-6 mt-2">
+            <label class="h6">Last Name</label>
             <div class="form-group">
-              <input type="password" required autofocus name="password1" placeholder='password' class="form-control">
+              <input type="text" required autofocus name="last_name" placeholder='last_name' class="form-control">
             </div>
         </div>
 
         <div class="col-md-6 mt-2">
-            <label class="h6">Last Name</label>
+            <label class="h6">Password</label>
             <div class="form-group">
-              <input type="text" required autofocus name="last_name" placeholder='last_name' class="form-control">
+              <input type="password" required autofocus name="password1" placeholder='password' class="form-control">
             </div>
         </div>
 
@@ -54,5 +62,18 @@
         <button class="btn btn-secondary loginbtn h5" type="submit">Submit</button>
     </div>
 </form>
+<script>
+$(document).ready(function() {
+  // Add formatting to phone number input
+  $('#phone').on('input', function() {
+    var phoneNumber = $(this).val();
+    phoneNumber = phoneNumber.replace(/\D/g, ''); // Remove all non-numeric characters
+    if (phoneNumber.length >= 9) {
+      phoneNumber = '+254' + phoneNumber.substr(-9); // Prepend +254 to phone number
+    }
+    $(this).val(phoneNumber);
+  });
+});
 
+</script>
 {%endblock content%}

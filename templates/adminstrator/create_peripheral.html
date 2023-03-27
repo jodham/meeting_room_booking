@@ -5,24 +5,26 @@
   <div class="create-peripheral-title text-center">Create Peripheral</div>
 
   <form method="post" class="row create_peripheral_form">
+    <div class="col-md-12">
+      <a href="{%url 'peripherals'%}" class="btn cancel-user-creation-button text-white fw-bold">Back</a>
+    </div>
     {% csrf_token %}
 
-    <div class="col-md-6">
+    <div class="col-md-6 mt-3">
       <div class="form-group">
-        {{ form.title.label_tag }}
+        <p class="h5 fw-bold"> {{ form.title.label_tag }}</p>
         {{ form.title }}
       </div>
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-6 mt-3">
       <div class="form-group">
-        {{ form.category.label_tag }}
+        <p class="h5 fw-bold"> {{ form.category.label_tag }}</p>
         {{ form.category }}
       </div>
     </div>
     <div class="col-md-12 text-center mt-4">
     <button type="submit" class="btn loginbtn">Submit</button>
-       <a href="{%url 'peripherals'%}" class="btn cancel-user-creation-button text-white ml-4">Cancel</a>
     </div>
   </form>
 {% endblock content %}

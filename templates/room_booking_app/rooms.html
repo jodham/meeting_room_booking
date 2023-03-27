@@ -55,11 +55,16 @@
                           <a href="{%url 'room_detail' room.pk%}" class="dropdown-item">View</a>
                           {%if role == "administrator"%}
                           <a href="{%url 'room_update' room.id%}" class="dropdown-item update_disable_item_link">Edit</a>
-                          <a href="{%url 'suspend_room' room.id%}" class="dropdown-item update_disable_item_link">Suspend</a>
+                          <a href="{%url 'suspend_room' room.id%}"
+                             class="dropdown-item update_disable_item_link">Suspend</a>
                           {%if room.is_active == 1%}
-                          <a href="{%url 'activate_deactivate_room' room.pk%}" class="dropdown-item update_disable_item_link">Disable</a>
+                          <a href="{%url 'activate_deactivate_room' room.pk%}"
+                              onclick="return confirm('Are you sure you want to Disable this Facility?');"
+                             class="dropdown-item update_disable_item_link">Disable</a>
                           {%else%}
-                          <a href="{%url 'activate_deactivate_room' room.pk%}" class="dropdown-item activate_item_link">activate</a>
+                          <a href="{%url 'activate_deactivate_room' room.pk%}"
+                              onclick="return confirm('Are you sure you want to activate this Facility?');"
+                             class="dropdown-item activate_item_link">activate</a>
                           {%endif%}
                            {%endif%}
                       </div>

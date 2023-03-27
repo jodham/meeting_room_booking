@@ -3,6 +3,7 @@ $(document).ready(function() {
         responsive: true,
     });
 
+
     var table = $('#table_id').DataTable({
         responsive: true,
     });

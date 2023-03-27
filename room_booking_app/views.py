@@ -100,10 +100,10 @@ def RoomUpdateView(request, pk):
         room.save()
         return redirect('dashboard')
 
-    form.fields['location'].initial = room.location
-    form.fields['title'].initial = room.title
-    form.fields['capacity'].initial = room.capacity
-    form.fields['facilities'].initial = facilities_ids
+    form.fields['Location'].initial = room.location
+    form.fields['Title'].initial = room.title
+    form.fields['Capacity'].initial = room.capacity
+    form.fields['Peripherals'].initial = facilities_ids
 
     return render(request, 'room_booking_app/update_room.html', {'form': form, 'facilities': facilities, 'role': role})
 
@@ -349,7 +349,7 @@ def update_my_booking(request, pk):
             booking.title = title
             booking.date_start = starting_time
             booking.date_end = ending_time
-            booking.refreshments = ','.join(str(refreshment) for refreshment in form.cleaned_data['refreshments'])
+            booking.refreshments = ','.join(str(refreshment.id) for refreshment in form.cleaned_data['refreshments'])
 
             booking.save()
             messages.success(request, f'booking updated successfully')

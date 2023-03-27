@@ -7,9 +7,9 @@
             <div class="justify-content-between h3 d-flex align-items-center py-2 text-center">
                 {%if role == 'administrator'%}
                 <div class="float-left text-center h6">
-                    <a href="{%url 'adminstrator_page'%}" class="btn btn-lg">
+                    <a href="{%url 'adminstrator_page'%}" class="btn btn-lg loginbtn text-white">
                         <i class="bi bi-arrow-left-circle"></i>
-                        Dashboard
+                        Back
                     </a>
                 </div>
                 <div class="float-right"><a class="btn btn-lg add-peripheral-btn" href="{%url 'create_peripheral'%}"> Add Peripheral</a></div>
@@ -46,9 +46,13 @@
                   <td>
                       <a class="update_disable_item_link" href="{%url 'update_peripheral' item.pk%}">Edit</a>
                       {%if item.active == 1%}
-                      <a class="update_disable_item_link" href="{%url 'activate_deactivate_peripheral' item.pk%}">disable</a>
+                      <a class="update_disable_item_link"
+                         onclick="return confirm('Are you sure you want to Disable this Peripheral?');"
+                         href="{%url 'activate_deactivate_peripheral' item.pk%}">disable</a>
                       {%else%}
-                      <a class="activate_item_link" href="{%url 'activate_deactivate_peripheral' item.pk%}">activate</a>
+                      <a class="activate_item_link"
+                         onclick="return confirm('Are you sure you want to Activate this Peripheral?');"
+                         href="{%url 'activate_deactivate_peripheral' item.pk%}">activate</a>
                       {%endif%}
                   </td>
               </tr>

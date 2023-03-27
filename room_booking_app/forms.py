@@ -23,18 +23,20 @@ class BookingForm(forms.ModelForm):
 
 
 class RoomForm(forms.Form):
-    location = forms.ModelChoiceField(
+    Location = forms.ModelChoiceField(
         queryset=Campus.objects.all(),
         widget=forms.Select(attrs={'class': 'form-control', 'required': True}),
         to_field_name='id'
     )
-    title = forms.CharField(
+    Title = forms.CharField(
         max_length=100,
         widget=forms.TextInput(attrs={'class': 'form-control', 'required': True})
     )
-    capacity = forms.IntegerField()
+    Capacity = forms.IntegerField(
+        widget=forms.NumberInput(attrs={'class': 'form-control'})
+    )
 
-    facilities = forms.MultipleChoiceField(
+    Peripherals = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(attrs={'required': False}),
         choices=[(facility.id, facility.title) for facility in Facility.objects.all()]
     )

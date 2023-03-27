@@ -1,36 +1,48 @@
 {%extends 'base/base.html'%}
 {%block title%}Usage Report{%endblock title%}
 {%block content%}
-<div class="py-3 text-center h4 users-page-title">Users Report</div>
+<div class="py-3 text-center h4 users-page-title">Usage Report</div>
 <div class="col-md-12 adminstrator-reports-panel">
-<div class="row shadow-lg p-2 mx-1 mb-4">
-
+<div class="row shadow-sm p-2 mx-1">
+    <div class="col-md-12">
+        <a href="{%url 'reports'%}" class="btn loginbtn text-white">Back</a>
+    </div>
+</div>
+<form class="row shadow-lg p-2 mx-1 mb-4" method="post" action="{%url 'usage_report'%}" >
+    {%csrf_token%}
     <div class="col-md-3">
         <label class="fw-bold">User</label><br>
-        <select class="form-control status-dropdown">
-            <option value="">All</option>
-            {%for user in users%}
-            <option class="text-capitalize" value="{{user.full_name}}">{{user.full_name}}</option>
-            {%endfor%}
+        <select class="form-control" name="user">
+
+        <option value="">All</option>
+        {% for u in users %}
+            {% if u.id == selected_user_id %}
+                <option value="{{ u.id }}" selected>{{ u.full_name }}</option>
+            {% else %}
+                <option value="{{ u.id }}">{{ u.full_name }}</option>
+            {% endif %}
+        {% endfor %}
+
+
         </select>
     </div>
 
       <div class="col-md-3">
         <label class="fw-bold">Facility</label><br>
-        <select class="form-control facility-dropdown">
+        <select class="form-control" name="facility">
             <option value="">All</option>
             {%for item in rooms%}
-            <option value="{{item.title}}">{{item.title}}</option>
+            <option value="{{item.pk}}">{{item.title}}</option>
             {%endfor%}
         </select>
     </div>
 
     <div class="col-md-3">
         <label class="fw-bold">Peripheral</label><br>
-        <select class="form-control peripheral-dropdown">
+        <select class="form-control" name="peripheral">
             <option value="">All</option>
             {%for peripheral in all_peripherals%}
-            <option value="{{peripheral.title}}">{{peripheral.title}}</option>
+            <option value="{{peripheral.pk}}">{{peripheral.title}}</option>
             {%endfor%}
         </select>
     </div>
@@ -40,7 +52,7 @@
         <select class="form-control refreshment-dropdown">
             <option value="">All</option>
             {%for item in refreshments%}
-            <option value="{{item.title}}">{{item.title}}</option>
+            <option value="{{item.pk}}">{{item.title}}</option>
             {%endfor%}
         </select>
     </div>
@@ -55,7 +67,11 @@
         <input type="text" autocomplete="off" class="form-control" name="dateto" id="To-date">
     </div>
 
-</div>
+    <div class="col-md-3 mt-3 text-center">
+        <button class="btn btn-secondary" type="submit">Search</button>
+    </div>
+
+</form>
 
 
 <table id="example" class="table table-striped table-bordered my-4 bordered">

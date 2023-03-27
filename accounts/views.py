@@ -48,7 +48,7 @@ def signin(request):
         if user is not None:
             if user.active:
                 login(request, user)
-                messages.success(request, f'login successful')
+                messages.add_message(request, messages.SUCCESS, 'login success', extra_tags='alert-success')
             else:
                 messages.warning(request, 'account disabled contact admin')
                 return render(request, 'accounts/signin.html')
@@ -166,7 +166,7 @@ def update_user(request, pk):
 
         user.role = ','.join(selected_roles)
         user.save()
-        messages.success(request, f'user updated successfully')
+        messages.add_message(request, messages.SUCCESS, 'user updated successfully', extra_tags='alert-success')
         return redirect('system_users')
 
     form.fields['email'].initial = user.email
@@ -185,12 +185,12 @@ def activate_deactivate_user(request, id):
         user.active = False
         user.save()
         print(timezone.localtime())
-        messages.success(request, f'user has been deactivated')
+        messages.add_message(request, messages.SUCCESS, 'user has been deactivated', extra_tags='alert-success')
         return redirect('system_users')
     else:
         user.active = True
         user.save()
-        messages.success(request, f'user has been activated')
+        messages.add_message(request, messages.SUCCESS, 'user has been activated', extra_tags='alert-success')
         return redirect('system_users')
 
 
@@ -263,12 +263,12 @@ def activate_deactivate_peripheral(request, pk):
     peripheral = get_object_or_404(Facility, id=pk)
     if peripheral.active:
         peripheral.active = False
-        messages.success(request, 'peripheral is deactivated')
+        messages.add_message(request, messages.SUCCESS, f'peripheral is deactivated', extra_tags='alert-success')
         peripheral.save()
         return redirect('peripherals')
     else:
         peripheral.active = True
-        messages.success(request, 'peripheral is activated')
+        messages.add_message(request, messages.SUCCESS, 'peripheral is activated', extra_tags='alert-success')
         peripheral.save()
         return redirect('peripherals')
 
@@ -280,12 +280,12 @@ def activate_deactivate_room(request, pk):
     room = get_object_or_404(Rooms, id=pk)
     if room.is_active:
         room.is_active = False
-        messages.success(request, 'room has been deactivated', fail_silently=True)
+        messages.add_message(request, messages.SUCCESS, 'room has been deactivated', extra_tags='alert-success')
         room.save()
         return redirect('dashboard')
     else:
         room.is_active = True
-        messages.success(request, 'room has been activated', fail_silently=True)
+        messages.add_message(request, messages.SUCCESS, 'room has been activated', extra_tags='alert-success')
         room.save()
         return redirect('dashboard')
 
@@ -544,12 +544,117 @@ def reports(request):
     return render(request, templatename, context)
 
 
+from django.shortcuts import get_object_or_404
+
+
 def usage_report(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+
+    bookings = Booking.objects.all()
     users = User.objects.all()
     all_peripherals = Facility.objects.all()
     refreshments = Refreshments.objects.all()
     rooms = Rooms.objects.all()
-    bookings = Booking.objects.all()
+
+    if request.method == 'POST':
+        selected_user_id = request.POST.get('user')
+        facility_id = request.POST.get('facility')
+
+        if selected_user_id:
+            user = get_object_or_404(User, id=selected_user_id)
+            bookings = Booking.objects.filter(user_id=user)
+
+            users = User.objects.all()
+            all_peripherals = Facility.objects.all()
+            refreshments = Refreshments.objects.all()
+            rooms = Rooms.objects.all()
+
+            peripheral_names = None
+            for booking in bookings:
+                if booking.extra_peripherals:
+                    peripheral_ids = set(booking.extra_peripherals.split(','))
+                    peripherals = Facility.objects.filter(id__in=peripheral_ids)
+                    if peripherals.exists():
+                        peripheral_names = ", ".join([peripheral.title for peripheral in peripherals])
+                        booking.peripheral_names = peripheral_names
+                    else:
+                        booking.peripheral_names = ""
+                else:
+                    booking.peripheral_names = ""
+
+            refreshment_names = None
+            for booking in bookings:
+                if booking.refreshments:
+                    refreshment_ids = set(booking.refreshments.split(','))
+                    refreshments = Refreshments.objects.filter(id__in=refreshment_ids)
+                    if refreshments.exists():
+                        refreshment_names = ", ".join([refreshment.title for refreshment in refreshments])
+                        booking.refreshment_names = refreshment_names
+                    else:
+                        booking.refreshment_names = ""
+                else:
+                    booking.refreshment_names = ""
+
+            context = {
+                'users': users,
+                'all_peripherals': all_peripherals,
+                'refreshments': refreshments,
+                'rooms': rooms,
+                'user': user,
+                'bookings': bookings,
+                'peripheral_names': peripheral_names,
+                'refreshment_names': refreshment_names,
+                'role': role,
+                'selected_user_id': selected_user_id
+            }
+            return render(request, 'accounts/usage_report.html', context)
+        # -----------------------user and facility------------------------>
+        elif selected_user_id and facility_id:
+            user = get_object_or_404(User, id=selected_user_id)
+            facility = get_object_or_404(Rooms, id=facility_id)
+            bookings = Booking.objects.filter(Q(user_id=user) & Q(room_id=facility))
+
+            peripheral_names = None
+            for booking in bookings:
+                if booking.extra_peripherals:
+                    peripheral_ids = set(booking.extra_peripherals.split(','))
+                    peripherals = Facility.objects.filter(id__in=peripheral_ids)
+                    if peripherals.exists():
+                        peripheral_names = ", ".join([peripheral.title for peripheral in peripherals])
+                        booking.peripheral_names = peripheral_names
+                    else:
+                        booking.peripheral_names = ""
+                else:
+                    booking.peripheral_names = ""
+
+            refreshment_names = None
+            for booking in bookings:
+                if booking.refreshments:
+                    refreshment_ids = set(booking.refreshments.split(','))
+                    refreshments = Refreshments.objects.filter(id__in=refreshment_ids)
+                    if refreshments.exists():
+                        refreshment_names = ", ".join([refreshment.title for refreshment in refreshments])
+                        booking.refreshment_names = refreshment_names
+                    else:
+                        booking.refreshment_names = ""
+                else:
+                    booking.refreshment_names = ""
+
+            context = {
+                'users': users,
+                'all_peripherals': all_peripherals,
+                'refreshments': refreshments,
+                'rooms': rooms,
+                'bookings': bookings,
+                'peripheral_names': peripheral_names,
+                'refreshment_names': refreshment_names,
+                'role': role
+            }
+
+            return render(request, 'accounts/usage_report.html', context)
 
     peripheral_names = None
     for booking in bookings:
@@ -584,8 +689,10 @@ def usage_report(request):
         'rooms': rooms,
         'bookings': bookings,
         'peripheral_names': peripheral_names,
-        'refreshment_names': refreshment_names
+        'refreshment_names': refreshment_names,
+        'role': role
     }
+
     return render(request, 'accounts/usage_report.html', context)
 
 

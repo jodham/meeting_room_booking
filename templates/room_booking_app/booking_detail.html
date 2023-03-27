@@ -39,7 +39,7 @@
     </div>
     <div class="col-md-6 mt-2  p-3" style="border-top: 1px solid #ccc;">
         <label class="h5 bold"> Booked by </label>
-        <p class="meeting"> {{booking.user_id}}</p>
+        <p class="meeting text-capitalize"> {{booking.user_id.full_name}}</p>
 
          <label class="h5 bold">Services Requested</label>
         <p>
@@ -49,9 +49,9 @@
             {%endfor%}
         </p>
         <p>
-            <input type="checkbox" checked disabled>
             {%for item in peripherals%}
-            {{item.title}}
+            <input type="checkbox" checked disabled>
+            {{item.title}}<br>
             {%endfor%}
         </p>
 
@@ -97,12 +97,12 @@
           <a href="{%url 'approve_booking' booking.pk%}" class="btn approve-booking-btn float-left mt-2">Approve</a>
         </div>
          {%else%}
-         <label style="color: #cb6015"> booking cancelled</label>
+         <label class="float-right" style="color: #cb6015"> booking cancelled</label>
          {%endif%}
          {%endif%}
 
-         {%if booking.user_id == user and booking.status == 0%}
-             <a href="{%url 'booking_update' booking.pk%}" class="btn reject-booking-btn m-2">Edit</a>
+         {%if booking.user_id == request.user%}
+             <a href="{%url 'booking_update' booking.pk%}" class="btn reject-booking-btn m-2 float-left">Edit</a>
          {%endif%}
 
         {%if booking.user_id == user and booking.status == 0%}

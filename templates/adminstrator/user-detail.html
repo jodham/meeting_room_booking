@@ -1,7 +1,7 @@
 {%extends 'base/base.html'%}
 {%block title%}user details{%endblock title%}
 {%block content%}
-<div class="py-4 h4 text-center user-detail-title">{{user_id.email}}</div>
+<div class="py-4 h4 text-center text-capitalize user-detail-title">{{user_id.full_name}}'s Details</div>
 <div class="row user-details-wrapper">
     <div class="col-md-12 m-2">
         <a href="{%url 'system_users'%}" class="btn btn-lg back-to-dashboard-button">
@@ -9,14 +9,21 @@
             Back
         </a>
     </div>
-    <div class="col-md-6">
-        <label class="h5">Email</label>
-        <p>{{user_id.email}}</p>
+    <div class="col-md-4 mt-3">
+        <label class="fw-bold h5">Full Name</label>
+        <p class="text-capitalize">{{user_id.full_name}}</p>
     </div>
-
-     <div class="col-md-6">
-        <label class="h5">Status</label>
-        <p>
+    <div class="col-md-4 mt-3">
+        <label class="fw-bold h5">Email</label>
+        <p class="text-capitalize">{{user_id.full_name}}</p>
+    </div>
+     <div class="col-md-4 mt-3">
+        <label class="fw-bold h5">Access Level</label>
+        <p class="text-capitalize">{{role}}</p>
+    </div>
+     <div class="col-md-4 mt-3">
+        <label class="fw-bold h5">Status</label>
+        <p class="text-capitalize">
             {%if user_id.active == 1%}
                Active
                {%else%}
@@ -24,41 +31,20 @@
                {%endif%}
         </p>
     </div>
-
-     <div class="col-md-6">
-        <label class="h5">First Name</label>
-        <p>{{user_id.first_name}}</p>
+    <div class="col-md-4 mt-3">
+        <label class="fw-bold h5">Last Login</label>
+        <p class="text-capitalize">{{user_id.last_login}}</p>
+    </div>
+   <div class="col-md-4 mt-3">
+        <label class="fw-bold h5">Date Created</label>
+        <p class="text-capitalize">{{user_id.created_at}}</p>
+    </div>
+    <div class="col-md-4 mt-3">
+        <label class="fw-bold h5">Date Modified</label>
+        <p class="text-capitalize">{{user_id.updated_at}}</p>
     </div>
 
-     <div class="col-md-6">
-        <label class="h5">Last Login</label>
-        <p>{{user_id.last_login}}</p>
-    </div>
 
-     <div class="col-md-6">
-        <label class="h5">Last Name</label>
-        <p>{{user_id.last_name}}</p>
-    </div>
-
-     <div class="col-md-6">
-        <label class="h5">Date Created</label>
-        <p>{{user_id.created_at}}</p>
-    </div>
-
-     <div class="col-md-6">
-        <label class="h5">Access Level</label>
-        <p>{{role}}</p>
-    </div>
-
-     <div class="col-md-6">
-        <label class="h5">Email</label>
-        <p>{{user_id.email}}</p>
-    </div>
-
-     <div class="col-md-6">
-        <label class="h5">Date Updated</label>
-        <p>{{user_id.updated_at}}</p>
-    </div>
 
 </div>
 

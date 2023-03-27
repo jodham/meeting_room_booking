@@ -4,8 +4,11 @@
 <div class="col-md-12 text-center create-room-title">Add Facility</div>
 
         <form method="post" class="row room-create-form">
+            <div class="col-md-12">
+                <a href="{%url 'dashboard'%}" class="btn cancel-user-creation-button text-white fw-bold">Back</a>
+            </div>
             {%csrf_token%}
-            <div class="col-md-6">
+            <div class="col-md-6 mt-3">
             <label class="h6">Facility Location</label>
             <div class="form-group">
               <select class="form-control form-control-lg" required name="location_id">
@@ -16,22 +19,22 @@
             </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-6 mt-3">
                 <label class="h6">Facility Name</label>
                 <div class="form-group">
                     <input type="text" required name="title" class="form-control form-control-lg">
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-6 mt-3">
             <label class="h6">Capacity</label>
             <div class="form-group">
                 <input type="number" name="capacity" required class="form-control form-control-lg">
             </div>
             </div>
 
-            <div class="col-md-6">
-            <label class="h6">Services</label>
+            <div class="col-md-6 mt-3">
+            <label class="h6">Peripherals</label>
             <div class="form-group">
                 {%for facility in facility%}
                 <input type="checkbox" name="facilities" value="{{facility.id}}">
@@ -40,8 +43,7 @@
             </div>
             </div>
             <div class="col-md-12 text-center">
-             <button class="btn  create-room-submit-btn h5" type="submit">Submit</button>
-            <a class="btn cancel-user-creation-button text-white ml-4 h5" href="{%url 'dashboard'%}">Cancel</a>
+             <button class="btn  create-room-submit-btn fw-bold" type="submit">Submit</button>
             </div>
 
         </form>

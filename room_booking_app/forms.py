@@ -90,10 +90,12 @@ class BookUpdateForm(forms.ModelForm):
             if isinstance(booking.refreshments, str):
                 refreshments_ids = [int(pk) for pk in booking.refreshments.split(',') if pk]
             else:
-                refreshments_ids = list(booking.refreshments.value_list('id', flat=True))
+                refreshments_ids = list(booking.refreshments.values_list('id', flat=True))
             self.fields['refreshments'].initial = available_refreshments.filter(id__in=refreshments_ids)
+
         if not refreshments_ids:
             self.fields['refreshments'].initial = None
+
 
     class Meta:
         model = Booking

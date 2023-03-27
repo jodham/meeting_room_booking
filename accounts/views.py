@@ -4,17 +4,20 @@ import phonenumbers
 from django.contrib import messages
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect, get_object_or_404
-from django.urls import reverse, reverse_lazy
+from django.shortcuts import redirect, get_object_or_404
+from django.urls import reverse_lazy
 from django.utils import timezone
 from django.views.generic import UpdateView
 
-from accounts.forms import CreateUserAccount, UserUpdateForm, peripheralUpdate, suspend_room_form, CategoryForm, \
+from accounts.forms import CreateUserAccount, UserUpdateForm, suspend_room_form, CategoryForm, \
     PeripheralForm, CampusForm, RefreshmentsForm
 from room_booking_app.controllers import *
 from room_booking_app.models import Facility, Rooms, Roles, Booking, Room_Suspension, Facility_Category, Campus, \
     Refreshments
 from room_booking_app.models import User
+from django.shortcuts import render
+from django.db.models import Q
+from datetime import datetime
 
 
 # Create your views here.
@@ -538,4 +541,70 @@ def reports(request):
         role = None
     context = {'role': role}
     templatename = 'accounts/reports.html'
+    return render(request, templatename, context)
+
+
+def usage_report(request):
+    users = User.objects.all()
+    all_peripherals = Facility.objects.all()
+    refreshments = Refreshments.objects.all()
+    rooms = Rooms.objects.all()
+    bookings = Booking.objects.all()
+
+    peripheral_names = None
+    for booking in bookings:
+        if booking.extra_peripherals:
+            peripheral_ids = set(booking.extra_peripherals.split(','))
+            peripherals = Facility.objects.filter(id__in=peripheral_ids)
+            if peripherals.exists():
+                peripheral_names = ", ".join([peripheral.title for peripheral in peripherals])
+                booking.peripheral_names = peripheral_names
+            else:
+                booking.peripheral_names = ""
+        else:
+            booking.peripheral_names = ""
+
+    refreshment_names = None
+    for booking in bookings:
+        if booking.refreshments:
+            refreshment_ids = set(booking.refreshments.split(','))
+            refreshments = Refreshments.objects.filter(id__in=refreshment_ids)
+            if refreshments.exists():
+                refreshment_names = ", ".join([refreshment.title for refreshment in refreshments])
+                booking.refreshment_names = refreshment_names
+            else:
+                booking.refreshment_names = ""
+        else:
+            booking.refreshment_names = ""
+
+    context = {
+        'users': users,
+        'all_peripherals': all_peripherals,
+        'refreshments': refreshments,
+        'rooms': rooms,
+        'bookings': bookings,
+        'peripheral_names': peripheral_names,
+        'refreshment_names': refreshment_names
+    }
+    return render(request, 'accounts/usage_report.html', context)
+
+
+def summary_report(request):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    total_users = User.objects.all().count()
+    total_active_users = User.objects.all().filter(active=True).count()
+    total_facilities = Rooms.objects.all().count()
+    total_active_facilities = Rooms.objects.all().filter(is_active=True).count()
+    total_peripherals = Facility.objects.all().count()
+    total_active_peripherals = Facility.objects.all().filter(active=True).count()
+    total_refreshments = Refreshments.objects.all().count()
+    templatename = 'accounts/summary_report.html'
+    context = {'role': role, 'total_users': total_users, 'total_facilities': total_facilities,
+               'total_active_facilities': total_active_facilities,
+               'total_peripherals': total_peripherals, 'total_refreshments': total_refreshments,
+               'total_active_users': total_active_users,
+               'total_active_peripherals': total_active_peripherals}
     return render(request, templatename, context)

@@ -349,7 +349,8 @@ def update_my_booking(request, pk):
             booking.title = title
             booking.date_start = starting_time
             booking.date_end = ending_time
-            booking.refreshments = ','.join(form.fields.get['refreshments'].name)
+            booking.refreshments = ','.join(str(refreshment) for refreshment in form.cleaned_data['refreshments'])
+
             booking.save()
             messages.success(request, f'booking updated successfully')
             return redirect('booking_detail', booking.pk)

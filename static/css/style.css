@@ -476,7 +476,42 @@ main {
     border-radius: 5px;
     box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
 }
+.adminstrator-reports-panel{
+    margin-top: 1.0rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    padding: 0.5rem;
+    min-height: 15rem;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.adminstrator-summary-reports-panel{
+    margin-top: 1.0rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
+    padding: 0.5rem;
+    min-height: 15rem;
+    background-color: #FAF9F6;
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #041e42, -1px -1px 5px #cb6015;
+}
+.usage-display-form{
+    max-height: 10rem;
+}
+.search-user-btn{
+    background-color: #041e42;
+    border-radius: 5px;
+    color: white;
+}
+.total-users-summary{
+    background-color: #FFFF;
+    min-height: 15rem;
+    border-radius: 5px;
+}
 
+.total-users-summary label{
+    font-weight: bold;
+}
 /*.form-column {
     border-right: 1px solid #ccc;
     padding-right: 15px;

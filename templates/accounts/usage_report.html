@@ -1,0 +1,166 @@
+{%extends 'base/base.html'%}
+{%block title%}Usage Report{%endblock title%}
+{%block content%}
+<div class="py-3 text-center h4 users-page-title">Users Report</div>
+<div class="col-md-12 adminstrator-reports-panel">
+<div class="row shadow-lg p-2 mx-1 mb-4">
+
+    <div class="col-md-3">
+        <label class="fw-bold">User</label><br>
+        <select class="form-control status-dropdown">
+            <option value="">All</option>
+            {%for user in users%}
+            <option class="text-capitalize" value="{{user.full_name}}">{{user.full_name}}</option>
+            {%endfor%}
+        </select>
+    </div>
+
+      <div class="col-md-3">
+        <label class="fw-bold">Facility</label><br>
+        <select class="form-control facility-dropdown">
+            <option value="">All</option>
+            {%for item in rooms%}
+            <option value="{{item.title}}">{{item.title}}</option>
+            {%endfor%}
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <label class="fw-bold">Peripheral</label><br>
+        <select class="form-control peripheral-dropdown">
+            <option value="">All</option>
+            {%for peripheral in all_peripherals%}
+            <option value="{{peripheral.title}}">{{peripheral.title}}</option>
+            {%endfor%}
+        </select>
+    </div>
+
+    <div class="col-md-3">
+        <label class="fw-bold">Refreshment</label><br>
+        <select class="form-control refreshment-dropdown">
+            <option value="">All</option>
+            {%for item in refreshments%}
+            <option value="{{item.title}}">{{item.title}}</option>
+            {%endfor%}
+        </select>
+    </div>
+
+    <div class="col-md-3 mt-3">
+        <label class="fw-bold">Date From</label><br>
+        <input type="text" autocomplete="off" class="form-control from-date-filter" name="datefrom" id="fromdate">
+    </div>
+
+     <div class="col-md-3 mt-3">
+        <label class="fw-bold">Date To</label><br>
+        <input type="text" autocomplete="off" class="form-control" name="dateto" id="To-date">
+    </div>
+
+</div>
+
+
+<table id="example" class="table table-striped table-bordered my-4 bordered">
+    <thead>
+        <tr>
+            <th>Booked by</th>
+            <th>Facility</th>
+            <th>Meeting Purpose</th>
+            <th>Peripheral</th>
+            <th>Refreshment</th>
+            <th>Date From</th>
+            <th>Date To</th>
+
+        </tr>
+    </thead>
+    <tbody>
+    {%for book in bookings%}
+        <tr>
+            <td class="text-capitalize">{{book.user_id.full_name}}</td>
+            <td>{{book.room_id}}</td>
+            <td>{{book.title}}</td>
+            <td>
+                {{book.peripheral_names}}
+            </td>
+            <td>{{book.refreshment_names}}</td>
+            <td>{{book.date_start|date:"b d, Y"}}</td>
+            <td>{{book.date_end|date:"M j, Y"}}</td>
+
+        </tr>
+    {%endfor%}
+    </tbody>
+</table>
+</div>
+
+
+<script>
+ $(document).ready(function() {
+    dataTable = $("#example").DataTable({
+<!--      "columnDefs": [-->
+<!--            {-->
+<!--                "targets": [7],-->
+<!--                "visible": false-->
+<!--            }-->
+<!--        ]-->
+
+    });
+
+    $('#fromdate, #To-date').datepicker({
+        dateFormat: "M dd, yy"
+    });
+
+     $('.from-date-filter').on('change', function(e) {
+      var dateFrom = $(this).val();
+      $('.date-filter').val(dateFrom);
+      console.log(dateFrom);
+      var parsedDate = moment(dateFrom, 'MMM DD, YYYY'); // parse the date with the correct format
+
+      dataTable.column(5).data().each(function (date, index) {
+        var parsedDateColumn = moment(date, 'b DD, YYYY'); // parse the date with the correct format
+        console.log(parsedDate, parsedDateColumn.format('MMM DD, YYYY'), date);
+        if (parsedDateColumn.isSameOrAfter(parsedDate, 'day')) { // compare the dates
+          dataTable.cell(index, 5).nodes().to$().addClass('date-match'); // mark the matching rows with a class
+        } else {
+          dataTable.cell(index, 5).nodes().to$().removeClass('date-match');
+        }
+      });
+      dataTable.column(5).search('date-match', true, false).draw(); // filter the table based on the marked rows
+    });
+
+
+
+
+
+    $('.status-dropdown').on('change', function(e){
+      var status = $(this).val();
+      $('.status-dropdown').val(status)
+      console.log(status)
+      //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+      dataTable.column(0).search(status).draw();
+    })
+
+    $('.facility-dropdown').on('change', function(e){
+      var status = $(this).val();
+      $('.facility-dropdown').val(status)
+      console.log(status)
+      //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+      dataTable.column(1).search(status).draw();
+    })
+
+    $('.peripheral-dropdown').on('change', function(e){
+      var status = $(this).val();
+      $('.peripheral-dropdown').val(status)
+      console.log(status)
+      //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+      dataTable.column(3).search(status).draw();
+    })
+
+    $('.refreshment-dropdown').on('change', function(e){
+      var status = $(this).val();
+      $('.refreshment-dropdown').val(status)
+      console.log(status)
+      //dataTable.column(6).search('\\s' + status + '\\s', true, false, true).draw();
+      dataTable.column(4).search(status).draw();
+    })
+});
+
+</script>
+{%endblock content%}

@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 # Create your models here.
 
 
@@ -180,8 +181,9 @@ class Booking(models.Model):
 
     def get_absolute_url(self):
         return reverse('bookings_detail', kwargs={'pk': self.pk})
+
     def __str__(self):
-         return self.title
+        return self.title
 
 
 class Room_Suspension(models.Model):
@@ -197,3 +199,10 @@ class Room_Suspension(models.Model):
 
 class Booking_Approval(models.Model):
     need_approval = models.BooleanField(default=False)
+
+
+class System_Logs(models.Model):
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.CharField(max_length=255)
+    key_word = models.CharField(max_length=30)
+    date_actioned = models.DateTimeField(auto_now_add=True)

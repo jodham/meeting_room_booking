@@ -6,30 +6,30 @@
 
     <div class="card users-table-container">
             <div class="py-2 float-left h6">
-                <a href="{%url 'adminstrator_page'%}" class="btn btn-lg">
+                <a href="{%url 'adminstrator_page'%}" class="btn loginbtn text-white fw-bold">
                     <i class="bi bi-arrow-left-circle"></i>
-                    Dashboard
+                    Back
                 </a>
             </div>
          <table class="table data-table">
               <thead>
                 <tr>
 
-                  <th scope="col">id</th>
-                  <th scope="col">Action time</th>
+                  <th scope="col">#</th>
+                  <th scope="col">User</th>
                   <th scope="col">Message</th>
-                  <th scope="col">Object</th>
-                  <th scope="col">Actioned by</th>
+                  <th scope="col">Key Word</th>
+                  <th scope="col">Date of Action</th>
                 </tr>
               </thead>
               <tbody>
               {%for x in logs%}
               <tr>
-                  <td>{{x.id}}</td>
-                  <td>{{x.action_time}}</td>
-                  <td>{{x.change_message}}</td>
-                  <td>{{x.object_repr}}</td>
-                  <td>{{x.user}}</td>
+                  <td>{{forloop.counter}}</td>
+                  <td class="text-capitalize">{{x.user_id.full_name}}</td>
+                  <td>{{x.message}}</td>
+                  <td>{{x.key_word}}</td>
+                  <td>{{x.date_actioned}}</td>
               </tr>
               {%endfor%}
               </tbody>

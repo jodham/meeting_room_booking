@@ -1,7 +1,7 @@
 from django.urls import path
 
 from.views import *
-
+from .report_generator import usagereport
 
 urlpatterns = [
     path('register', register, name='register'),
@@ -46,6 +46,6 @@ urlpatterns = [
     path('user/<int:room_id>/profile/<int:user_id>/', user_profile, name='profile'),
 
     path('administrator/reports', reports, name='reports'),
-    path('administrator/reports/usage', usage_report, name='usage_report'),
+    path('administrator/reports/usage', usagereport, name='usage_report'),
     path('administrator/reports/summary', summary_report, name='summary_report')
 ]

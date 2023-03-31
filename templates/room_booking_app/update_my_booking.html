@@ -1,0 +1,49 @@
+{%extends 'base/base.html'%}
+{%block title%}Update Room{%endblock title%}
+{%block content%}
+<div class="update-room-title text-center">Update Booking</div>
+       <form method="post" class="row room-update-form">
+           <div class="col-md-12">
+               <a  href="{%url 'booking_detail' booking.pk%}" class="btn create-room-submit-btn text-white">Back</a>
+           </div>
+
+            {%csrf_token%}
+            {%for field in form%}
+            <div class="col-md-6 mt-4">
+            <div class="form-group">
+                <label class="fw-bold h5">{{field.label_tag}}</label>
+                {{field}}
+            </div>
+            </div>
+            {%endfor%}
+           <div class="col-md-12 text-center">
+            <button class="btn create-room-submit-btn text-white h5 fw-bold" type="submit">Submit</button>
+           </div>
+       </form>
+<script>
+$(function () {
+  var now = new Date();
+  now.setMinutes(0);
+  now.setSeconds(0);
+  now.setMilliseconds(0);
+  var nextHour = new Date(now.getTime() + 60 * 60 * 1000);
+
+  var disabledDates = [
+    {% for book in bookings %}
+      new Date('{{ book.date_start|date:"Y/m/d H:i" }}'),
+      new Date('{{ book.date_end|date:"Y/m/d H:i" }}'),
+    {% endfor %}
+  ];
+
+  $('#datetimepicker, #datetimepicker2').datetimepicker({
+    defaultValue: '{{ datetime|date:"Y-m-d H" }}',
+    minDateTime: nextHour,
+    format: 'Y-m-d H:00',
+    step: 60,
+    allowTimes: ['00:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00', '20:00', '21:00', '22:00', '23:00'],
+    disabledDates: disabledDates
+  });
+});
+
+</script>
+{%endblock content%}

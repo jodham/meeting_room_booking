@@ -153,6 +153,11 @@ def add_user(request):
         else:
             user = User.objects.create_user(email=email, password=password1, first_name=first_name,
                                             last_name=last_name, phone_number=phone)
+            new_log = System_Logs()
+            new_log.message = f"Added new user, ({first_name, last_name})"
+            new_log.key_word = "Add"
+            new_log.user_id = request.user
+            new_log.save()
             messages.success(request, f'User created successfully!')
             return redirect('system_users')
     templatename = 'accounts/register.html'
@@ -176,6 +181,11 @@ def update_user(request, pk):
 
         user.role = ','.join(selected_roles)
         user.save()
+        new_log = System_Logs()
+        new_log.message = f"Edited details of user,({user.first_name, user.last_name}) "
+        new_log.key_word = "Edit"
+        new_log.user_id = request.user
+        new_log.save()
         messages.add_message(request, messages.SUCCESS, 'user updated successfully', extra_tags='alert-success')
         return redirect('system_users')
 
@@ -194,12 +204,21 @@ def activate_deactivate_user(request, id):
     if user.active:
         user.active = False
         user.save()
-        print(timezone.localtime())
+        new_log = System_Logs()
+        new_log.message = f"Deactivated user ({user.full_name})"
+        new_log.key_word = "Deactivate"
+        new_log.user_id = request.user
+        new_log.save()
         messages.add_message(request, messages.SUCCESS, 'user has been deactivated', extra_tags='alert-success')
         return redirect('system_users')
     else:
         user.active = True
         user.save()
+        new_log = System_Logs()
+        new_log.message = f"Activated user, ({user.full_name}) "
+        new_log.key_word = "Activate"
+        new_log.user_id = request.user
+        new_log.save()
         messages.add_message(request, messages.SUCCESS, 'user has been activated', extra_tags='alert-success')
         return redirect('system_users')
 
@@ -209,7 +228,7 @@ def system_logs(request):
         role = check_user_role(request.user)
     else:
         role = None
-    logs = System_Logs.objects.all()
+    logs = System_Logs.objects.all().order_by('-date_actioned')
     templatename = 'adminstrator/system-logs.html'
     context = {'logs': logs, 'role': role}
     return render(request, templatename, context)
@@ -234,6 +253,12 @@ def create_peripheral(request):
     form = PeripheralForm(request.POST or None)
     if form.is_valid():
         form.save()
+        new_log = System_Logs()
+        new_log.message = f"Added new peripheral, ({form.cleaned_data.get('title')})"
+        new_log.key_word = "Add"
+        new_log.user_id = request.user
+        new_log.save()
+        messages.add_message(request, messages.SUCCESS, 'Added new Peripheral')
         return redirect('peripherals')
     else:
         form = PeripheralForm()
@@ -273,13 +298,25 @@ def activate_deactivate_peripheral(request, pk):
     peripheral = get_object_or_404(Facility, id=pk)
     if peripheral.active:
         peripheral.active = False
-        messages.add_message(request, messages.SUCCESS, f'peripheral is deactivated', extra_tags='alert-success')
         peripheral.save()
+
+        new_log = System_Logs()
+        new_log.message = f"Deactivated peripheral, ({peripheral.title})"
+        new_log.key_word = "Deactivate"
+        new_log.user_id = request.user
+        new_log.save()
+        messages.add_message(request, messages.SUCCESS, f'peripheral is deactivated', extra_tags='alert-success')
         return redirect('peripherals')
     else:
         peripheral.active = True
-        messages.add_message(request, messages.SUCCESS, 'peripheral is activated', extra_tags='alert-success')
         peripheral.save()
+
+        new_log = System_Logs()
+        new_log.message = f"Activated peripheral, ({peripheral.title})"
+        new_log.key_word = "Activate"
+        new_log.user_id = request.user
+        new_log.save()
+        messages.add_message(request, messages.SUCCESS, 'peripheral is activated', extra_tags='alert-success')
         return redirect('peripherals')
 
 
@@ -290,13 +327,24 @@ def activate_deactivate_room(request, pk):
     room = get_object_or_404(Rooms, id=pk)
     if room.is_active:
         room.is_active = False
-        messages.add_message(request, messages.SUCCESS, 'room has been deactivated', extra_tags='alert-success')
         room.save()
+        new_log = System_Logs()
+        new_log.message = f"Deactivated facility, ({room.title})"
+        new_log.key_word = "Deactivate"
+        new_log.user_id = request.user
+        new_log.save()
+        messages.add_message(request, messages.SUCCESS, 'room has been deactivated', extra_tags='alert-success')
         return redirect('dashboard')
     else:
         room.is_active = True
-        messages.add_message(request, messages.SUCCESS, 'room has been activated', extra_tags='alert-success')
         room.save()
+
+        new_log = System_Logs()
+        new_log.message = f"Activated facility, ({room.title})"
+        new_log.key_word = "Activate"
+        new_log.user_id = request.user
+        new_log.save()
+        messages.add_message(request, messages.SUCCESS, 'room has been activated', extra_tags='alert-success')
         return redirect('dashboard')
 
 
@@ -312,7 +360,12 @@ def approve_booking(request, pk):
         booking.actioned_by = user
         booking.date_actioned = timezone.now()
         booking.save()
-        messages.success(request, f'booking is approved')
+        new_log = System_Logs()
+        new_log.message = f"Approved booking, ({booking.title})"
+        new_log.key_word = "Approve"
+        new_log.user_id = request.user
+        new_log.save()
+        messages.add_message(request, messages.SUCCESS, 'booking is approved', extra_tags='alert-success')
         return redirect('booking_detail', pk=pk)
 
 
@@ -326,7 +379,13 @@ def cancel_booking(request, pk):
         booking.actioned_by = user
         booking.date_actioned = timezone.now()
         booking.save()
-        messages.success(request, f'booking is cancelled')
+
+        new_log = System_Logs()
+        new_log.message = f"Cancelled booking, ({booking.title})"
+        new_log.key_word = "Cancel"
+        new_log.user_id = request.user
+        new_log.save()
+        messages.add_message(request, messages.SUCCESS, 'booking is cancelled', extra_tags='alert-success')
         return redirect('booking_detail', pk=pk)
 
 
@@ -340,6 +399,12 @@ def reject_booking(request, pk):
         booking.actioned_by = user
         booking.date_actioned = timezone.now()
         booking.save()
+
+        new_log = System_Logs()
+        new_log.message = f"Rejected booking, ({booking.title})"
+        new_log.key_word = "Activate"
+        new_log.user_id = request.user
+        new_log.save()
         messages.success(request, f'booking is rejected')
         return redirect('booking_detail', pk=pk)
 
@@ -374,6 +439,12 @@ def suspend_room(request, pk):
         x.suspension_reason = reason
         x.is_suspended = True
         x.save()
+
+        new_log = System_Logs()
+        new_log.message = f"Suspended facility, ({room.title})"
+        new_log.key_word = "Suspend"
+        new_log.user_id = request.user
+        new_log.save()
         return redirect('room_detail', pk=pk)
     else:
         form = suspend_room_form()
@@ -392,6 +463,12 @@ def add_facility_category(request):
         new_category = Facility_Category()
         new_category.title = title
         new_category.save()
+
+        new_log = System_Logs()
+        new_log.message = f"Added new peripherals category, ({title})"
+        new_log.key_word = "Add"
+        new_log.user_id = request.user
+        new_log.save()
         return redirect('facility_category')
     templatename = 'adminstrator/add_category.html'
     context = {'role': role}
@@ -408,7 +485,12 @@ def edit_facility_category(request, pk):
     form = CategoryForm(request.POST, instance=category)
     if form.is_valid():
         form.save()
-        messages.success(request, f'category edited susccessfully')
+        new_log = System_Logs()
+        new_log.message = f"Edited peripherals category, ({form.cleaned_data.get('title')})"
+        new_log.key_word = "Edit"
+        new_log.user_id = request.user
+        new_log.save()
+        messages.add_message(request, messages.SUCCESS, 'category edited susccessfully', extra_tags='alert-success')
         return redirect('facility_category')
 
     else:
@@ -438,6 +520,12 @@ def add_campus(request):
     form = CampusForm(request.POST)
     if form.is_valid():
         form.save()
+
+        new_log = System_Logs()
+        new_log.message = f"Added Campus, ({form.cleaned_data.get('title')})"
+        new_log.key_word = "Activate"
+        new_log.user_id = request.user
+        new_log.save()
         messages.success(request, f'successfully added a campus')
         return redirect('campus_list')
     else:
@@ -505,6 +593,12 @@ def Add_refreshment(request):
     if form.is_valid():
         title = form.cleaned_data.get('title')
         form.save()
+
+        new_log = System_Logs()
+        new_log.message = f"Added new Refreshment, ({title})"
+        new_log.key_word = "Add"
+        new_log.user_id = request.user
+        new_log.save()
         messages.success(request, f'successsfully added refreshment {title}')
         return redirect('refreshments_list')
     else:
@@ -523,6 +617,11 @@ def edit_refreshment(request, pk):
     form = RefreshmentsForm(request.POST, instance=refreshment)
     if form.is_valid():
         form.save()
+        new_log = System_Logs()
+        new_log.message = f"Edited refreshment, ({form.cleaned_data.get('title')})"
+        new_log.key_word = "Edit"
+        new_log.user_id = request.user
+        new_log.save()
         messages.success(request, f'succefully edited refreshment')
         return redirect('refreshments_list')
     else:
@@ -552,588 +651,6 @@ def reports(request):
     context = {'role': role}
     templatename = 'accounts/reports.html'
     return render(request, templatename, context)
-
-
-from django.shortcuts import get_object_or_404
-
-
-def usage_report(request):
-    if request.user.is_authenticated:
-        role = check_user_role(request.user)
-    else:
-        role = None
-
-    bookings = Booking.objects.all()
-    users = User.objects.all()
-    all_peripherals = Facility.objects.all()
-    refreshments = Refreshments.objects.all()
-    rooms = Rooms.objects.all()
-
-    if request.method == 'POST':
-        selected_user_id = request.POST.get('user')
-        facility_id = request.POST.get('facility')
-        peripheral_id = request.POST.get('peripheral')
-        refreshment_id = request.POST.get('refreshment')
-        datefrom = request.POST.get('datefrom')
-        dateto = request.POST.get('dateto')
-
-        if all([selected_user_id, facility_id, peripheral_id, refreshment_id, datefrom, dateto]):
-            selected_user = int(selected_user_id)
-            selected_facility = int(facility_id)
-            selected_peripheral = int(peripheral_id)
-            selected_refreshment = int(refreshment_id)
-            selected_from_date = datefrom
-            selected_date_to = dateto
-            user = get_object_or_404(User, id=selected_user_id)
-            bookings = Booking.objects.filter(
-                user_id=selected_user_id,
-                room=facility_id,
-                date_from__gte=datetime.strptime(datefrom, '%Y-%m-%d').date(),
-                date_to__lte=datetime.strptime(dateto, '%Y-%m-%d').date()
-            ).filter(
-                Q(extra_peripherals__startswith=peripheral_id + ',') |
-                Q(extra_peripherals__endswith=',' + peripheral_id) |
-                Q(extra_peripherals__contains=',' + peripheral_id + ',') |
-                Q(extra_peripherals=peripheral_id)
-            ).filter(
-                Q(refreshments__startswith=refreshment_id + ',') |
-                Q(refreshments__endswith=',' + refreshment_id) |
-                Q(refreshments__contains=',' + refreshment_id + ',') |
-                Q(refreshments=refreshment_id)
-            )
-
-            users = User.objects.all()
-            all_peripherals = Facility.objects.all()
-            refreshments = Refreshments.objects.all()
-            rooms = Rooms.objects.all()
-
-            peripheral_names = None
-            for booking in bookings:
-                if booking.extra_peripherals:
-                    peripheral_ids = set(booking.extra_peripherals.split(','))
-                    peripherals = Facility.objects.filter(id__in=peripheral_ids)
-                    if peripherals.exists():
-                        peripheral_names = ", ".join([peripheral.title for peripheral in peripherals])
-                        booking.peripheral_names = peripheral_names
-                    else:
-                        booking.peripheral_names = ""
-                else:
-                    booking.peripheral_names = ""
-
-            refreshment_names = None
-            for booking in bookings:
-                if booking.refreshments:
-                    refreshment_ids = set(booking.refreshments.split(','))
-                    refreshments = Refreshments.objects.filter(id__in=refreshment_ids)
-                    if refreshments.exists():
-                        refreshment_names = ", ".join([refreshment.title for refreshment in refreshments])
-                        booking.refreshment_names = refreshment_names
-                    else:
-                        booking.refreshment_names = ""
-                else:
-                    booking.refreshment_names = ""
-
-            context = {
-                'users': users,
-                'all_peripherals': all_peripherals,
-                'refreshments': refreshments,
-                'rooms': rooms,
-                'user': user,
-                'bookings': bookings,
-                'peripheral_names': peripheral_names,
-                'refreshment_names': refreshment_names,
-                'role': role,
-                'selected_user': selected_user,
-                'selected_facility': selected_facility,
-                'selected_peripheral': selected_peripheral,
-                'selected_refreshment': selected_refreshment,
-                'selected_from_date': selected_from_date,
-                'selected_date_to': selected_date_to
-            }
-            return render(request, 'accounts/usage_report.html', context)
-        elif all([selected_user_id, facility_id, peripheral_id, refreshment_id, datefrom]):
-            selected_user = int(selected_user_id)
-            selected_facility = int(facility_id)
-            selected_refreshment = int(refreshment_id)
-            selected_peripheral = int(peripheral_id)
-            selected_from_date = datefrom
-            user = get_object_or_404(User, id=selected_user_id)
-            bookings = Booking.objects.filter(
-                user_id=selected_user_id,
-                room_id=facility_id,
-                date_start__gte=datetime.strptime(datefrom, '%Y-%m-%d').date(),
-            ).filter(
-                Q(extra_peripherals__startswith=peripheral_id + ',') |
-                Q(extra_peripherals__endswith=',' + peripheral_id) |
-                Q(extra_peripherals__contains=',' + peripheral_id + ',') |
-                Q(extra_peripherals=peripheral_id)
-            ).filter(
-                Q(refreshments__startswith=refreshment_id + ',') |
-                Q(refreshments__endswith=',' + refreshment_id) |
-                Q(refreshments__contains=',' + refreshment_id + ',') |
-                Q(refreshments=refreshment_id)
-            )
-            users = User.objects.all()
-            all_peripherals = Facility.objects.all()
-            refreshments = Refreshments.objects.all()
-            rooms = Rooms.objects.all()
-
-            peripheral_names = None
-            for booking in bookings:
-                if booking.extra_peripherals:
-                    peripheral_ids = set(booking.extra_peripherals.split(','))
-                    peripherals = Facility.objects.filter(id__in=peripheral_ids)
-                    if peripherals.exists():
-                        peripheral_names = ", ".join([peripheral.title for peripheral in peripherals])
-                        booking.peripheral_names = peripheral_names
-                    else:
-                        booking.peripheral_names = ""
-                else:
-                    booking.peripheral_names = ""
-
-            refreshment_names = None
-            for booking in bookings:
-                if booking.refreshments:
-                    refreshment_ids = set(booking.refreshments.split(','))
-                    refreshments = Refreshments.objects.filter(id__in=refreshment_ids)
-                    if refreshments.exists():
-                        refreshment_names = ", ".join([refreshment.title for refreshment in refreshments])
-                        booking.refreshment_names = refreshment_names
-                    else:
-                        booking.refreshment_names = ""
-                else:
-                    booking.refreshment_names = ""
-
-            context = {
-                'users': users,
-                'all_peripherals': all_peripherals,
-                'refreshments': refreshments,
-                'rooms': rooms,
-                'user': user,
-                'bookings': bookings,
-                'peripheral_names': peripheral_names,
-                'refreshment_names': refreshment_names,
-                'role': role,
-                'selected_user': selected_user,
-                'selected_facility': selected_facility,
-                'selected_peripheral_id': selected_peripheral,
-                'selected_refreshment': selected_refreshment,
-                'selected_from_date': selected_from_date,
-            }
-            return render(request, 'accounts/usage_report.html', context)
-
-        elif all([selected_user_id, facility_id, peripheral_id, refreshment_id]):
-            user = get_object_or_404(User, id=selected_user_id)
-            selected_user = int(selected_user_id)
-            selected_facility = int(facility_id)
-            selected_refreshment = int(refreshment_id)
-            selected_peripheral = int(peripheral_id)
-            bookings = Booking.objects.filter(
-                user_id=selected_user_id,
-                room_id=facility_id,
-
-            ).filter(
-                Q(extra_peripherals__startswith=peripheral_id + ',') |
-                Q(extra_peripherals__endswith=',' + peripheral_id) |
-                Q(extra_peripherals__contains=',' + peripheral_id + ',') |
-                Q(extra_peripherals=peripheral_id)
-            ).filter(
-                Q(refreshments__startswith=refreshment_id + ',') |
-                Q(refreshments__endswith=',' + refreshment_id) |
-                Q(refreshments__contains=',' + refreshment_id + ',') |
-                Q(refreshments=refreshment_id)
-            )
-            users = User.objects.all()
-            all_peripherals = Facility.objects.all()
-            refreshments = Refreshments.objects.all()
-            rooms = Rooms.objects.all()
-
-            peripheral_names = None
-            for booking in bookings:
-                if booking.extra_peripherals:
-                    peripheral_ids = set(booking.extra_peripherals.split(','))
-                    peripherals = Facility.objects.filter(id__in=peripheral_ids)
-                    if peripherals.exists():
-                        peripheral_names = ", ".join([peripheral.title for peripheral in peripherals])
-                        booking.peripheral_names = peripheral_names
-                    else:
-                        booking.peripheral_names = ""
-                else:
-                    booking.peripheral_names = ""
-
-            refreshment_names = None
-            for booking in bookings:
-                if booking.refreshments:
-                    refreshment_ids = set(booking.refreshments.split(','))
-                    refreshments = Refreshments.objects.filter(id__in=refreshment_ids)
-                    if refreshments.exists():
-                        refreshment_names = ", ".join([refreshment.title for refreshment in refreshments])
-                        booking.refreshment_names = refreshment_names
-                    else:
-                        booking.refreshment_names = ""
-                else:
-                    booking.refreshment_names = ""
-
-            context = {
-                'users': users,
-                'all_peripherals': all_peripherals,
-                'refreshments': refreshments,
-                'rooms': rooms,
-                'user': user,
-                'bookings': bookings,
-                'peripheral_names': peripheral_names,
-                'refreshment_names': refreshment_names,
-                'role': role,
-                'selected_user': selected_user,
-                'selected_facility': selected_facility,
-                'selected_peripheral': selected_peripheral,
-                'selected_refreshment': selected_refreshment
-
-            }
-            return render(request, 'accounts/usage_report.html', context)
-        elif all([selected_user_id, facility_id, peripheral_id]):
-            selected_user = int(selected_user_id)
-            selected_facility = int(facility_id)
-            selected_peripheral = int(peripheral_id)
-            user = get_object_or_404(User, id=selected_user_id)
-
-            bookings = Booking.objects.filter(
-                user_id=selected_user_id,
-                room_id=facility_id,
-            ).filter(
-                Q(extra_peripherals__startswith=peripheral_id + ',') |
-                Q(extra_peripherals__endswith=',' + peripheral_id) |
-                Q(extra_peripherals__contains=',' + peripheral_id + ',') |
-                Q(extra_peripherals=peripheral_id)
-            )
-            users = User.objects.all()
-            all_peripherals = Facility.objects.all()
-            refreshments = Refreshments.objects.all()
-            rooms = Rooms.objects.all()
-
-            peripheral_names = None
-            for booking in bookings:
-                if booking.extra_peripherals:
-                    peripheral_ids = set(booking.extra_peripherals.split(','))
-                    peripherals = Facility.objects.filter(id__in=peripheral_ids)
-                    if peripherals.exists():
-                        peripheral_names = ", ".join([peripheral.title for peripheral in peripherals])
-                        booking.peripheral_names = peripheral_names
-                    else:
-                        booking.peripheral_names = ""
-                else:
-                    booking.peripheral_names = ""
-
-            refreshment_names = None
-            for booking in bookings:
-                if booking.refreshments:
-                    refreshment_ids = set(booking.refreshments.split(','))
-                    refreshments = Refreshments.objects.filter(id__in=refreshment_ids)
-                    if refreshments.exists():
-                        refreshment_names = ", ".join([refreshment.title for refreshment in refreshments])
-                        booking.refreshment_names = refreshment_names
-                    else:
-                        booking.refreshment_names = ""
-                else:
-                    booking.refreshment_names = ""
-
-            context = {
-                'users': users,
-                'all_peripherals': all_peripherals,
-                'refreshments': refreshments,
-                'rooms': rooms,
-                'user': user,
-                'bookings': bookings,
-                'peripheral_names': peripheral_names,
-                'refreshment_names': refreshment_names,
-                'role': role,
-                'selected_user': selected_user,
-                'selected_facility': selected_facility,
-                'selected_peripheral': selected_peripheral,
-            }
-            return render(request, 'accounts/usage_report.html', context)
-        # -----------------------user and facility------------------------>
-        elif selected_user_id and facility_id:
-            selected_user = int(selected_user_id)
-            selected_facility = int(facility_id)
-            user = get_object_or_404(User, id=selected_user_id)
-            facility = get_object_or_404(Rooms, id=facility_id)
-            bookings = Booking.objects.filter(Q(user_id=user) & Q(room_id=facility))
-
-            peripheral_names = None
-            for booking in bookings:
-                if booking.extra_peripherals:
-                    peripheral_ids = set(booking.extra_peripherals.split(','))
-                    peripherals = Facility.objects.filter(id__in=peripheral_ids)
-                    if peripherals.exists():
-                        peripheral_names = ", ".join([peripheral.title for peripheral in peripherals])
-                        booking.peripheral_names = peripheral_names
-                    else:
-                        booking.peripheral_names = ""
-                else:
-                    booking.peripheral_names = ""
-
-            refreshment_names = None
-            for booking in bookings:
-                if booking.refreshments:
-                    refreshment_ids = set(booking.refreshments.split(','))
-                    refreshments = Refreshments.objects.filter(id__in=refreshment_ids)
-                    if refreshments.exists():
-                        refreshment_names = ", ".join([refreshment.title for refreshment in refreshments])
-                        booking.refreshment_names = refreshment_names
-                    else:
-                        booking.refreshment_names = ""
-                else:
-                    booking.refreshment_names = ""
-
-            context = {
-                'users': users,
-                'all_peripherals': all_peripherals,
-                'refreshments': refreshments,
-                'rooms': rooms,
-                'bookings': bookings,
-                'peripheral_names': peripheral_names,
-                'refreshment_names': refreshment_names,
-                'role': role,
-                'selected_user': selected_user,
-                'selected_facility': selected_facility,
-                'peripheral_id': peripheral_id,
-                'refreshment_id': refreshment_id
-
-            }
-
-            return render(request, 'accounts/usage_report.html', context)
-        elif selected_user_id:
-            selected_user = int(selected_user_id)
-            selected_facility = int(facility_id)
-            bookings = Booking.objects.filter(user_id=selected_user_id)
-            peripheral_names = None
-            for booking in bookings:
-                if booking.extra_peripherals:
-                    peripheral_ids = set(booking.extra_peripherals.split(','))
-                    peripherals = Facility.objects.filter(id__in=peripheral_ids)
-                    if peripherals.exists():
-                        peripheral_names = ", ".join([peripheral.title for peripheral in peripherals])
-                        booking.peripheral_names = peripheral_names
-                    else:
-                        booking.peripheral_names = ""
-                else:
-                    booking.peripheral_names = ""
-
-            refreshment_names = None
-            for booking in bookings:
-                if booking.refreshments:
-                    refreshment_ids = set(booking.refreshments.split(','))
-                    refreshments = Refreshments.objects.filter(id__in=refreshment_ids)
-                    if refreshments.exists():
-                        refreshment_names = ", ".join([refreshment.title for refreshment in refreshments])
-                        booking.refreshment_names = refreshment_names
-                    else:
-                        booking.refreshment_names = ""
-                else:
-                    booking.refreshment_names = ""
-
-            context = {
-                'users': users,
-                'all_peripherals': all_peripherals,
-                'refreshments': refreshments,
-                'rooms': rooms,
-                'bookings': bookings,
-                'peripheral_names': peripheral_names,
-                'refreshment_names': refreshment_names,
-                'role': role,
-                'selected_user': selected_user,
-                'selected_facility': selected_facility,
-                'peripheral_id': peripheral_id,
-                'refreshment_id': refreshment_id
-            }
-
-            return render(request, 'accounts/usage_report.html', context)
-        elif all([facility_id]):
-            facility = get_object_or_404(Rooms, id=facility_id)
-            selected_user = int(selected_user_id)
-            selected_facility = int(facility_id)
-            bookings = Booking.objects.filter(room_id=facility)
-
-            peripheral_names = None
-            for booking in bookings:
-                if booking.extra_peripherals:
-                    peripheral_ids = set(booking.extra_peripherals.split(','))
-                    peripherals = Facility.objects.filter(id__in=peripheral_ids)
-                    if peripherals.exists():
-                        peripheral_names = ", ".join([peripheral.title for peripheral in peripherals])
-                        booking.peripheral_names = peripheral_names
-                    else:
-                        booking.peripheral_names = ""
-                else:
-                    booking.peripheral_names = ""
-
-            refreshment_names = None
-            for booking in bookings:
-                if booking.refreshments:
-                    refreshment_ids = set(booking.refreshments.split(','))
-                    refreshments = Refreshments.objects.filter(id__in=refreshment_ids)
-                    if refreshments.exists():
-                        refreshment_names = ", ".join([refreshment.title for refreshment in refreshments])
-                        booking.refreshment_names = refreshment_names
-                    else:
-                        booking.refreshment_names = ""
-                else:
-                    booking.refreshment_names = ""
-
-            context = {
-                'users': users,
-                'all_peripherals': all_peripherals,
-                'refreshments': refreshments,
-                'rooms': rooms,
-                'bookings': bookings,
-                'peripheral_names': peripheral_names,
-                'refreshment_names': refreshment_names,
-                'role': role,
-                'selected_user': selected_user,
-                'selected_facility': selected_facility,
-                'peripheral_id': peripheral_id,
-                'refreshment_id': refreshment_id
-            }
-
-            return render(request, 'accounts/usage_report.html', context)
-        elif peripheral_id:
-            selected_peripheral = int(peripheral_id)
-            bookings = Booking.objects.filter(
-                Q(extra_peripherals__startswith=peripheral_id + ',') |
-                Q(extra_peripherals__endswith=',' + peripheral_id) |
-                Q(extra_peripherals__contains=',' + peripheral_id + ',') |
-                Q(extra_peripherals=peripheral_id)
-            )
-
-            peripheral_names = None
-            for booking in bookings:
-                if booking.extra_peripherals:
-                    peripheral_ids = set(booking.extra_peripherals.split(','))
-                    peripherals = Facility.objects.filter(id__in=peripheral_ids)
-                    if peripherals.exists():
-                        peripheral_names = ", ".join([peripheral.title for peripheral in peripherals])
-                        booking.peripheral_names = peripheral_names
-                    else:
-                        booking.peripheral_names = ""
-                else:
-                    booking.peripheral_names = ""
-
-            refreshment_names = None
-            for booking in bookings:
-                if booking.refreshments:
-                    refreshment_ids = set(booking.refreshments.split(','))
-                    refreshments = Refreshments.objects.filter(id__in=refreshment_ids)
-                    if refreshments.exists():
-                        refreshment_names = ", ".join([refreshment.title for refreshment in refreshments])
-                        booking.refreshment_names = refreshment_names
-                    else:
-                        booking.refreshment_names = ""
-                else:
-                    booking.refreshment_names = ""
-
-            context = {
-                'users': users,
-                'all_peripherals': all_peripherals,
-                'refreshments': refreshments,
-                'rooms': rooms,
-                'bookings': bookings,
-                'peripheral_names': peripheral_names,
-                'refreshment_names': refreshment_names,
-                'role': role,
-                'selected_peripheral': selected_peripheral,
-                'refreshment_id': refreshment_id
-            }
-
-            return render(request, 'accounts/usage_report.html', context)
-        elif refreshment_id:
-            selected_refreshment = int(refreshment_id)
-            bookings = Booking.objects.filter(
-                Q(refreshments__startswith=refreshment_id + ',') |
-                Q(refreshments__endswith=',' + refreshment_id) |
-                Q(refreshments__contains=',' + refreshment_id + ',') |
-                Q(refreshments=refreshment_id)
-            )
-
-            peripheral_names = None
-            for booking in bookings:
-                if booking.extra_peripherals:
-                    peripheral_ids = set(booking.extra_peripherals.split(','))
-                    peripherals = Facility.objects.filter(id__in=peripheral_ids)
-                    if peripherals.exists():
-                        peripheral_names = ", ".join([peripheral.title for peripheral in peripherals])
-                        booking.peripheral_names = peripheral_names
-                    else:
-                        booking.peripheral_names = ""
-                else:
-                    booking.peripheral_names = ""
-
-            refreshment_names = None
-            for booking in bookings:
-                if booking.refreshments:
-                    refreshment_ids = set(booking.refreshments.split(','))
-                    refreshments = Refreshments.objects.filter(id__in=refreshment_ids)
-                    if refreshments.exists():
-                        refreshment_names = ", ".join([refreshment.title for refreshment in refreshments])
-                        booking.refreshment_names = refreshment_names
-                    else:
-                        booking.refreshment_names = ""
-                else:
-                    booking.refreshment_names = ""
-
-            context = {
-                'users': users,
-                'all_peripherals': all_peripherals,
-                'refreshments': refreshments,
-                'rooms': rooms,
-                'bookings': bookings,
-                'peripheral_names': peripheral_names,
-                'refreshment_names': refreshment_names,
-                'role': role,
-                'peripheral_id': peripheral_id,
-                'selected_refreshment': selected_refreshment
-
-            }
-
-            return render(request, 'accounts/usage_report.html', context)
-    peripheral_names = None
-    for booking in bookings:
-        if booking.extra_peripherals:
-            peripheral_ids = set(booking.extra_peripherals.split(','))
-            peripherals = Facility.objects.filter(id__in=peripheral_ids)
-            if peripherals.exists():
-                peripheral_names = ", ".join([peripheral.title for peripheral in peripherals])
-                booking.peripheral_names = peripheral_names
-            else:
-                booking.peripheral_names = ""
-        else:
-            booking.peripheral_names = ""
-
-    refreshment_names = None
-    for booking in bookings:
-        if booking.refreshments:
-            refreshment_ids = set(booking.refreshments.split(','))
-            refreshments = Refreshments.objects.filter(id__in=refreshment_ids)
-            if refreshments.exists():
-                refreshment_names = ", ".join([refreshment.title for refreshment in refreshments])
-                booking.refreshment_names = refreshment_names
-            else:
-                booking.refreshment_names = ""
-        else:
-            booking.refreshment_names = ""
-
-    context = {
-        'users': users,
-        'all_peripherals': all_peripherals,
-        'refreshments': refreshments,
-        'rooms': rooms,
-        'bookings': bookings,
-        'peripheral_names': peripheral_names,
-        'refreshment_names': refreshment_names,
-        'role': role
-    }
-
-    return render(request, 'accounts/usage_report.html', context)
 
 
 def summary_report(request):

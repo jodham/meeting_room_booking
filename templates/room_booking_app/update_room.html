@@ -2,7 +2,7 @@
 {%block title%}Update Room{%endblock title%}
 {%block content%}
 <div class="update-room-title text-center">Update Facility</div>
-       <form method="post" class="row room-update-form">
+       <form method="post" class="row room-update-form" action="{%url 'room_update' room.pk%}">
            <div class="col-md-12">
                <a href="{%url 'dashboard'%}" class="btn create-room-submit-btn text-white">Back</a>
            </div>

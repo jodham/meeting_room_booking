@@ -11,8 +11,8 @@ urlpatterns = [
     path('bookings/', Bookings_View, name='bookings'),
     path('booking/mybooking/', My_Booking, name='my_booking'),
     path('book/detail/<int:pk>', booking_detail_view, name='booking_detail'),
-    path('book/update/<int:pk>', update_my_booking, name='booking_update'),
-
+    # path('book/update/<int:pk>', update_my_booking, name='booking_update'),
+    path('book/update/<int:pk>', updateBooking, name='booking_update'),
     path('room/detail/<int:pk>/', room_detail_view, name='room_detail'),
     path('room/create/', create_room_form, name='create_room'),
     path('room/update/<int:pk>', RoomUpdateView, name='room_update'),

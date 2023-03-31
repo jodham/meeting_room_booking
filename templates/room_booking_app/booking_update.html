@@ -51,19 +51,26 @@
               Request Services
           </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-      {% for choice in form.extra_peripherals %}
+    {% for choice in form.extra_peripherals %}
+
         <div class="dropdown-item">
             {{ choice }}
-            <input type="hidden" name="{{ choice.name }}" value="{{ choice.value }}">
+             {% if choice.value in booking.extra_peripherals %}
+            <input type="hidden" name="{{ choice.name }}" value="{{ choice.value }}" checked>
+             {% else %}
+             <input type="checkbox" hidden name="{{ choice.name }}" value="{{ choice.value }}">
+              {% endif %}
         </div>
         {% endfor %}
-        <div class="py-2 px-2"><label class="h6 text-danger">NOTE : Bookings that require below services should be done a day earlier.</label></div>
-        {% for choice in form.refreshments %}
-        <div class="dropdown-item">
-            {{ choice }}
-            <input type="hidden" name="{{ choice.name }}" value="{{ choice.value }}">
-        </div>
-        {% endfor %}
+
+        {%for item in refreshments%}
+                <div class="dropdown-item">
+                    <input type="checkbox" checked value="{{ item.id}}">
+                    {{item.title}}
+                </div>
+         {%endfor%}
+
+
         </div>
         </div>
       </div>
@@ -99,4 +106,4 @@ $(function () {
 });
 
 </script>
-{%endblock content%}
+<!--{%endblock content%}-->

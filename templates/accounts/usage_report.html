@@ -12,13 +12,13 @@
     {%csrf_token%}
     <div class="col-md-3">
         <label class="fw-bold">User</label><br>
-        <select class="form-control" name="user">
+        <select class="form-control text-capitalize" name="user">
             <option value="" >All</option>
         {% for user in users %}
         {%if user.id == selected_user%}
-            <option value="{{user.id }}" selected>{{ user.full_name }}</option>
+            <option class="text-capitalize" value="{{user.id }}" selected>{{ user.full_name }}</option>
             {%else%}
-            <option value="{{user.id }}">{{ user.full_name }}</option>
+            <option class="text-capitalize" value="{{user.id }}">{{ user.full_name }}</option>
             {%endif%}
         {% endfor %}
         </select>
@@ -77,8 +77,8 @@
 
      <div class="col-md-3 mt-3">
         <label class="fw-bold">Date To</label><br>
-         {%if selected_date_to%}
-         <input type="text" autocomplete="off" class="form-control" value="{{selected_to_date}}" name="dateto" id="selected-To-date">
+         {%if selected_to_date%}
+         <input type="text" autocomplete="off" class="form-control" value="{{selected_to_date}}" name="dateto" id="selected-to-date">
          {%else%}
         <input type="text" autocomplete="off" class="form-control" name="dateto" id="To-date">
          {%endif%}
@@ -115,8 +115,8 @@
                 {{book.peripheral_names}}
             </td>
             <td>{{book.refreshment_names}}</td>
-            <td>{{book.date_start|date:"b d, Y"}}</td>
-            <td>{{book.date_end|date:"M j, Y"}}</td>
+            <td>{{book.date_start|date:"M j, Y, H:i a"}}</td>
+            <td>{{book.date_end|date:"M j, Y, H:i a"}}</td>
 
         </tr>
     {%endfor%}
@@ -137,7 +137,7 @@
 
     });
 
-    $('#fromdate, #To-date, #selectedfromdate, #selected-To-date').datepicker({
+    $('#fromdate, #To-date, #selectedfromdate, #selected-to-date').datepicker({
         dateFormat: "yy-mm-dd"
     });
 

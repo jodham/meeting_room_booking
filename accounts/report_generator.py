@@ -1,12 +1,14 @@
 from datetime import datetime
 
+from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, render
 
 from room_booking_app.controllers import check_user_role
-from room_booking_app.models import*
+from room_booking_app.models import *
 
 
+@login_required(login_url='signin')
 def usagereport(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)

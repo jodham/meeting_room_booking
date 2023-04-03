@@ -39,6 +39,7 @@ def dashboard(request):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def activeRooms(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -52,7 +53,7 @@ def activeRooms(request):
 
 
 # ------------------------------room create view------>
-
+@login_required(login_url='signin')
 def create_room_form(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -83,7 +84,7 @@ def create_room_form(request):
 
 
 # ------------------------------------Update Views---------------------------->
-
+@login_required(login_url='signin')
 def RoomUpdateView(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -139,7 +140,7 @@ def clear_session(request):
 # class BookDetailView(DetailView):
 #     model = Booking
 
-
+@login_required(login_url='signin')
 def room_detail_view(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -168,6 +169,7 @@ def room_detail_view(request, pk):
 
 
 # --------------------------------------Book room ---------------------------------
+@login_required(login_url='signin')
 def book_room(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -273,6 +275,7 @@ def book_room(request, pk):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def Bookings_View(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -287,6 +290,7 @@ def Bookings_View(request):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def My_Booking(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -303,6 +307,7 @@ def My_Booking(request):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 @csrf_exempt
 def booking_approval_api(request):
     if request.user.is_authenticated:
@@ -314,6 +319,7 @@ def booking_approval_api(request):
     return render(request, 'adminstrator/settings.html', {'booking_approval': booking_approval, 'role': role})
 
 
+@login_required(login_url='signin')
 def booking_detail_view(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -339,6 +345,7 @@ def booking_detail_view(request, pk):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 @require_http_methods(['PUT'])
 def update_booking_approval_status(request):
     data = json.loads(request.body)
@@ -357,6 +364,7 @@ def update_booking_approval_status(request):
     return JsonResponse({'status': 'success'})
 
 
+@login_required(login_url='signin')
 def updateBooking(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -408,9 +416,16 @@ def updateBooking(request, pk):
                                                               date_start__lte=ending_time,
                                                               date_end__gte=starting_time)
                 if overlapping_bookings.exists():
-                    messages.add_message(request, messages.WARNING, 'This room is already booked for this time frame.',
-                                         extra_tags='alert-warning')
-                    return redirect('booking_update', booking.pk)
+                    print(overlapping_bookings)
+                    for book in overlapping_bookings:
+                        print(book.id, booking.pk)
+                        if book.id == booking.pk:
+                            pass
+                        else:
+                            messages.add_message(request, messages.WARNING, 'This room is already booked for this '
+                                                                            'time frame.',
+                                                 extra_tags='alert-warning')
+                            return redirect('booking_update', booking.pk)
 
             overlapping_suspension = Room_Suspension.objects.filter(room=room,
                                                                     start_date__lte=ending_time,
@@ -450,5 +465,103 @@ def updateBooking(request, pk):
     form.fields['extra_peripherals'].initial = selected_peripheral_ids
 
     templatename = 'room_booking_app/update_my_booking.html'
+    context = {'role': role, 'form': form, 'booking': booking}
+    return render(request, templatename, context)
+
+
+@login_required(login_url='signin')
+def my_booking_update(request, pk):
+    if request.user.is_authenticated:
+        role = check_user_role(request.user)
+    else:
+        role = None
+    booking = get_object_or_404(Booking, pk=pk)
+    user = User.objects.get(email=request.user)
+    room = Rooms.objects.get(id=booking.room_id_id)
+
+    refreshment_ids = booking.refreshments
+    if refreshment_ids:
+        selected_refreshment_ids = refreshment_ids.split(',')
+    else:
+        selected_refreshment_ids = []
+
+    extra_peripheral_ids = booking.extra_peripherals
+    if extra_peripheral_ids:
+        selected_peripheral_ids = booking.extra_peripherals.split(',')
+    else:
+        selected_peripheral_ids = []
+
+    form = BookUpdateForm(request.POST or None)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            title = form.cleaned_data.get('title')
+            starting_time = form.cleaned_data.get('date_start')
+            ending_time = form.cleaned_data.get('date_end')
+            extra_peripheral = form.cleaned_data.get('extra_peripherals', [])
+            refreshment = form.cleaned_data.get('refreshments', [])
+
+            if starting_time is None:
+                messages.add_message(request, messages.WARNING, 'Starting time is required', extra_tags='alert-warning')
+                return redirect('my_booking_update', booking.pk)
+
+            # Check if ending_time is greater than starting_time
+            if ending_time < starting_time:
+                messages.add_message(request, messages.WARNING, 'ending time cannot be less than starting time',
+                                     extra_tags='alert-warning')
+                return redirect('my_booking_update', booking.pk)
+
+            # Check if the time frame for the booking is not within another approved booking
+            overlapping_bookings = Booking.objects.filter(room_id=room, status=1,
+                                                          date_start__lte=ending_time,
+                                                          date_end__gte=starting_time)
+            if overlapping_bookings.exists():
+                for book in overlapping_bookings:
+                    if book.id == booking.pk:
+                        pass
+                    else:
+                        messages.add_message(request, messages.WARNING,
+                                             'This room is already booked for this time frame.',
+                                             extra_tags='alert-warning')
+                        return redirect('my_booking_update', booking.pk)
+
+            overlapping_suspension = Room_Suspension.objects.filter(room=room,
+                                                                    start_date__lte=ending_time,
+                                                                    end_date__gte=starting_time)
+
+            if overlapping_suspension.exists():
+                messages.add_message(request, messages.WARNING, "Meeting Room is unavailable at this time",
+                                     extra_tags='alert-warning')
+                return redirect('my_booking_update', booking.pk)
+
+            booking.user_id = user
+            booking.room_id = room
+            booking.title = title
+            booking.date_start = starting_time
+            booking.date_end = ending_time
+            booking.extra_peripherals = ','.join(str(item.id) for item in extra_peripheral)
+
+            booking.refreshments = ','.join(str(item.id) for item in refreshment)
+
+            booking.save()
+
+            new_log = System_Logs()
+            new_log.message = f"User Edited a booking,({booking.title})"
+            new_log.key_word = "Edited"
+            new_log.user_id = request.user
+            new_log.save()
+            messages.add_message(request, messages.SUCCESS, 'booking updated successfully', extra_tags='alert-warning')
+            return redirect('booking_detail', booking.pk)
+
+    else:
+        form = BookUpdateForm(request.POST or None)
+
+    form.fields['title'].initial = booking.title
+    form.fields['date_start'].initial = booking.date_start
+    form.fields['date_end'].initial = booking.date_end
+    form.fields['refreshments'].initial = selected_refreshment_ids
+    form.fields['extra_peripherals'].initial = selected_peripheral_ids
+
+    templatename = 'room_booking_app/booking_update.html'
     context = {'role': role, 'form': form, 'booking': booking}
     return render(request, templatename, context)

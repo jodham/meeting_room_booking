@@ -22,21 +22,23 @@
         <div class="col-md-6 mt-2">
 
         <div class="form-group">
-          {{ form.title.label_tag }}
+            <label class="h5 fw-bold">{{ form.title.label_tag }}</label>
           {{ form.title }}
         </div>
 
 
        <div class="form-group">
-          {{ form.date_start.label_tag }}
-         <input type="text" id="{{ form.date_start.id_for_label }}" name="{{ form.date_start.name }}" class="form-control"
-                 autocomplete="off" readonly required value="{{ form.initial.date_start|date:'Y-m-d\TH:i' }}">
+           <label class="h5 fw-bold">{{ form.date_start.label_tag }}</label>
+           {{form.date_start}}
+<!--         <input type="text" id="{{ form.date_start.id_for_label }}" name="{{ form.date_start.name }}" class="form-control"-->
+<!--                 autocomplete="off" readonly required value="{{ form.initial.date_start|date:'Y-m-d\TH:i' }}">-->
        </div>
 
         <div class="form-group">
-          {{ form.date_end.label_tag }}
-         <input type="text" id="{{ form.date_end.id_for_label }}" name="{{ form.date_end.name }}" class="form-control"
-                 autocomplete="off" readonly required value="{{ form.initial.date_end|date:'Y-m-d\TH:i'}}">
+            <label class="h5 fw-bold">{{ form.date_end.label_tag }}</label>
+            {{form.date_end}}
+<!--         <input type="text" id="{{ form.date_end.id_for_label }}" name="{{ form.date_end.name }}" class="form-control"-->
+<!--                 autocomplete="off" readonly required value="{{ form.initial.date_end|date:'Y-m-d\TH:i'}}">-->
        </div>
         </div>
          <div class="col-md-6 mt-2">
@@ -50,29 +52,23 @@
                   aria-haspopup="true" aria-expanded="false">
               Request Services
           </button>
-    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-    {% for choice in form.extra_peripherals %}
+         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+         {% for choice in form.extra_peripherals %}
 
         <div class="dropdown-item">
             {{ choice }}
-             {% if choice.value in booking.extra_peripherals %}
-            <input type="hidden" name="{{ choice.name }}" value="{{ choice.value }}" checked>
-             {% else %}
-             <input type="checkbox" hidden name="{{ choice.name }}" value="{{ choice.value }}">
-              {% endif %}
         </div>
         {% endfor %}
 
-        {%for item in refreshments%}
+        {%for item in form.refreshments%}
                 <div class="dropdown-item">
-                    <input type="checkbox" checked value="{{ item.id}}">
-                    {{item.title}}
+                    {{item}}
                 </div>
          {%endfor%}
 
 
         </div>
-        </div>
+    </div>
       </div>
 
         <div class="col-md-12 text-center mt-2">

@@ -45,7 +45,7 @@
         <p>
             {%for item in refreshments%}
             <input type="checkbox" checked disabled>
-            {{item.title}}
+            {{item.title}}<br>
             {%endfor%}
         </p>
         <p>
@@ -102,7 +102,7 @@
          {%endif%}
 
          {%if booking.user_id == request.user%}
-             <a href="{%url 'booking_update' booking.pk%}" class="btn reject-booking-btn m-2 float-left">Edit</a>
+             <a href="{%url 'my_booking_update' booking.pk%}" class="btn reject-booking-btn m-2 float-left">Edit</a>
          {%endif%}
 
         {%if booking.user_id == user and booking.status == 0%}

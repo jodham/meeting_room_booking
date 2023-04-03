@@ -4,6 +4,8 @@ import phonenumbers
 from django.contrib import messages
 from django.contrib.admin.models import LogEntry
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.utils import timezone
@@ -83,7 +85,7 @@ def signout(request):
 
 
 # -------------------Admin--page---------------------
-
+@login_required(login_url='signin')
 def adminstrator(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -95,6 +97,7 @@ def adminstrator(request):
 
 
 # ------------------------ListView-------------------------
+@login_required(login_url='signin')
 def UsersListView(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -115,6 +118,7 @@ def UsersListView(request):
 """
 
 
+@login_required(login_url='signin')
 def user_detail(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -126,12 +130,14 @@ def user_detail(request, pk):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def add_user(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
     else:
         role = None
     available_users = User.objects.all()
+
     if request.method == 'POST':
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
@@ -164,6 +170,7 @@ def add_user(request):
     return render(request, templatename, {'role': role})
 
 
+@login_required(login_url='signin')
 def update_user(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -197,6 +204,7 @@ def update_user(request, pk):
     return render(request, 'adminstrator/update_user.html', {'form': form, 'roles': roles, 'role': role, 'user': user})
 
 
+@login_required(login_url='signin')
 def activate_deactivate_user(request, id):
     if not (request.user.is_authenticated and request.user.is_admin):
         return redirect('signin')
@@ -223,6 +231,7 @@ def activate_deactivate_user(request, id):
         return redirect('system_users')
 
 
+@login_required(login_url='signin')
 def system_logs(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -235,6 +244,7 @@ def system_logs(request):
 
 
 # -----------------------peripherals---------------------
+@login_required(login_url='signin')
 def peripherals(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -245,6 +255,7 @@ def peripherals(request):
     return render(request, 'adminstrator/peripherals.html', context)
 
 
+@login_required(login_url='signin')
 def create_peripheral(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -266,7 +277,7 @@ def create_peripheral(request):
     return render(request, templatename, {'role': role, 'form': form})
 
 
-class PeripheralUpdateView(UpdateView):
+class PeripheralUpdateView(LoginRequiredMixin, UpdateView):
     model = Facility
     form_class = PeripheralForm
     template_name = 'adminstrator/peripheral_update.html'
@@ -292,6 +303,7 @@ class PeripheralUpdateView(UpdateView):
         return response
 
 
+@login_required(login_url='signin')
 def activate_deactivate_peripheral(request, pk):
     if not request.user.is_admin:
         return redirect(signin)
@@ -321,6 +333,7 @@ def activate_deactivate_peripheral(request, pk):
 
 
 # --------------------------rooms/facilities---------------
+@login_required(login_url='signin')
 def activate_deactivate_room(request, pk):
     if not request.user.is_admin:
         return redirect(signin)
@@ -349,7 +362,7 @@ def activate_deactivate_room(request, pk):
 
 
 # -----------------approve booking --------------------------
-
+@login_required(login_url='signin')
 def approve_booking(request, pk):
     if not request.user.is_authenticated:
         return redirect('signin')
@@ -369,6 +382,7 @@ def approve_booking(request, pk):
         return redirect('booking_detail', pk=pk)
 
 
+@login_required(login_url='signin')
 def cancel_booking(request, pk):
     if not request.user.is_authenticated:
         return redirect('sign')
@@ -389,6 +403,7 @@ def cancel_booking(request, pk):
         return redirect('booking_detail', pk=pk)
 
 
+@login_required(login_url='signin')
 def reject_booking(request, pk):
     if not request.user.is_authenticated:
         return redirect('sign')
@@ -409,6 +424,7 @@ def reject_booking(request, pk):
         return redirect('booking_detail', pk=pk)
 
 
+@login_required(login_url='signin')
 def suspend_room(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -453,6 +469,7 @@ def suspend_room(request, pk):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def add_facility_category(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -475,6 +492,7 @@ def add_facility_category(request):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def edit_facility_category(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -501,6 +519,7 @@ def edit_facility_category(request, pk):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def facility_category(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -512,6 +531,7 @@ def facility_category(request):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def add_campus(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -536,6 +556,7 @@ def add_campus(request):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def Campuses(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -547,7 +568,7 @@ def Campuses(request):
     return render(request, templatename, context)
 
 
-class CampusUpdateView(UpdateView):
+class CampusUpdateView(LoginRequiredMixin, UpdateView):
     model = Campus
     form_class = CampusForm
     template_name = 'adminstrator/campus_update.html'
@@ -573,6 +594,7 @@ class CampusUpdateView(UpdateView):
         return response
 
 
+@login_required(login_url='signin')
 def Refreshments_View(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -584,6 +606,7 @@ def Refreshments_View(request):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def Add_refreshment(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -608,6 +631,7 @@ def Add_refreshment(request):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def edit_refreshment(request, pk):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -631,6 +655,7 @@ def edit_refreshment(request, pk):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def user_profile(request, user_id, room_id):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -643,6 +668,7 @@ def user_profile(request, user_id, room_id):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def reports(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
@@ -653,6 +679,7 @@ def reports(request):
     return render(request, templatename, context)
 
 
+@login_required(login_url='signin')
 def summary_report(request):
     if request.user.is_authenticated:
         role = check_user_role(request.user)
